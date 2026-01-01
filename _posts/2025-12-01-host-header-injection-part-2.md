@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Mastering Host Header Attacks: A Deep Dive into PortSwigger Labs"
+title: "Host header Injection Lab Walkthrough"
 date: 2025-12-01
 categories: [Web Security]
 toc: true
 ---
 
 # 🧠 Understanding Host Header Vulnerabilities
-
 
 
 The HTTP `Host` header is a mandatory request header (in HTTP/1.1) that specifies the domain name that the client wants to access. Vulnerabilities arise when an application **blindly trusts** this header without proper validation.
@@ -24,8 +23,8 @@ The application generates password reset emails that contain a clickable link. T
 **Root Cause:** The developer assumes the `Host` header is immutable and always reflects the legitimate website domain.
 
 ### ⚠️ Preconditions
-* Ability to trigger a password reset for another user.
-* Access to an external server (Exploit Server) to capture incoming requests.
+- Ability to trigger a password reset for another user.
+- Access to an external server (Exploit Server) to capture incoming requests.
 
 ### 🚨 Exploitation Steps
 
@@ -70,7 +69,7 @@ The application restricts access to the `/admin` panel to "local" users only. Cr
 **Root Cause:** Reliance on user-controllable input (headers) for critical authorization decisions.
 
 ### ⚠️ Preconditions
-* The server must not validate the source IP, only the Host header.
+- The server must not validate the source IP, only the Host header.
 
 ### 🚨 Exploitation Steps
 
@@ -98,14 +97,14 @@ The application restricts access to the `/admin` panel to "local" users only. Cr
 
 ### 🧐 How the Vulnerability Exists
 The application handles multiple `Host` headers inconsistently.
-* **The Cache:** Uses the *first* Host header for the cache key.
-* **The Backend:** Uses the *second* Host header to generate script import paths in the HTML.
+- **The Cache:** Uses the *first* Host header for the cache key.
+- **The Backend:** Uses the *second* Host header to generate script import paths in the HTML.
 
 **Root Cause:** Component confusion. The caching server and the backend application disagree on which header is authoritative.
 
 ### ⚠️ Preconditions
-* The page must be cacheable.
-* The application must reflect the Host header into the HTML source (e.g., `<script src...>`).
+- The page must be cacheable.
+- The application must reflect the Host header into the HTML source (e.g., `<script src...>`).
 
 ### 🚨 Exploitation Steps
 
@@ -142,8 +141,8 @@ An intermediate load balancer uses the `Host` header to decide where to route re
 **Root Cause:** Architecture flaw where internal routing logic trusts user input.
 
 ### ⚠️ Preconditions
-* Existence of an internal network (e.g., `192.168.0.x`).
-* Misconfigured reverse proxy.
+- Existence of an internal network (e.g., `192.168.0.x`).
+- Misconfigured reverse proxy.
 
 ### 🚨 Exploitation Steps
 
