@@ -5,7 +5,7 @@
 
 /* --- YOUR CUSTOM CYBER STYLES --- */
 
-/* 1. Dark Background */
+/* 1. Dark Background & Fonts */
 body {
   background-color: #0d1117 !important;
   color: #c9d1d9 !important;
@@ -39,4 +39,10 @@ ul li {
 /* 4. Badges Alignment */
 div[align="center"] {
   margin-bottom: 30px;
+}
+
+/* 5. HIDE THE DEFAULT THEME HEADER */
+/* This removes the duplicate title at the very top */
+header, .site-header, #header {
+  display: none !important;
 }
