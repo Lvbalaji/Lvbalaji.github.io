@@ -1,0 +1,41 @@
+---
+---
+
+/* --- CUSTOM CYBER STYLES --- */
+
+/* 1. Force Dark Mode Overrides */
+/* Midnight is already dark, but this ensures your specific color palette is used */
+body {
+  background-color: #0d1117; /* GitHub Dark Dimmed */
+  color: #c9d1d9;
+}
+
+/* 2. Cyber Blue Accents for Links and Headers */
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #58a6ff;
+}
+
+/* 3. The "Card" Look for Lists (Certifications/Skills) */
+/* This targets the bullet points in your README to look like boxed cards */
+ul li {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  list-style-type: none; /* Removes the bullet point dot */
+  display: block;
+}
+
+/* 4. Center the Badges */
+div[align="center"] {
+  margin-bottom: 20px;
+}
