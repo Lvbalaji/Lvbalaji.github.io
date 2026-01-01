@@ -12,6 +12,7 @@ Before we dive into exploitation, we must understand the fundamental architectur
 
 ---
 
+
 ## 🔸 1. What is the HTTP Host Header?
 
 Introduced in **HTTP/1.1**, the `Host` header is **mandatory**. It tells the web server which specific domain name the client wants to access.
@@ -35,6 +36,7 @@ This is called **Virtual Hosting** .
 
 ---
 
+
 ## 🧨 2. The Vulnerability: Blind Trust
 
 Host Header Injection is an attack that exploits **unsafe usage or implicit trust** in this header.
@@ -55,6 +57,7 @@ Developers often assume the Host header is:
 **The Reality:** Tools like Burp Suite allow us to send _any_ value we want. If the server uses this input to perform critical logic (like generating links or routing traffic), we can hijack that process.
 
 ---
+
 
 ## 🧠 3. The Million Dollar Question: How does it even work?
 
@@ -82,6 +85,7 @@ When the server receives a request for `Host: evil.com`, it checks its internal 
 
 ---
 
+
 ## 🧩 4. Root Causes: Why does it happen?
 
 The vulnerability typically exists due to one of three failures:
@@ -105,6 +109,7 @@ Many frameworks (like PHP or Django) offer built-in variables (e.g., `$_SERVER['
 
 ---
 
+
 ## 📍 5. Where does it behave dangerously? (Attack Surface)
 
 The Host header is dangerous when used in these specific contexts:
@@ -126,7 +131,6 @@ We don't just "change the header." We use specific techniques to trick parsers a
 
 Simply replacing the domain.
 
-HTTP
 
 ```
 Host: attacker.com
@@ -176,11 +180,9 @@ _Goal:_ Exploit parsing discrepancies where the server trusts the Request Line f
 
 If the main Host header is locked down, inject headers used by proxies.
 
-- `X-Forwarded-Host: attacker.com`
-    
-- `X-Host: attacker.com`
-    
-- `Forwarded: host=attacker.com`
+- X-Forwarded-Host: attacker.com
+- X-Host: attacker.com   
+- Forwarded: host=attacker.com
     
 
 ---
