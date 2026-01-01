@@ -40,9 +40,3 @@ ul li {
 div[align="center"] {
   margin-bottom: 30px;
 }
-
-/* 5. HIDE THE DEFAULT THEME HEADER */
-/* This removes the duplicate title at the very top */
-header, .site-header, #header {
-  display: none !important;
-}
