@@ -1,0 +1,65 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* --- FORCE DARK MODE ON PRIMER --- */
+
+/* 1. Main Backgrounds */
+body {
+  background-color: #0d1117 !important; /* GitHub Dark Dimmed */
+  color: #c9d1d9 !important; /* Text Color */
+}
+
+/* 2. Containers (Fixes the white box issue) */
+.container-lg, .markdown-body {
+  background-color: transparent !important;
+  color: #c9d1d9 !important;
+}
+
+/* 3. Headers & Links */
+h1, h2, h3, h4, h5, h6 {
+  color: #58a6ff !important; /* Cyber Blue */
+  border-bottom-color: #30363d !important;
+}
+
+a {
+  color: #58a6ff !important;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* 4. Code Blocks (Terminal Look) */
+pre, code {
+  background-color: #161b22 !important;
+  border: 1px solid #30363d !important;
+  color: #e6edf3 !important;
+  border-radius: 6px;
+}
+
+/* 5. Tables (If you use them) */
+table tr {
+  background-color: #0d1117 !important;
+  border-color: #30363d !important;
+}
+table tr:nth-child(2n) {
+  background-color: #161b22 !important;
+}
+
+/* 6. The "Card" Look for your Certifications */
+ul li {
+  list-style: none; /* Remove bullets */
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* 7. Hide the default Header/Footer if they appear white */
+header.site-header {
+  background-color: #0d1117 !important;
+  border-bottom: 1px solid #30363d !important;
+}
