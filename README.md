@@ -14,7 +14,7 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Section | Description |
 | :--- | :--- |
 | **👨‍💻 [About Me](/about/)** | My certifications (OSCP+, CPTS), detailed skills, and background. |
-| **📝 [Technical Writeups](#-technical-writeups)** | Deep dives into vulnerabilities like HTTP Request Smuggling. |
+| **📝 [Technical Writeups](#-technical-writeups)** | Deep dives into various web app vulnerabilities |
 | **🧠 [Research](#)** | Machine Learning in Malware Analysis. |
 
 ---
@@ -24,8 +24,8 @@ This is my personal documentation of advanced penetration testing techniques, ce
 
 | Date | Topic | Difficulty | Link |
 | :--- | :--- | :--- | :--- |
-| Jan 01, 2026 | **HTTP Request Smuggling (Part 1)** | 🟢 Easy | [Read Article](./2026/01/01/http-request-smuggling-basic.html) |
-| *Coming Soon* | HTTP Request Smuggling (Part 2) | 🟠 Medium | - |
+| Jan 01, 2026 | **Host Header Injection (Part 1)** | 🟢 Easy | [Read Article](./2026/01/01/host-header-injection-theory.md) |
+| Jan 01, 2026 | **Host Header Injection (Part 2)** | 🟠 Medium | - |
 
 ---
 <div align="center">
