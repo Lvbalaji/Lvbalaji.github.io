@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Host Header Injection: The Theory & Mechanics (Part 1)"
-date: 2026-01-01
+date: 2025-12-01
 categories: [Web Security, Theory, HTTP]
 toc: true
 ---
