@@ -71,20 +71,20 @@ The server must not validate the source IP, only the Host header.
 ### 🚨 Exploitation Steps
 
 1.  **Identify the Block:**
-    * Request `GET /admin`. Observe the **403 Forbidden** response.
+    Request `GET /admin`. Observe the **403 Forbidden** response.
 
 2.  **Bypass Access Control:**
-    * Send the request to **Repeater**.
-    * Change the `Host` header to `localhost`.
-    * Send the request. Observe the **200 OK** response and the admin panel HTML.
+    Send the request to **Repeater**.
+    Change the `Host` header to `localhost`.
+    Send the request. Observe the **200 OK** response and the admin panel HTML.
 
 3.  **Execute Administrative Action:**
-    * Modify the request line to perform the target action (e.g., deleting a user):
-        ```http
-        GET /admin/delete?username=carlos HTTP/1.1
-        Host: localhost
-        ```
-    * Send the request to solve the lab.
+    Modify the request line to perform the target action (e.g., deleting a user):
+   ```
+    GET /admin/delete?username=carlos HTTP/1.1
+    Host: localhost
+   ```
+    Send the request to solve the lab.
 
 **IMPACT:** Unauthorized access to administrative functionality.
 
@@ -94,37 +94,37 @@ The server must not validate the source IP, only the Host header.
 
 ### 🧐 How the Vulnerability Exists
 The application handles multiple `Host` headers inconsistently.
-* **The Cache:** Uses the *first* Host header for the cache key.
-* **The Backend:** Uses the *second* Host header to generate script import paths in the HTML.
+ **The Cache:** Uses the *first* Host header for the cache key.
+ **The Backend:** Uses the *second* Host header to generate script import paths in the HTML.
 
 **Root Cause:** Component confusion. The caching server and the backend application disagree on which header is authoritative.
 
 ### ⚠️ Preconditions
-* The page must be cacheable.
-* The application must reflect the Host header into the HTML source (e.g., `<script src...>`).
+The page must be cacheable.
+The application must reflect the Host header into the HTML source (e.g., `<script src...>`).
 
 ### 🚨 Exploitation Steps
 
 1.  **Identify Injection Point:**
-    * Send `GET /` to **Repeater**.
-    * Add a second `Host` header:
-        ```http
-        GET / HTTP/1.1
-        Host: YOUR-LAB-ID.web-security-academy.net
-        Host: malicious-test.com
-        ```
-    * Observe that the response HTML contains `<script src="//malicious-test.com/...">`.
+    Send `GET /` to **Repeater**.
+    Add a second `Host` header:
+   ```http
+   GET / HTTP/1.1
+   Host: YOUR-LAB-ID.web-security-academy.net
+   Host: malicious-test.com
+   ```
+    Observe that the response HTML contains `<script src="//malicious-test.com/...">`.
 
 2.  **Prepare the Payload:**
-    * On your **Exploit Server**, create the file path expected by the import (e.g., `/resources/js/tracking.js`).
-    * In the body, write your malicious JavaScript: `alert(document.cookie)`.
+    On your **Exploit Server**, create the file path expected by the import (e.g., `/resources/js/tracking.js`).
+    In the body, write your malicious JavaScript: `alert(document.cookie)`.
 
 3.  **Poison the Cache:**
-    * In Repeater, set the second `Host` header to your exploit server domain.
-    * Send the request repeatedly until you see `X-Cache: hit` in the response headers.
+    In Repeater, set the second `Host` header to your exploit server domain.
+    Send the request repeatedly until you see `X-Cache: hit` in the response headers.
 
 4.  **Verify:**
-    * Visiting the home page in a browser (or as a victim) will now load the malicious script from your server.
+    Visiting the home page in a browser (or as a victim) will now load the malicious script from your server.
 
 **IMPACT:** Stored XSS affecting all users who visit the cached page.
 
@@ -138,30 +138,30 @@ An intermediate load balancer uses the `Host` header to decide where to route re
 **Root Cause:** Architecture flaw where internal routing logic trusts user input.
 
 ### ⚠️ Preconditions
-* Existence of an internal network (e.g., `192.168.0.x`).
-* Misconfigured reverse proxy.
+Existence of an internal network (e.g., `192.168.0.x`).
+Misconfigured reverse proxy.
 
 ### 🚨 Exploitation Steps
 
 1.  **Detect SSRF (Collaborator):**
-    * Replace the `Host` header with a **Burp Collaborator** payload.
-    * If you see DNS/HTTP interactions in the Collaborator tab, the server is attempting to connect to your domain.
+    Replace the `Host` header with a **Burp Collaborator** payload.
+    If you see DNS/HTTP interactions in the Collaborator tab, the server is attempting to connect to your domain.
 
 2.  **Scan Internal Network (Intruder):**
-    * Send the request to **Burp Intruder**.
-    * **CRITICAL:** Go to the Target tab and **uncheck** "Update Host header to match target".
-    * Set the Payload Position on the last octet of the IP: `Host: 192.168.0.§0§`.
-    * Payload type: **Numbers** (0-255).
-    * Start attack.
+    Send the request to **Burp Intruder**.
+    **CRITICAL:** Go to the Target tab and **uncheck** "Update Host header to match target".
+    Set the Payload Position on the last octet of the IP: `Host: 192.168.0.§0§`.
+    Payload type: **Numbers** (0-255).
+    Start attack.
 
 3.  **Identify Target:**
-    * Look for a status code difference (e.g., a **302 Found** redirecting to `/admin` vs a 404 or 500).
-    * Note the IP (e.g., `192.168.0.23`).
+    Look for a status code difference (e.g., a **302 Found** redirecting to `/admin` vs a 404 or 500).
+    Note the IP (e.g., `192.168.0.23`).
 
 4.  **Exploit:**
-    * In Repeater, set `Host: 192.168.0.23` and request `GET /admin`.
-    * Extract the CSRF token and session cookie from the response.
-    * Change request to `POST`, add the cookies/CSRF token, and execute the delete action.
+    In Repeater, set `Host: 192.168.0.23` and request `GET /admin`.
+    Extract the CSRF token and session cookie from the response.
+    Change request to `POST`, add the cookies/CSRF token, and execute the delete action.
 
 **IMPACT:** Accessing internal-only interfaces (SSRF).
 
@@ -179,21 +179,21 @@ The application uses two different components that parse requests differently:
 ### 🚨 Exploitation Steps
 
 1.  **Analyze Parsing Logic:**
-    * If you change the `Host` header, the request is blocked.
-    * Change the Request Line to use an absolute URL: `GET https://YOUR-LAB-ID.web-security-academy.net/ HTTP/1.1`.
-    * Now, change the `Host` header to a random value. If the error changes from "Blocked" to "Timeout" (or similar), the bypass works.
+    If you change the `Host` header, the request is blocked.
+    Change the Request Line to use an absolute URL: `GET https://YOUR-LAB-ID.web-security-academy.net/ HTTP/1.1`.
+    Now, change the `Host` header to a random value. If the error changes from "Blocked" to "Timeout" (or similar), the bypass works.
 
 2.  **Scan Internal Network:**
-    * Send to **Intruder**.
-    * **Uncheck** "Update Host header to match target".
-    * Keep the absolute URL in the request line as the valid domain.
-    * Set the `Host` header payload to `192.168.0.§0§`.
-    * Scan for the admin panel (look for 302/200 status codes).
+    Send to **Intruder**.
+    **Uncheck** "Update Host header to match target".
+    Keep the absolute URL in the request line as the valid domain.
+    Set the `Host` header payload to `192.168.0.§0§`.
+    Scan for the admin panel (look for 302/200 status codes).
 
 3.  **Exploit:**
-    * Set `Host` to the discovered internal IP.
-    * Update the absolute URL path to `.../admin/delete`.
-    * Add necessary CSRF tokens and cookies to complete the action.
+    Set `Host` to the discovered internal IP.
+    Update the absolute URL path to `.../admin/delete`.
+    Add necessary CSRF tokens and cookies to complete the action.
 
 **IMPACT:** Bypassing domain whitelists to perform SSRF.
 
