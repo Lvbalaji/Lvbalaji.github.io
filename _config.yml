@@ -1,7 +1,2 @@
 title: Loganatha Vishnu Balaji
-theme: jekyll-theme-prime
-
-/* Hides the default site title at the top */
-.site-header, .site-title, header {
-  display: none !important;
-}
+theme: jekyll-theme-midnight
