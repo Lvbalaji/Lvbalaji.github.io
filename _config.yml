@@ -1,2 +1,31 @@
-title: Loganatha Vishnu Balaji
+# =========================
+# Site identity
+# =========================
+title: ybugs.me
+author:
+  name: Loganatha Vishnu Balaji
+
+# =========================
+# Theme
+# =========================
 theme: jekyll-theme-primer
+
+# =========================
+# URL settings
+# =========================
+url: https://ybugs.me
+baseurl: ""
+
+# =========================
+# Blog / posts configuration
+# =========================
+permalink: /:year/:month/:day/:title.html
+
+collections:
+  posts:
+    output: true
+
+# =========================
+# Markdown engine
+# =========================
+markdown: kramdown
