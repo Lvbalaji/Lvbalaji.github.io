@@ -25,7 +25,7 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Date | Topic | Difficulty | Link |
 | :--- | :--- | :--- | :--- |
 | Dec 01, 2025 | **Host Header Injection (Part 1)** | 🟢 Easy | [Read Article](/2025/12/01/host-header-injection-part-1.html) |
-| Jan 01, 2026 | **Host Header Injection (Part 2)** | 🟠 Medium | - |
+| Dec 01, 2025 | **Host Header Injection (Part 2)** | 🟠 Medium | [Read Article](/2025/12/01/host-header-injection-part-2.html) ||
 
 ---
 <div align="center">
