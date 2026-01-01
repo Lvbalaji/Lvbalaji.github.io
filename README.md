@@ -8,7 +8,7 @@
 
 # Hello, I'm Loganatha Vishnu Balaji 👋
 
-### Offensive Security Specialist | Red Teaming & Penetration Testing | Web Application Testing
+### Security Engineer | Red Teaming & Penetration Testing | Web Application Testing
 **OSCP+ | CPTS | CRTP | OSWP**
 
 ---
