@@ -1,9 +1,11 @@
 ---
+layout: default
 title: "Mastering Host Header Attacks: A Deep Dive into PortSwigger Labs"
-date: 2026-01-01
-categories: [Web Security, Bug Bounty, Burp Suite]
-tags: [host-header, ssrf, cache-poisoning, authentication-bypass]
+date: 2025-12-01
+categories: [Web Security]
+toc: true
 ---
+
 
 # 🧠 Understanding Host Header Vulnerabilities
 
