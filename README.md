@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/STATUS-ONLINE-success?style=for-the-badge" />
   <h1>Loganatha Vishnu Balaji</h1>
-  <p><b>Offensive Security Specialist | Red Teaming | OSCP+, CPTS, CRTP</b></p>
+  <p><b>Penetration Tester | Red Teaming | OSCP+, CPTS, CRTP</b></p>
 </div>
 
 ---
@@ -26,6 +26,7 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | :--- | :--- | :--- | :--- |
 | Dec 01, 2025 | **Host Header Injection (Part 1)** | 🟢 Easy | [Read Article](/2025/12/01/host-header-injection-part-1.html) |
 | Dec 01, 2025 | **Host Header Injection (Part 2)** | 🟠 Medium | [Read Article](/2025/12/01/host-header-injection-part-2.html) |
+| Dec 02, 2025 | **JWT Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](2025-12-02-JWT-vuln-part-1.html) |
 
 ---
 <div align="center">
