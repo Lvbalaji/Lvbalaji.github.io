@@ -29,7 +29,8 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 02, 2025 | **JWT Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/02/jwt-vuln-part-1.html) |
 | Dec 02, 2025 | **JWT Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/02/jwt-vuln-part-2.html) |
 | Dec 03, 2025 | **XXE Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/03/xxe-vuln-part-1.html) |
-| Dec 03, 2025 | **XXE Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/03/xxe-vuln-part-2.html) |
+| Dec 03, 2025 | **XXE Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/03/xxe-vuln-part-2.html) |
+
 ---
 <div align="center">
   <small>Connect with me: <a href="https://linkedin.com/in/loganathavishnubalaji">LinkedIn</a></small>
