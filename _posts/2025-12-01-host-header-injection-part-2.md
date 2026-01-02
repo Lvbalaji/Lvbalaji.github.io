@@ -44,16 +44,22 @@ Access to an external server (Exploit Server) to capture incoming requests.
     Change the `username` parameter in the body to the victim (`carlos`).
     Send the request.
 
+    ![image](/images/Pasted image 20251206230920.png)
+
 4.  **Steal the Token:**
     Check your Exploit Server's **Access Log**.
     Look for a request from the victim (Carlos) clicking the link. It will look like:
    `GET /forgot-password?temp-forgot-password-token=STOLEN_TOKEN ...`
     Copy the token.
 
+    ![image](/images/Pasted image 20251206230905.png)
+    
 5.  **Account Takeover:**
     Construct the valid URL using the *real* lab domain and the *stolen* token.
     Visit the URL, reset Carlos's password, and log in.
 
+    ![image](/images/Pasted image 20251206231216.png)
+    
 **IMPACT:** Full Account Takeover.
 
 ---
@@ -84,6 +90,8 @@ The server must not validate the source IP, only the Host header.
     GET /admin/delete?username=carlos HTTP/1.1
     Host: localhost
    ```
+    ![image](/images/Pasted image 20251207103526.png)
+    
     Send the request to solve the lab.
 
 **IMPACT:** Unauthorized access to administrative functionality.
@@ -117,12 +125,16 @@ The application must reflect the Host header into the HTML source (e.g., `<scrip
 
 2.  **Prepare the Payload:**
     On your **Exploit Server**, create the file path expected by the import (e.g., `/resources/js/tracking.js`).
+    ![image](/images/Pasted image 20251207105827.png)
+    
     In the body, write your malicious JavaScript: `alert(document.cookie)`.
-
+    ![image](/images/Pasted image 20251207105900.png)
+    
 3.  **Poison the Cache:**
     In Repeater, set the second `Host` header to your exploit server domain.
     Send the request repeatedly until you see `X-Cache: hit` in the response headers.
-
+    ![image](/images/Pasted image 20251207105843.png)
+    
 4.  **Verify:**
     Visiting the home page in a browser (or as a victim) will now load the malicious script from your server.
 
@@ -145,24 +157,40 @@ Misconfigured reverse proxy.
 
 1.  **Detect SSRF (Collaborator):**
     Replace the `Host` header with a **Burp Collaborator** payload.
+    ![image](/images/Pasted image 20251207123042.png)
+    
     If you see DNS/HTTP interactions in the Collaborator tab, the server is attempting to connect to your domain.
-
+    ![image](/images/Pasted image 20251207123053.png)
+    
+    
 2.  **Scan Internal Network (Intruder):**
     Send the request to **Burp Intruder**.
     **CRITICAL:** Go to the Target tab and **uncheck** "Update Host header to match target".
     Set the Payload Position on the last octet of the IP: `Host: 192.168.0.§0§`.
     Payload type: **Numbers** (0-255).
     Start attack.
-
+    
+    ![image](/images/Pasted image 20251207122843.png)
+    
 3.  **Identify Target:**
     Look for a status code difference (e.g., a **302 Found** redirecting to `/admin` vs a 404 or 500).
     Note the IP (e.g., `192.168.0.23`).
+
+    ![image](/images/Pasted image 20251207124206.png)
+
+    Response
+    ![image](/images/Pasted image 20251207122925.png)
 
 4.  **Exploit:**
     In Repeater, set `Host: 192.168.0.23` and request `GET /admin`.
     Extract the CSRF token and session cookie from the response.
     Change request to `POST`, add the cookies/CSRF token, and execute the delete action.
 
+    ![image](/images/Pasted image 20251207122900.png)
+
+    WORKED
+    ![image](/images/Pasted image 20251207122827.png)
+    
 **IMPACT:** Accessing internal-only interfaces (SSRF).
 
 ---
@@ -183,6 +211,10 @@ The application uses two different components that parse requests differently:
     Change the Request Line to use an absolute URL: `GET https://YOUR-LAB-ID.web-security-academy.net/ HTTP/1.1`.
     Now, change the `Host` header to a random value. If the error changes from "Blocked" to "Timeout" (or similar), the bypass works.
 
+    ![image](/images/Pasted image 20251207132307.png)
+
+    ![image](/images/Pasted image 20251207132355.png)
+    
 2.  **Scan Internal Network:**
     Send to **Intruder**.
     **Uncheck** "Update Host header to match target".
@@ -190,10 +222,18 @@ The application uses two different components that parse requests differently:
     Set the `Host` header payload to `192.168.0.§0§`.
     Scan for the admin panel (look for 302/200 status codes).
 
+    ![image](/images/Pasted image 20251207134810.png)
+
+    WORKED
+    ![image](/images/Pasted image 20251207132332.png)
+
 3.  **Exploit:**
     Set `Host` to the discovered internal IP.
     Update the absolute URL path to `.../admin/delete`.
     Add necessary CSRF tokens and cookies to complete the action.
+
+    ![image](/images/Pasted image 20251207132251.png)
+    
 
 **IMPACT:** Bypassing domain whitelists to perform SSRF.
 
