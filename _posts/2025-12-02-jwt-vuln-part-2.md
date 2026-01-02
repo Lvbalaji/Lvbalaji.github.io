@@ -32,13 +32,13 @@ The application reads the user identity (the `sub` claim) from the token payload
 
 2.  **Modify Payload:**
     In the Burp **Inspector** panel (or JSON Web Token tab), change the `sub` claim from `wiener` to `administrator`.
-    ![image](/images/Pasted image 20251205132147.png)
+ ![image](/images/Pasted image 20251205132147.png)
 
-3.  **Execute Bypass:**
+4.  **Execute Bypass:**
     Click **Apply changes**. Do **not** change the signature (keep the original one).
     Send the request. The server accepts the token because it ignores the signature entirely.
 
-4.  **Solve Lab:**
+5.  **Solve Lab:**
     Access the admin panel and delete the user `carlos`.
 ![image](/images/Pasted image 20251205132129.png)
 
@@ -65,11 +65,12 @@ The server relies on the token's header `alg` parameter to decide which verifica
 2.  **Set Algorithm to None:**
     In the JWT Header, change the `alg` parameter to `none`.
 ![image](/images/Pasted image 20251205134124.png)
-3.  **Strip the Signature:**
+
+4.  **Strip the Signature:**
     In the raw message editor, **delete the signature bytes** at the end of the token.
     **CRITICAL:** You must keep the final trailing dot (`.`) to maintain the structure: `header.payload.`.
 
-4.  **Execute:**
+5.  **Execute:**
     Send the request. The server sees `alg: none`, skips verification, and grants admin access.
 ![image](/images/Pasted image 20251205134139.png)
 
@@ -112,6 +113,7 @@ The server signs JWTs using a symmetric algorithm (`HS256`) but uses a **low-ent
     Replace your session cookie with the forged token and access `/admin`.
 
 ![image](/images/Pasted image 20251205135823.png)
+
 **IMPACT:** Compromise of the server's signing key, allowing generation of any token.
 
 ---
@@ -142,6 +144,7 @@ The server allows the client to embed the **public verification key** directly i
     *Note:* This automatically adds the `jwk` parameter to the header and signs the token with your private key.
 
 ![image](/images/Pasted image 20251205151159.png)
+
 4.  **Execute:**
     Send the request to gain admin access.
 
