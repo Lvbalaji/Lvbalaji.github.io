@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "JWT Attacks: The Theory & Mechanics (Part 1)"
-date: 2025-12-05
+date: 2025-12-02
 categories: [Web Security, Theory, Authentication]
 toc: true
 ---
