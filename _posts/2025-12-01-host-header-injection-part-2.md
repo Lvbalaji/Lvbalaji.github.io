@@ -179,6 +179,7 @@ Misconfigured reverse proxy.
     ![image](/images/Pasted image 20251207124206.png)
 
     Response
+    
     ![image](/images/Pasted image 20251207122925.png)
 
 4.  **Exploit:**
@@ -188,7 +189,8 @@ Misconfigured reverse proxy.
 
     ![image](/images/Pasted image 20251207122900.png)
 
-    WORKED
+    Worked!!
+    
     ![image](/images/Pasted image 20251207122827.png)
     
 **IMPACT:** Accessing internal-only interfaces (SSRF).
@@ -224,7 +226,8 @@ The application uses two different components that parse requests differently:
 
     ![image](/images/Pasted image 20251207134810.png)
 
-    WORKED
+    Worked!!
+    
     ![image](/images/Pasted image 20251207132332.png)
 
 3.  **Exploit:**
