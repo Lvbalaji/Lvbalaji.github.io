@@ -209,10 +209,10 @@ The application uses the `kid` (Key ID) header to retrieve a key file from the l
     In **JWT Editor Keys**, generate a new **Symmetric Key**.
     Set the `k` parameter to `"AA=="` (Base64 for a null byte/empty string).
    
-   OR USE THIS PYTHON CODE, IT WILL GENERATE THE TOKEN.
+    OR USE THIS PYTHON CODE, IT WILL GENERATE THE TOKEN.
     ![image](/images/Pasted image 20251205161305.png)
 
-   JUST USE THIS TOKEN TO SEND REQUEST OR IF YOU WANT YOU CAN TRY THE METHOD WITH (`AA==`) BUT I DIDN'T TRY.
+    JUST USE THIS TOKEN TO SEND REQUEST OR IF YOU WANT YOU CAN TRY THE METHOD WITH (`AA==`) BUT I DIDN'T TRY.
     ![image](/images/Pasted image 20251205161233.png)
 
 2.  **Modify Header:**
@@ -221,7 +221,7 @@ The application uses the `kid` (Key ID) header to retrieve a key file from the l
     
     ![image](/images/Pasted image 20251205162226.png)
 
-4.  **Sign & Execute:**
+3.  **Sign & Execute:**
     Change `sub` to `administrator`.
     Sign the token using your "Null" key.
     Send the request. The server reads `/dev/null` (empty), matches it with your empty signature, and validates the token.
