@@ -98,9 +98,9 @@ The most common cause is a lack of a **whitelist**. The server accepts _any_ Hos
 
 Modern web stacks are complex. A Frontend (Reverse Proxy) and a Backend (App Server) often look at the request differently:
 
-- **Frontend:** Might route traffic based on the IP or the first Host header.
+**Frontend:** Might route traffic based on the IP or the first Host header.
     
-- **Backend:** Might generate content based on the _second_ Host header or the `X-Forwarded-Host` header.
+**Backend:** Might generate content based on the _second_ Host header or the `X-Forwarded-Host` header.
     
 
 ### C. Default Server Behaviors
@@ -131,7 +131,6 @@ We don't just "change the header." We use specific techniques to trick parsers a
 
 Simply replacing the domain.
 
-
 ```
 Host: attacker.com
 ```
@@ -141,8 +140,6 @@ _Goal:_ See if the response reflects this domain (e.g., in a `<link>` tag or ema
 ### 2️⃣ Port Injection
 
 Some validators check the domain but ignore the port.
-
-
 
 ```
 Host: vulnerable-website.com:bad-stuff-here
@@ -154,8 +151,6 @@ _Goal:_ Bypass validation or corrupt internal logging.
 
 Sending two conflicting headers.
 
-
-
 ```
 Host: vulnerable.com
 Host: attacker.com
@@ -166,8 +161,6 @@ _Goal:_ Trick the frontend into routing safely with the first header, while the 
 ### 4️⃣ Absolute URL Bypass
 
 Supplying the absolute URL in the request line.
-
-
 
 ```
 GET [https://vulnerable.com/](https://vulnerable.com/) HTTP/1.1
@@ -186,7 +179,8 @@ If the main Host header is locked down, inject headers used by proxies.
     
 
 ---
-## 🛡️ 6. Remediation & Defense Strategies
+
+## 🛡️ 7. Remediation & Defense Strategies
 
 Understanding the attack is only half the battle. As security professionals, we must also know how to fix it. The defense against Host Header Injection is almost always **configuration-based** rather than code-based.
 
@@ -196,7 +190,6 @@ The most effective defense is to verify the `Host` header against a hardcoded li
 
 **Implementation Example:** In your application code, wrap the entry point with a check:
 
-Python
 
 ```
 allowed_hosts = ['vulnerable-website.com', 'api.vulnerable-website.com']
@@ -211,15 +204,12 @@ Developers often use the `Host` header to dynamically generate absolute URLs (e.
 
 **Bad Practice (PHP):**
 
-PHP
-
 ```
 $reset_link = "https://" . $_SERVER['HTTP_HOST'] . "/reset-password";
 ```
 
 **Secure Practice:** Use a hardcoded configuration value for the domain.
 
-PHP
 
 ```
 $reset_link = "https://" . GLOBAL_CONFIG_DOMAIN . "/reset-password";
@@ -230,8 +220,6 @@ $reset_link = "https://" . GLOBAL_CONFIG_DOMAIN . "/reset-password";
 In web servers like Nginx and Apache, you can configure a "default" or "catch-all" server that handles any request with an unrecognized `Host` header. This server should simply return an error or drop the connection.
 
 **Nginx Example:**
-
-Nginx
 
 ```
 server {
@@ -251,7 +239,7 @@ Ensure your application **only** trusts `X-Forwarded-Host` headers if they come 
 
 ---
 
-## ❓ 7. Interview Corner: Common FAQs (Pentest & AppSec)
+## ❓ 8. Interview Corner: Common FAQs (Pentest & AppSec)
 
 If you are preparing for a role as a **Penetration Tester**, **Security Engineer**, or **SOC Analyst**, expect to be grilled on the nuances of this vulnerability. Here are the top questions and the "Gold Standard" answers.
 
@@ -276,11 +264,11 @@ If you are preparing for a role as a **Penetration Tester**, **Security Engineer
 
 **Answer:**
 
-- The **`Host`** header is standard HTTP/1.1 and is meant to identify the destination server.
+The **`Host`** header is standard HTTP/1.1 and is meant to identify the destination server.
  
-- **`X-Forwarded-Host`** is a de-facto standard header used by load balancers and reverse proxies to preserve the _original_ Host header sent by the client before the proxy modified it.
+**`X-Forwarded-Host`** is a de-facto standard header used by load balancers and reverse proxies to preserve the _original_ Host header sent by the client before the proxy modified it.
 
-- **Exploitation Note:** Even if an application validates the `Host` header, it might blindly trust `X-Forwarded-Host` to generate links, making it a key bypass vector.
+**Exploitation Note:** Even if an application validates the `Host` header, it might blindly trust `X-Forwarded-Host` to generate links, making it a key bypass vector.
  
 
 ### Q4: Can Host Header Injection lead to Server-Side Request Forgery (SSRF)?
@@ -295,8 +283,8 @@ If you are preparing for a role as a **Penetration Tester**, **Security Engineer
 
 **Answer:** The golden rule is **Whitelisting**.
 
-- **Nginx:** Configure a default "catch-all" server block that drops requests with undefined hostnames, and explicitly define `server_name` for valid domains.
-- **Application Level:** Do not use `$_SERVER['HTTP_HOST']` (PHP) or equivalent variables. Instead, use a hardcoded configuration value for the site's domain.
+**Nginx:** Configure a default "catch-all" server block that drops requests with undefined hostnames, and explicitly define `server_name` for valid domains.
+**Application Level:** Do not use `$_SERVER['HTTP_HOST']` (PHP) or equivalent variables. Instead, use a hardcoded configuration value for the site's domain.
    
 
 ### Q7: Does HTTP/2 fix this vulnerability?
@@ -322,64 +310,64 @@ If you are preparing for a role as a **Penetration Tester**, **Security Engineer
 
 **Answer:** VHost Hopping allows an attacker to access a different website hosted on the same IP address that is normally restricted or internal.
 
-- **Scenario:** An external website (`www.example.com`) and an internal admin panel (`admin.internal`) live on the same Load Balancer.
+**Scenario:** An external website (`www.example.com`) and an internal admin panel (`admin.internal`) live on the same Load Balancer.
    
-- **Attack:** The attacker sends a request to the public IP of `www.example.com` but changes the Host header to `admin.internal`.
+**Attack:** The attacker sends a request to the public IP of `www.example.com` but changes the Host header to `admin.internal`.
  
-- **Result:** If the Load Balancer routes based on the Host header but doesn't verify access controls for that specific VHost, the attacker gains access to the internal panel.
+**Result:** If the Load Balancer routes based on the Host header but doesn't verify access controls for that specific VHost, the attacker gains access to the internal panel.
 
 #### Q10: How does Django (or Rails) protect against this by default, and how do developers break it?
 
 **Answer:**
 
-- **Protection:** Django uses the `ALLOWED_HOSTS` setting. If the Host header in the request does not match a domain in this list, Django throws a `SuspiciousOperation` exception and blocks the request.
+**Protection:** Django uses the `ALLOWED_HOSTS` setting. If the Host header in the request does not match a domain in this list, Django throws a `SuspiciousOperation` exception and blocks the request.
 
-- **The Mistake:** Developers often disable this during development or migration by setting `ALLOWED_HOSTS = ['*']`. This allows _any_ domain to be accepted, completely re-opening the vulnerability.
+**The Mistake:** Developers often disable this during development or migration by setting `ALLOWED_HOSTS = ['*']`. This allows _any_ domain to be accepted, completely re-opening the vulnerability.
 
 
 #### Q11: You found a reflected Host Header, but it doesn't appear in links or scripts. Is it still exploitable?
 
 **Answer:** Yes, potentially via **Blind exploitation** or **Routing exploits**.
 
-- **Blind:** Use an out-of-band (OOB) interaction/collaborator payload. If the backend uses the header to fetch resources (e.g., XML imports, PDF generators) invisibly, you will get a pingback on your collaborator server.
+**Blind:** Use an out-of-band (OOB) interaction/collaborator payload. If the backend uses the header to fetch resources (e.g., XML imports, PDF generators) invisibly, you will get a pingback on your collaborator server.
 
-- **Routing:** Even if not reflected, the header might be used by an internal proxy to route the request to a different backend (SSRF).
+**Routing:** Even if not reflected, the header might be used by an internal proxy to route the request to a different backend (SSRF).
  
 
 #### Q12: Can you explain the difference between Web Cache Poisoning and Web Cache Deception?
 
 **Answer:**
 
-- **Cache Poisoning:** The attacker tricks the cache into storing a malicious response (e.g., a page with XSS). _All_ subsequent users get infected. (Availability/Integrity impact).
+**Cache Poisoning:** The attacker tricks the cache into storing a malicious response (e.g., a page with XSS). _All_ subsequent users get infected. (Availability/Integrity impact).
    
-- **Cache Deception:** The attacker tricks a logged-in victim into visiting a URL (e.g., `/my-account/image.jpg`) that the server treats as a static image but actually contains the victim's private data. The cache stores this private data, allowing the attacker to view it later. (Confidentiality impact).
+**Cache Deception:** The attacker tricks a logged-in victim into visiting a URL (e.g., `/my-account/image.jpg`) that the server treats as a static image but actually contains the victim's private data. The cache stores this private data, allowing the attacker to view it later. (Confidentiality impact).
  
-- _Host Header Injection is primarily used for Poisoning._
+_Host Header Injection is primarily used for Poisoning._
   
 
 #### Q13: Why might an attacker inject a duplicate Host header? (e.g., `Host: a.com` and `Host: b.com`)
 
 **Answer:** To exploit **parsing inconsistencies** (HTTP Desync-style logic).
 
-- The **Load Balancer** might look at the _first_ header to decide "This is a safe request for `a.com`" and let it through.
+The **Load Balancer** might look at the _first_ header to decide "This is a safe request for `a.com`" and let it through.
   
-- The **Backend Server** might prefer the _last_ header, processing the logic using `b.com`.
+The **Backend Server** might prefer the _last_ header, processing the logic using `b.com`.
 
-- This bypasses the Load Balancer's security rules/WAF.
+This bypasses the Load Balancer's security rules/WAF.
  
 
 #### Q14: How does HTTP/2 change the landscape of Host Header Injection?
 
-- **Answer:** HTTP/2 introduces the `:authority` pseudo-header, which replaces the Host header.
+**Answer:** HTTP/2 introduces the `:authority` pseudo-header, which replaces the Host header.
 
-- **The Risk:** Many load balancers convert HTTP/2 traffic down to HTTP/1.1 for the backend.
+**The Risk:** Many load balancers convert HTTP/2 traffic down to HTTP/1.1 for the backend.
 
-- **The Exploit:** An attacker can sometimes send _both_ an `:authority` header AND a `Host` header. If the translation layer mishandles this, it might verify one but forward the other, leading to "HTTP/2 Request Smuggling" or injection opportunities.
+**The Exploit:** An attacker can sometimes send _both_ an `:authority` header AND a `Host` header. If the translation layer mishandles this, it might verify one but forward the other, leading to "HTTP/2 Request Smuggling" or injection opportunities.
   
 
 ---
 
-## 🎭 8.**Scenario-Based Questions** designed to test your ability to think like an attacker and an architect simultaneously. These are typical of "Bar Raiser" rounds in big tech interviews.
+## 🎭 9.**Scenario-Based Questions** designed to test your ability to think like an attacker and an architect simultaneously. These are typical of "Bar Raiser" rounds in big tech interviews.
 
 ### 🎭 Scenario 1: 
 
@@ -430,9 +418,9 @@ The "Hired" Answer:
 
 **Context:** You are testing a microservices architecture hosted on Kubernetes.
 
-- Request to `Host: www.example.com` -> Returns the main website.
+1. Request to `Host: www.example.com` -> Returns the main website.
     
-- Request to `Host: internal-admin` -> Returns `403 Forbidden` (Blocked by the WAF/Ingress).
+2. Request to `Host: internal-admin` -> Returns `403 Forbidden` (Blocked by the WAF/Ingress).
     
 
 You try to bypass the WAF, but it’s configured correctly.
@@ -451,11 +439,11 @@ GET http://internal-admin/ HTTP/1.1
 Host: www.example.com
 ```
 
-- **The Logic:** The WAF/Ingress controller might validate the `Host` header (`www.example.com` = Allowed) and let the request through.
+**The Logic:** The WAF/Ingress controller might validate the `Host` header (`www.example.com` = Allowed) and let the request through.
   
-- **The Exploit:** However, the backend application server might prefer the Absolute URL in the request line (`internal-admin`).
+**The Exploit:** However, the backend application server might prefer the Absolute URL in the request line (`internal-admin`).
   
-- **Result:** The request bypasses the WAF because the header is safe, but the backend serves the content for the internal admin panel."
+**Result:** The request bypasses the WAF because the header is safe, but the backend serves the content for the internal admin panel."
   
 
 ---
@@ -510,19 +498,15 @@ The "Hired" Answer:
 In scenarios, interviewers often push back on severity (e.g., "So what? It's just a redirect.").
 
 Always tie the technical flaw to a Business Impact:
+1. "It's just a redirect" → **"It's a Phishing vector to steal creds."**
+2. "It's just metadata" → **"It's a Cache Poisoning attack that defaces your site."**
+3. "It's just an internal IP" → **"It's a roadmap for an SSRF attack."**
 
-- "It's just a redirect" → **"It's a Phishing vector to steal creds."**
-    
-- "It's just metadata" → **"It's a Cache Poisoning attack that defaces your site."**
-    
-- "It's just an internal IP" → **"It's a roadmap for an SSRF attack."**
+
 ---
   
 ## 🛑 Summary of Part 1
+1. **Concept:** Servers host multiple sites on one IP (Virtual Hosting).
+2. **Flaw:** Components blindly trust the Host header to generate links or route traffic.
+3. **Attack:** We send requests to the valid IP but with a malicious Host header. The server processes our request using the malicious data.
 
-- **Concept:** Servers host multiple sites on one IP (Virtual Hosting).
-    
-- **Flaw:** Components blindly trust the Host header to generate links or route traffic.
-    
-- **Attack:** We send requests to the valid IP but with a malicious Host header. The server processes our request using the malicious data.
-    
