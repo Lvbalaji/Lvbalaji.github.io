@@ -80,7 +80,8 @@ The attacker sends a request with a Content-Length that covers the entire payloa
  
 
 **Attack Payload:**
-![image](/images/Pasted image 20251208125444.png)
+
+![image](/images/Pasted%20image%2020251208125444.png)
 
 
 ⚠️ Important Syntax Note for CL.TE:
@@ -92,7 +93,7 @@ Always ensure you have the empty line between the 0 and the smuggled request lin
 
 Why Content-length is 130? 
 
-![image](/images/Pasted image 20251208125507.png)
+![image](/images/Pasted%20image%2020251208125507.png)
 
 Here, the front-end server sees the `Content-Length` of 130 bytes and believes the request ends after  `isadmin=true`. However, the back-end server sees the `Transfer-Encoding: chunked` and interprets the `0` as the end of a chunk, making the second request the start of a new chunk. This can lead to the back-end server treating the `POST /update HTTP/1.1` as a separate, new request, potentially giving the attacker unauthorized access.
 
@@ -114,26 +115,33 @@ The attacker sends a chunked request. The Front-End processes it perfectly. Howe
     
 
 For Detection
-![image](/images/Pasted image 20251208134629.png)
 
-<-- Backend reads 4 bytes ("5c" + \r\n) and stops.
-<-- Frontend expects 92 bytes (0x5c).
-<-- We stop early. Frontend waits -> Timeout.
+![image](/images/Pasted%20image%2020251208134629.png)
+
+
+1. Backend reads 4 bytes ("5c" + \r\n) and stops.
+2. Frontend expects 92 bytes (0x5c).
+3. We stop early. Frontend waits -> Timeout.
 
 
 How we calculate those values
 
-![image](/images/Pasted image 20251208124649.png)
+
+![image](/images/Pasted%20image%2020251208124649.png)
 
 
 First content-length: 4 => 9e\r\n
 how 9e ? Here we need to stop at q and shouldn't include \r\n after x=q
 
-![image](/images/Pasted image 20251208124816.png)
+
+![image](/images/Pasted%20image%2020251208124816.png)
+
 
 Why 15? The actual request is 10 bytes but those extra byes helps to include the next request. So, then the complete request will be pushed.
 
-![image](/images/Pasted image 20251208124917.png)
+
+![image](/images/Pasted%20image%2020251208124917.png)
+
 
 ```
 POST / HTTP/1.1
