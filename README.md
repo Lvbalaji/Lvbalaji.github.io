@@ -33,7 +33,9 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 06, 2025 | **Web Cache Poisoning (Part 1)** | 🟠 Medium | [Read Article](/2025/12/06/web-cache-poisoning-part-1.html) |
 | Dec 06, 2025 | **Web Cache Poisoning (Part 2)** | 🟠 Medium | [Read Article](/2025/12/06/web-cache-poisoning-part-2.html) |
 | Dec 07, 2025 | **SSRF Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/07/ssrf-part-1.html) |
-| Dec 07, 2025 | **SSRF Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/07/ssrf-part-2.html) |
+| Dec 07, 2025 | **SSRF Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/07/ssrf-part-2.html) |
+| Dec 08, 2025 | **Access Control (Part 1)** | 🟠 Medium | [Read Article](/2025/12/08/access-control-part-1.html) |
+| Dec 08, 2025 | **Access Control (Part 2)** | 🟠 Medium | [Read Article](/2025/12/07/access-control-part-2.html) |
 
 ---
 <div align="center">
