@@ -41,7 +41,8 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 09, 2025 | **File Upload Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-2.html) |
 | Dec 10, 2025 | **OAuth Vulnerabilities (Part 1)** | 🟠 Medium| [Read Article](/2025/12/10/oauth-vulnerabilites-part-1.html) |
 | Dec 10, 2025 | **OAuth Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/10/oauth-vulnerabilites-part-2.html) |
-
+| Dec 08, 2025 | **HTTP Request Smuggling (Part 1)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-1.html) |
+| Dec 08, 2025 | **HTTP Request Smuggling (Part 2)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-2.html) |
 
 
 ---
