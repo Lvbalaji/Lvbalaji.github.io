@@ -20,7 +20,8 @@ This is my personal documentation of advanced penetration testing techniques, ce
 ---
 
 ### 📝 Technical Writeups
-*Recent research and lab walkthroughs.*
+
+**Recent research and lab walkthroughs.**
 
 | Date | Topic | Difficulty | Link |
 | :--- | :--- | :--- | :--- |
@@ -38,6 +39,10 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 08, 2025 | **Access Control (Part 2)** | 🟠 Medium | [Read Article](/2025/12/08/access-control-part-2.html) |
 | Dec 09, 2025 | **File Upload Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-1.html) |
 | Dec 09, 2025 | **File Upload Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-2.html) |
+| Dec 10, 2025 | **OAuth Vulnerabilities (Part 1)** | 🟠 Medium| [Read Article](/2025/12/10/oauth-vulnerabilites-part-1.html) |
+| Dec 10, 2025 | **OAuth Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/10/oauth-vulnerabilites-part-2.html) |
+
+
 
 ---
 
