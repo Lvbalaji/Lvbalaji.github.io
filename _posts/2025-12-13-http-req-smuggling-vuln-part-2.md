@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Mastering HTTP Request Smuggling: A Deep Dive into PortSwigger Labs (Part 2)"
-date: 2025-12-10
+date: 2025-12-13
 categories: [Web Security, HTTP]
 toc: true
 ---
