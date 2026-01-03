@@ -36,8 +36,11 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 07, 2025 | **SSRF Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/07/ssrf-part-2.html) |
 | Dec 08, 2025 | **Access Control (Part 1)** | 🟠 Medium | [Read Article](/2025/12/08/access-control-part-1.html) |
 | Dec 08, 2025 | **Access Control (Part 2)** | 🟠 Medium | [Read Article](/2025/12/08/access-control-part-2.html) |
+| Dec 09, 2025 | **File Upload Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-1.html) |
+| Dec 09, 2025 | **File Upload Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-2.html) |
 
 ---
+
 <div align="center">
   <small>Connect with me: <a href="https://linkedin.com/in/loganathavishnubalaji">LinkedIn</a></small>
 </div>
