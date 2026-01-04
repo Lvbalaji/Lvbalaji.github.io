@@ -25,11 +25,11 @@ This is my personal documentation of advanced penetration testing techniques, ce
 
 | Date | Topic | Difficulty | Link |
 | :--- | :--- | :--- | :--- |
-| Dec 01, 2025 | **Host Header Injection (Part 1)** | 🟢 Easy | [Read Article](/2025/12/01/host-header-injection-part-1.html) |
+| Dec 01, 2025 | **Host Header Injection (Part 1)** | 🟠 Medium| [Read Article](/2025/12/01/host-header-injection-part-1.html) |
 | Dec 01, 2025 | **Host Header Injection (Part 2)** | 🟠 Medium | [Read Article](/2025/12/01/host-header-injection-part-2.html) |
-| Dec 02, 2025 | **JWT Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/02/jwt-vuln-part-1.html) |
+| Dec 02, 2025 | **JWT Vulnerabilities (Part 1)** | 🟠 Medium | [Read Article](/2025/12/02/jwt-vuln-part-1.html) |
 | Dec 02, 2025 | **JWT Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/02/jwt-vuln-part-2.html) |
-| Dec 03, 2025 | **XXE Vulnerabilities (Part 1)** | 🟢 Easy | [Read Article](/2025/12/03/xxe-vuln-part-1.html) |
+| Dec 03, 2025 | **XXE Vulnerabilities (Part 1)** | 🟠 Medium | [Read Article](/2025/12/03/xxe-vuln-part-1.html) |
 | Dec 03, 2025 | **XXE Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/03/xxe-vuln-part-2.html) |
 | Dec 06, 2025 | **Web Cache Poisoning (Part 1)** | 🟠 Medium | [Read Article](/2025/12/06/web-cache-poisoning-part-1.html) |
 | Dec 06, 2025 | **Web Cache Poisoning (Part 2)** | 🟠 Medium | [Read Article](/2025/12/06/web-cache-poisoning-part-2.html) |
@@ -55,6 +55,8 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 22, 2025 | **CORS Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/22/cors-part-2.html) |
 | Dec 24, 2025 | **Insecure Deserialization (Part 1)** | 🟠 Medium | [Read Article](/2025/12/24/insecure-deserialization-part-1.html) |
 | Dec 24, 2025 | **Insecure Deserialization (Part 2)** | 🟠 Medium | [Read Article](/2025/12/24/insecure-deserialization-part-2.html) |
+| Dec 26, 2025 | **ProtoType Pollution (Part 1)** | 🔴 Hard | [Read Article](/2025/12/26/prototype-pollution-part-1.html) |
+| Dec 26, 2025 | **ProtoType Pollution (Part 2)** | 🔴 Hard | [Read Article](/2025/12/26/prototype-pollution-part-2.html) |
 
 ---
 
