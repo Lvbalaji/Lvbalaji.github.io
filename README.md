@@ -41,8 +41,14 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 09, 2025 | **File Upload Vulnerabilities (Part 2)** | 🟢 Easy | [Read Article](/2025/12/09/file-upload-vuln-part-2.html) |
 | Dec 10, 2025 | **OAuth Vulnerabilities (Part 1)** | 🟠 Medium| [Read Article](/2025/12/10/oauth-vulnerabilites-part-1.html) |
 | Dec 10, 2025 | **OAuth Vulnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/10/oauth-vulnerabilites-part-2.html) |
-| Dec 08, 2025 | **HTTP Request Smuggling (Part 1)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-1.html) |
-| Dec 08, 2025 | **HTTP Request Smuggling (Part 2)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-2.html) |
+| Dec 13, 2025 | **HTTP Request Smuggling (Part 1)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-1.html) |
+| Dec 13, 2025 | **HTTP Request Smuggling (Part 2)** | 🔴 Hard  | [Read Article](/2025/12/13/http-req-smuggling-vuln-part-2.html) |
+| Dec 17, 2025 | **CSRF VUlnerabilities (Part 1)** | 🟠 Medium | [Read Article](/2025/12/17/csrf-part-1.html) |
+| Dec 17, 2025 | **CSRF VUlnerabilities (Part 2)** | 🟠 Medium | [Read Article](/2025/12/17/csrf-part-2.html) |
+| Dec 18, 2025 | **OS Command Injection (Part 1)** | 🟢 Easy| [Read Article](/2025/12/18/os-cmd-injection-part-1.html) |
+| Dec 18, 2025 | **OS Command Injection (Part 2)** | 🟢 Easy | [Read Article](/2025/12/18/os-cmd-injection-part-2.htmll) |
+| Dec 19, 2025 | **Directory Traversal (Part 1)** | 🟢 Easy | [Read Article](/2025/12/19/directory-traversal-part-1.html) |
+| Dec 19, 2025 | **Directory Traversal (Part 2)** | 🟢 Easy | [Read Article](/2025/12/19/directory-traversal-part-2.html) |
 
 
 ---
