@@ -6,177 +6,272 @@ layout: null
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loganatha Vishnu Balaji | Offensive Security Portfolio</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Loganatha Vishnu Balaji | Elite Offensive Security</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-color: #c9d1d9;
-            --heading-color: #58a6ff;
-            --accent-color: #238636;
-            --border-color: #30363d;
-            --difficulty-hard: #f85149;
-            --difficulty-med: #d29922;
-            --difficulty-easy: #3fb950;
+            --bg-dark: #050505;
+            --neon-green: #00ff41;
+            --neon-purple: #bd00ff;
+            --text-main: #e0e0e0;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --grid-color: rgba(0, 255, 65, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Custom Cursor */ }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s;
+        }
+        .cursor-dot {
+            width: 6px; height: 6px; background: var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%;
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+        }
+        .brand { 
+            font-family: 'JetBrains Mono', monospace; 
+            color: var(--neon-green); font-weight: bold; font-size: 1.2rem; 
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        .nav-links a {
+            color: #fff; text-decoration: none; margin-left: 30px; font-weight: 500;
+            transition: 0.3s; position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background: var(--neon-purple);
+            transition: 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 90vh;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 10%; position: relative;
+        }
+
+        .hero-text { max-width: 650px; z-index: 2; }
+
+        .status-badge {
+            display: inline-block;
+            border: 1px solid var(--neon-green); color: var(--neon-green);
+            padding: 5px 15px; border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            margin-bottom: 20px; background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; box-shadow: 0 0 25px rgba(0,255,65,0.4); } 100% { opacity: 0.7; } }
+
+        h1 {
+            font-size: 4.5rem; line-height: 1.1; font-weight: 800; margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #a5a5a5);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .highlight {
+            background: linear-gradient(to right, var(--neon-green), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Typing Effect Container */
+        .typewriter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem; color: var(--neon-purple);
+            min-height: 1.5em; margin-bottom: 30px;
+        }
+        .cursor-blink { animation: blink 1s infinite; border-right: 2px solid var(--neon-green); }
+        @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: var(--neon-green); } }
+
+        .cta-group { display: flex; gap: 20px; }
+
+        .btn-neon {
+            padding: 15px 30px; background: var(--neon-green); color: #000;
+            font-weight: bold; text-decoration: none; border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); transition: 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .btn-neon::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .btn-neon:hover::before { left: 100%; }
+        .btn-neon:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(0, 255, 65, 0.6); }
+
+        .btn-outline {
+            padding: 15px 30px; border: 1px solid var(--neon-purple); color: var(--neon-purple);
+            font-weight: bold; text-decoration: none; border-radius: 5px; transition: 0.3s;
+        }
+        .btn-outline:hover { background: rgba(189, 0, 255, 0.1); box-shadow: 0 0 20px rgba(189, 0, 255, 0.3); }
+
+        /* --- 3D Tilt Image Area --- */
+        .hero-img-container {
+            position: relative; width: 400px; height: 500px;
+            perspective: 1000px;
+        }
+        .tilt-card {
+            width: 100%; height: 100%;
+            background: #111; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 5rem; color: #333;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative; transition: transform 0.1s;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+        }
+        .tilt-card img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 15px;
+        }
+        /* Glowing border behind image */
+        .hero-img-container::before {
+            content: ''; position: absolute; inset: -5px;
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-purple));
+            z-index: -1; border-radius: 20px; filter: blur(20px); opacity: 0.7;
+        }
+
+        /* --- Sections (Scroll Reveal) --- */
+        section { padding: 100px 10%; opacity: 0; transform: translateY(30px); transition: 1s all ease; }
+        .visible { opacity: 1; transform: translateY(0); }
+
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .bar { width: 60px; height: 4px; background: var(--neon-green); border-radius: 2px; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); border-radius: 15px; padding: 30px;
+            overflow: hidden; margin-top: 30px;
+            transition: 0.3s;
+        }
+        .glass-panel:hover { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0,255,65,0.1); }
         
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; color: #ccc; }
+        th { text-align: left; padding: 15px; color: var(--neon-green); font-family: 'JetBrains Mono'; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover td { background: rgba(255,255,255,0.05); color: #fff; }
 
-        /* Navigation */
-        nav { 
-            background: var(--card-bg); 
-            border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; padding: 15px 5%; align-items: center; position: sticky; top: 0; z-index: 100;
+        .cert-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .cert-badge {
+            border: 1px solid #333; padding: 10px 20px; border-radius: 8px;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px;
+            font-family: 'JetBrains Mono'; font-size: 0.9rem; transition: 0.3s;
         }
-        .logo { color: var(--heading-color); font-weight: bold; font-size: 1.2rem; text-decoration: none; }
-        .nav-links a { color: var(--text-color); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--heading-color); }
+        .cert-badge:hover { border-color: var(--neon-green); transform: translateY(-3px); }
+        .cert-badge i { color: var(--neon-green); }
 
-        /* Hero Section */
-        .hero { 
-            text-align: center; padding: 80px 20px; 
-            background: radial-gradient(circle at center, #1f2937 0%, #0d1117 70%);
-        }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; color: #ffffff; }
-        .hero h3 { font-size: 1.2rem; color: var(--heading-color); margin-bottom: 20px; font-weight: normal; }
-        .hero .badges img { margin: 5px; height: 28px; }
-
-        /* Sections */
-        section { padding: 60px 10%; max-width: 1200px; margin: 0 auto; }
-        .section-title { color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 30px; }
-
-        /* Grid for Certs/Research */
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-
-        /* Cards */
-        .card { background-color: var(--card-bg); padding: 20px; border: 1px solid var(--border-color); border-radius: 6px; }
-        .card h4 { color: #fff; margin-bottom: 10px; }
-        .card ul { list-style: none; padding-left: 0; }
-        .card li { margin-bottom: 8px; font-size: 0.95rem; }
-        .card li::before { content: "▹"; color: var(--accent-color); margin-right: 8px; }
-
-        /* Table Styling */
-        .table-container { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; background: var(--card-bg); font-size: 0.9rem; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        th { background-color: #21262d; color: #fff; }
-        tr:hover { background-color: #21262d; }
-        
-        .diff-easy { color: var(--difficulty-easy); font-weight: bold; }
-        .diff-med { color: var(--difficulty-med); font-weight: bold; }
-        .diff-hard { color: var(--difficulty-hard); font-weight: bold; }
-        
-        .read-btn { 
-            background: var(--accent-color); color: #fff; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; 
-        }
-        .read-btn:hover { opacity: 0.9; }
-
-        /* Footer */
-        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); margin-top: 40px; }
-        .social-links a { color: var(--text-color); font-size: 1.5rem; margin: 0 10px; text-decoration: none; }
-        .social-links a:hover { color: var(--heading-color); }
-
-        @media (max-width: 768px) {
-            section { padding: 40px 5%; }
-            .hero h1 { font-size: 2rem; }
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 100px; }
+            .hero-img-container { margin-top: 50px; width: 100%; max-width: 350px; height: 350px; }
+            .cta-group { justify-content: center; }
+            h1 { font-size: 3rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
     <nav>
-        <a href="#" class="logo">ybugs.me</a>
+        <div class="brand">&lt;LVB /&gt;</div>
         <div class="nav-links">
             <a href="#about">About</a>
-            <a href="#certs">Certifications</a>
-            <a href="#research">Research</a>
             <a href="#writeups">Writeups</a>
+            <a href="#contact">Contact</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="badges">
-            <img src="https://img.shields.io/badge/STATUS-ONLINE-success?style=for-the-badge" alt="Status Online">
+        <div class="hero-text">
+            <div class="status-badge">
+                <i class="fas fa-circle" style="font-size: 8px; vertical-align: middle; margin-right: 5px;"></i> 
+                AVAILABLE FOR RED TEAMING
+            </div>
+            <h1>Loganatha <br> <span class="highlight">Vishnu Balaji</span></h1>
+            
+            <div class="typewriter">
+                <span id="type-text"></span><span class="cursor-blink">&nbsp;</span>
+            </div>
+            
+            <p>
+                Specializing in Active Directory Exploitation and Advanced Red Teaming Operations.
+            </p>
+            
+            <div class="cert-grid">
+                <div class="cert-badge"><i class="fas fa-shield-alt"></i> OSCP+</div>
+                <div class="cert-badge"><i class="fas fa-box-open"></i> CPTS</div>
+                <div class="cert-badge"><i class="fas fa-user-secret"></i> CRTP</div>
+            </div>
+
+            <br><br>
+            <div class="cta-group">
+                <a href="#writeups" class="btn-neon">View Research</a>
+                <a href="mailto:loganathavishnubalaji6@gmail.com" class="btn-outline">Contact Me</a>
+            </div>
         </div>
-        <br>
-        <h1>Loganatha Vishnu Balaji</h1>
-        <h3>Penetration Tester | Red Teaming | OSCP+, CPTS, CRTP</h3>
-        <p style="max-width: 600px; margin: 0 auto; color: #8b949e;">
-            Personal documentation of advanced penetration testing techniques, certification reviews, and security research.
-        </p>
-        <br>
-        <div class="badges">
-            <img src="https://img.shields.io/badge/OSCP%2B-Certified-ff0000?style=for-the-badge&logo=kali-linux&logoColor=white">
-            <img src="https://img.shields.io/badge/CPTS-HackTheBox-9fef00?style=for-the-badge&logo=hack-the-box&logoColor=black">
-            <img src="https://img.shields.io/badge/CRTP-Active_Directory-00a2ed?style=for-the-badge&logo=windows&logoColor=white">
+
+        <div class="hero-img-container" id="tilt-container">
+            <div class="tilt-card" id="tilt-card">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
         </div>
     </header>
 
-    <section id="about">
-        <h2 class="section-title">Who Am I?</h2>
-        <div class="grid-2">
-            <div>
-                <p style="margin-bottom: 15px;">
-                    I am a results-driven cybersecurity professional with a specialized focus on <strong>Offensive Security, Active Directory exploitation, and Network Penetration Testing</strong>. My approach is rooted in the adversarial mindset—understanding exactly how attackers operate to build stronger defenses.
-                </p>
-                <p>
-                    Currently based in <strong>Ireland</strong>, I am pursuing my <strong>MSc in Cybersecurity</strong> at Munster Technological University. When I am not in the classroom, I am deep in a terminal, sharpening my skills on PortSwigger (170+ labs) and HackTheBox.
-                </p>
-            </div>
-            <div class="card" id="certs">
-                <h4>Certifications</h4>
-                <ul>
-                    <li><strong>OSCP+:</strong> Full-scale testing, rapid vulnerability ID, and reporting (Jan 2025).</li>
-                    <li><strong>CPTS:</strong> 10-day pentest against simulated enterprise networks & AD infrastructure.</li>
-                    <li><strong>CRTP:</strong> AD exploitation, enumeration, and privilege escalation.</li>
-                    <li><strong>OSWP:</strong> WEP, WPA/WPA2, and Enterprise network attacks.</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="research">
-        <h2 class="section-title">Research & Projects</h2>
-        <div class="card">
-            <h4>Unleashing Fileless Malware on Windows: ML-Powered Defence</h4>
-            <p>
-                I designed a Machine Learning pipeline to analyze fileless malware techniques. By extracting obfuscated command patterns and shell words from PowerShell logs, I identified Decision Tree classifiers as a top performer (90% accuracy) in distinguishing malicious scripts from benign administrative tasks.
-            </p>
-        </div>
-    </section>
-
     <section id="writeups">
-        <h2 class="section-title">Technical Writeups</h2>
-        <p style="margin-bottom: 20px;">Recent research and lab walkthroughs.</p>
-        
-        <div class="table-container">
+        <div class="section-header">
+            <h2>Mission Logs / Writeups</h2>
+            <div class="bar"></div>
+        </div>
+
+        <div class="glass-panel">
             <table>
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Topic</th>
-                        <th>Difficulty</th>
-                        <th>Link</th>
+                        <th>DATE</th>
+                        <th>TARGET / TOPIC</th>
+                        <th>THREAT LEVEL</th>
+                        <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for post in site.posts %}
+                    {% for post in site.posts limit:5 %}
                     <tr>
-                        <td>{{ post.date | date: "%b %d, %Y" }}</td>
-                        <td>{{ post.title }}</td>
-                        <td>
-                            {% if post.difficulty == 'Hard' %}
-                                <span class="diff-hard">🔴 Hard</span>
-                            {% elsif post.difficulty == 'Medium' %}
-                                <span class="diff-med">🟠 Medium</span>
-                            {% else %}
-                                <span class="diff-easy">🟢 Easy</span>
-                            {% endif %}
-                        </td>
-                        <td><a href="{{ post.url }}" class="read-btn">Read</a></td>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">{{ post.date | date: "%Y-%m-%d" }}</td>
+                        <td style="font-weight: bold; color: #fff;">{{ post.title }}</td>
+                        <td><span style="color:var(--neon-green)">DETECTED</span></td>
+                        <td><a href="{{ post.url }}" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -184,14 +279,60 @@ layout: null
         </div>
     </section>
 
-    <footer>
-        <div class="social-links">
-            <a href="https://linkedin.com/in/loganathavishnubalaji" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="mailto:loganathavishnubalaji6@gmail.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <br>
-        <p style="font-size: 0.8rem; color: #8b949e;">&copy; 2026 Loganatha Vishnu Balaji. Built with security in mind.</p>
-    </footer>
+    <section id="about" style="text-align:center;">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">Ready to Secure Your Infrastructure?</h2>
+        <a href="https://linkedin.com/in/loganathavishnubalaji" target="_blank" style="font-size: 2rem; color: #fff; margin: 0 15px;"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:loganathavishnubalaji6@gmail.com" style="font-size: 2rem; color: #fff; margin: 0 15px;"><i class="fas fa-envelope"></i></a>
+        <br><br>
+        <small style="color: #555;">SYSTEM STATUS: ONLINE // COPYRIGHT 2026 LVB</small>
+    </section>
 
+    <script>
+        // 1. Typing Effect
+        const text = "Elite Penetration Tester & Security Researcher.";
+        const typeElement = document.getElementById('type-text');
+        let index = 0;
+        function typeWriter() {
+            if (index < text.length) {
+                typeElement.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 50); // Speed of typing
+            }
+        }
+        window.onload = typeWriter;
+
+        // 2. Custom Cursor Follow
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // 3. 3D Tilt Effect on Image
+        const container = document.getElementById('tilt-container');
+        const card = document.getElementById('tilt-card');
+        container.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        container.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        // 4. Scroll Reveal
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
 </body>
 </html>
