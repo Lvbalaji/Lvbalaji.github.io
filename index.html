@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loganatha Vishnu Balaji | Offensive Security Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #58a6ff;
+            --accent-color: #238636;
+            --border-color: #30363d;
+            --difficulty-hard: #f85149;
+            --difficulty-med: #d29922;
+            --difficulty-easy: #3fb950;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+
+        /* Navigation */
+        nav { 
+            background: var(--card-bg); 
+            border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; padding: 15px 5%; align-items: center; position: sticky; top: 0; z-index: 100;
+        }
+        .logo { color: var(--heading-color); font-weight: bold; font-size: 1.2rem; text-decoration: none; }
+        .nav-links a { color: var(--text-color); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--heading-color); }
+
+        /* Hero Section */
+        .hero { 
+            text-align: center; padding: 80px 20px; 
+            background: radial-gradient(circle at center, #1f2937 0%, #0d1117 70%);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; color: #ffffff; }
+        .hero h3 { font-size: 1.2rem; color: var(--heading-color); margin-bottom: 20px; font-weight: normal; }
+        .hero .badges img { margin: 5px; height: 28px; }
+
+        /* Sections */
+        section { padding: 60px 10%; max-width: 1200px; margin: 0 auto; }
+        .section-title { color: var(--heading-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 30px; }
+
+        /* Grid for Certs/Research */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        /* Cards */
+        .card { background-color: var(--card-bg); padding: 20px; border: 1px solid var(--border-color); border-radius: 6px; }
+        .card h4 { color: #fff; margin-bottom: 10px; }
+        .card ul { list-style: none; padding-left: 0; }
+        .card li { margin-bottom: 8px; font-size: 0.95rem; }
+        .card li::before { content: "▹"; color: var(--accent-color); margin-right: 8px; }
+
+        /* Table Styling */
+        .table-container { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); font-size: 0.9rem; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: #21262d; color: #fff; }
+        tr:hover { background-color: #21262d; }
+        
+        .diff-easy { color: var(--difficulty-easy); font-weight: bold; }
+        .diff-med { color: var(--difficulty-med); font-weight: bold; }
+        .diff-hard { color: var(--difficulty-hard); font-weight: bold; }
+        
+        .read-btn { 
+            background: var(--accent-color); color: #fff; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; 
+        }
+        .read-btn:hover { opacity: 0.9; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        .social-links a { color: var(--text-color); font-size: 1.5rem; margin: 0 10px; text-decoration: none; }
+        .social-links a:hover { color: var(--heading-color); }
+
+        @media (max-width: 768px) {
+            section { padding: 40px 5%; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">ybugs.me</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#certs">Certifications</a>
+            <a href="#research">Research</a>
+            <a href="#writeups">Writeups</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="badges">
+            <img src="https://img.shields.io/badge/STATUS-ONLINE-success?style=for-the-badge" alt="Status Online">
+        </div>
+        <br>
+        <h1>Loganatha Vishnu Balaji</h1>
+        <h3>Penetration Tester | Red Teaming | OSCP+, CPTS, CRTP</h3>
+        <p style="max-width: 600px; margin: 0 auto; color: #8b949e;">
+            Personal documentation of advanced penetration testing techniques, certification reviews, and security research.
+        </p>
+        <br>
+        <div class="badges">
+            <img src="https://img.shields.io/badge/OSCP%2B-Certified-ff0000?style=for-the-badge&logo=kali-linux&logoColor=white">
+            <img src="https://img.shields.io/badge/CPTS-HackTheBox-9fef00?style=for-the-badge&logo=hack-the-box&logoColor=black">
+            <img src="https://img.shields.io/badge/CRTP-Active_Directory-00a2ed?style=for-the-badge&logo=windows&logoColor=white">
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">Who Am I?</h2>
+        <div class="grid-2">
+            <div>
+                <p style="margin-bottom: 15px;">
+                    I am a results-driven cybersecurity professional with a specialized focus on <strong>Offensive Security, Active Directory exploitation, and Network Penetration Testing</strong>. My approach is rooted in the adversarial mindset—understanding exactly how attackers operate to build stronger defenses.
+                </p>
+                <p>
+                    Currently based in <strong>Ireland</strong>, I am pursuing my <strong>MSc in Cybersecurity</strong> at Munster Technological University. When I am not in the classroom, I am deep in a terminal, sharpening my skills on PortSwigger (170+ labs) and HackTheBox.
+                </p>
+            </div>
+            <div class="card" id="certs">
+                <h4>Certifications</h4>
+                <ul>
+                    <li><strong>OSCP+:</strong> Full-scale testing, rapid vulnerability ID, and reporting (Jan 2025).</li>
+                    <li><strong>CPTS:</strong> 10-day pentest against simulated enterprise networks & AD infrastructure.</li>
+                    <li><strong>CRTP:</strong> AD exploitation, enumeration, and privilege escalation.</li>
+                    <li><strong>OSWP:</strong> WEP, WPA/WPA2, and Enterprise network attacks.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="research">
+        <h2 class="section-title">Research & Projects</h2>
+        <div class="card">
+            <h4>Unleashing Fileless Malware on Windows: ML-Powered Defence</h4>
+            <p>
+                I designed a Machine Learning pipeline to analyze fileless malware techniques. By extracting obfuscated command patterns and shell words from PowerShell logs, I identified Decision Tree classifiers as a top performer (90% accuracy) in distinguishing malicious scripts from benign administrative tasks.
+            </p>
+        </div>
+    </section>
+
+    <section id="writeups">
+        <h2 class="section-title">Technical Writeups</h2>
+        <p style="margin-bottom: 20px;">Recent research and lab walkthroughs.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Topic</th>
+                        <th>Difficulty</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dec 26, 2025</td>
+                        <td>ProtoType Pollution (Part 1 & 2)</td>
+                        <td class="diff-hard">🔴 Hard</td>
+                        <td><a href="/2025/12/26/prototype-pollution-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 24, 2025</td>
+                        <td>Insecure Deserialization (Part 1 & 2)</td>
+                        <td class="diff-med">🟠 Medium</td>
+                        <td><a href="/2025/12/24/insecure-deserialization-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 22, 2025</td>
+                        <td>CORS Vulnerabilities (Part 1 & 2)</td>
+                        <td class="diff-med">🟠 Medium</td>
+                        <td><a href="/2025/12/22/cors-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 20, 2025</td>
+                        <td>Clickjacking Vulnerabilities</td>
+                        <td class="diff-med">🟠 Medium</td>
+                        <td><a href="/2025/12/20/clickjacking-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 19, 2025</td>
+                        <td>Directory Traversal</td>
+                        <td class="diff-easy">🟢 Easy</td>
+                        <td><a href="/2025/12/19/directory-traversal-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 18, 2025</td>
+                        <td>OS Command Injection</td>
+                        <td class="diff-easy">🟢 Easy</td>
+                        <td><a href="/2025/12/18/os-cmd-injection-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 17, 2025</td>
+                        <td>CSRF Vulnerabilities</td>
+                        <td class="diff-med">🟠 Medium</td>
+                        <td><a href="/2025/12/17/csrf-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 13, 2025</td>
+                        <td>HTTP Request Smuggling (Part 1 & 2)</td>
+                        <td class="diff-hard">🔴 Hard</td>
+                        <td><a href="/2025/12/13/http-req-smuggling-vuln-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 10, 2025</td>
+                        <td>OAuth Vulnerabilities</td>
+                        <td class="diff-med">🟠 Medium</td>
+                        <td><a href="/2025/12/10/oauth-vulnerabilites-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    <tr>
+                        <td>Dec 09, 2025</td>
+                        <td>File Upload Vulnerabilities</td>
+                        <td class="diff-easy">🟢 Easy</td>
+                        <td><a href="/2025/12/09/file-upload-vuln-part-1.html" class="read-btn">Read</a></td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/loganathavishnubalaji" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:loganathavishnubalaji6@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <br>
+        <p style="font-size: 0.8rem; color: #8b949e;">&copy; 2026 Loganatha Vishnu Balaji. Built with security in mind.</p>
+    </footer>
+
+</body>
+</html>
