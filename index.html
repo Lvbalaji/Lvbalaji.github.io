@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -160,67 +163,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for post in site.posts %}
                     <tr>
-                        <td>Dec 26, 2025</td>
-                        <td>ProtoType Pollution (Part 1 & 2)</td>
-                        <td class="diff-hard">🔴 Hard</td>
-                        <td><a href="/2025/12/26/prototype-pollution-part-1.html" class="read-btn">Read</a></td>
+                        <td>{{ post.date | date: "%b %d, %Y" }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>
+                            {% if post.difficulty == 'Hard' %}
+                                <span class="diff-hard">🔴 Hard</span>
+                            {% elsif post.difficulty == 'Medium' %}
+                                <span class="diff-med">🟠 Medium</span>
+                            {% else %}
+                                <span class="diff-easy">🟢 Easy</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ post.url }}" class="read-btn">Read</a></td>
                     </tr>
-                    <tr>
-                        <td>Dec 24, 2025</td>
-                        <td>Insecure Deserialization (Part 1 & 2)</td>
-                        <td class="diff-med">🟠 Medium</td>
-                        <td><a href="/2025/12/24/insecure-deserialization-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 22, 2025</td>
-                        <td>CORS Vulnerabilities (Part 1 & 2)</td>
-                        <td class="diff-med">🟠 Medium</td>
-                        <td><a href="/2025/12/22/cors-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 20, 2025</td>
-                        <td>Clickjacking Vulnerabilities</td>
-                        <td class="diff-med">🟠 Medium</td>
-                        <td><a href="/2025/12/20/clickjacking-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 19, 2025</td>
-                        <td>Directory Traversal</td>
-                        <td class="diff-easy">🟢 Easy</td>
-                        <td><a href="/2025/12/19/directory-traversal-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 18, 2025</td>
-                        <td>OS Command Injection</td>
-                        <td class="diff-easy">🟢 Easy</td>
-                        <td><a href="/2025/12/18/os-cmd-injection-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 17, 2025</td>
-                        <td>CSRF Vulnerabilities</td>
-                        <td class="diff-med">🟠 Medium</td>
-                        <td><a href="/2025/12/17/csrf-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 13, 2025</td>
-                        <td>HTTP Request Smuggling (Part 1 & 2)</td>
-                        <td class="diff-hard">🔴 Hard</td>
-                        <td><a href="/2025/12/13/http-req-smuggling-vuln-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 10, 2025</td>
-                        <td>OAuth Vulnerabilities</td>
-                        <td class="diff-med">🟠 Medium</td>
-                        <td><a href="/2025/12/10/oauth-vulnerabilites-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    <tr>
-                        <td>Dec 09, 2025</td>
-                        <td>File Upload Vulnerabilities</td>
-                        <td class="diff-easy">🟢 Easy</td>
-                        <td><a href="/2025/12/09/file-upload-vuln-part-1.html" class="read-btn">Read</a></td>
-                    </tr>
-                    </tbody>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </section>
