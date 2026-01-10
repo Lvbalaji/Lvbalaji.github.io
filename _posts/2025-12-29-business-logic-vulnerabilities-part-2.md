@@ -31,7 +31,7 @@ The application calculates the price of an item on the client side (in the brows
     **Critical Observation:** Look at the body parameters. You will see `productId=1` and `price=133700` (cents). The fact that `price` is a parameter sent *from* the client is the vulnerability.
 
 2.  **Modify Parameter:**
-    * Change the price to a trivial amount (e.g., `50` cents).
+    Change the price to a trivial amount (e.g., `50` cents).
     ```http
     productId=1&quantity=1&price=50
     ```
