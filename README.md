@@ -57,6 +57,16 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 24, 2025 | **Insecure Deserialization (Part 2)** | 🟠 Medium | [Read Article](/2025/12/24/insecure-deserialization-part-2.html) |
 | Dec 26, 2025 | **ProtoType Pollution (Part 1)** | 🔴 Hard | [Read Article](/2025/12/26/prototype-pollution-part-1.html) |
 | Dec 26, 2025 | **ProtoType Pollution (Part 2)** | 🔴 Hard | [Read Article](/2025/12/26/prototype-pollution-part-2.html) |
+| Dec 28, 2025 | **DOM XSS (Part 1)** | 🟠 Medium| [Read Article](/2025/12/28/dom-xss-part-1.html) |
+| Dec 28, 2025 | **DOM XSS (Part 2)** | 🟠 Medium | [Read Article](/2025/12/28/dom-xss-part-2.html) |
+| Dec 29, 2025 | **Business Logic Vulnerability (Part 1)** | 🟠 Medium| [Read Article](/2025/12/29/business-logic-vulnerabilities-part-1.html) |
+| Dec 29, 2025 | **Business Logic Vulnerability (Part 2)** | 🟠 Medium | [Read Article](/2025/12/29/business-logic-vulnerabilities-part-2.htmll) |
+| Dec 30, 2025 | **Web LLM (Part 1)** | 🟢 Easy| [Read Article](/2025/12/30/web-llm-part-1.html) |
+| Dec 30, 2025 | **Web LLM (Part 2)** | 🟢 Easy | [Read Article](/2025/12/30/web-llm-part-2.htmll) |
+| Jan 01, 2026 | **NOSQL Injection (Part 1)** | 🟠 Medium| [Read Article](/2026/01/01/onsqli-part-1.html) |
+| Jan 01, 2026 | **NOSQL Injection  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/01/onsqli-part-2.htmll) |
+| Jan 03, 2026 | **API Testing (Part 1)** | 🟠 Medium| [Read Article](/2026/01/03/api-testing-part-1.html) |
+| Jan 03, 2026 | **API Testing  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/03/api-testing-part-2.htmll) 
 
 ---
 
