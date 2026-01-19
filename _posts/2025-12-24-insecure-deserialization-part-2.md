@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Insecure Deserialization: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-24
 categories: [Web Security, Insecure Deserialization]
