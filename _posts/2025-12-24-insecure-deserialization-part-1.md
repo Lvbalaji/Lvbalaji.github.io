@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Insecure Deserialization: The Deep Dive (Part 1)"
 date: 2025-12-24
 categories: [Web Security, Theory, Deserialization]
