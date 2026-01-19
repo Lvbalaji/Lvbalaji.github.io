@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Race Condition Attacks: The Theory & Mechanics (Part 1)"
 date: 2026-01-10
 categories: [Web Security, Theory, Logic Flaws]
