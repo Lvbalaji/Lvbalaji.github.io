@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Directory Traversal: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-19
 categories: [Web Security, Directory Traversal]
