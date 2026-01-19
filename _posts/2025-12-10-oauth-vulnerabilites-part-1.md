@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "OAuth 2.0 & OpenID Connect: The Deep Dive (Part 1)"
 date: 2025-12-10
 categories: [Web Security, Theory, OAuth]
