@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Web LLM Attacks: The Theory & Mechanics (Part 1)"
 date: 2025-12-30
 categories: [Web Security, Theory, AI Security]
