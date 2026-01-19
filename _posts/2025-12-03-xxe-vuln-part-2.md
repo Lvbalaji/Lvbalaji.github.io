@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering XXE Injection: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-03
 categories: [Web Security, Walkthroughs]
