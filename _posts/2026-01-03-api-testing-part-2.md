@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering API Exploitation: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2026-01-03
 categories: [Web Security, API Security]
