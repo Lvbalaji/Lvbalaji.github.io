@@ -5,7 +5,7 @@ date: 2025-12-03
 categories: [Web Security, Theory, XML]
 toc: true
 ---
-
+ 
 # XML External Entity (XXE): Understanding the Mechanics
 
 Before we start stealing `/etc/passwd` files, we must understand the language that makes it possible: XML. XXE is not just about injecting code; it is about exploiting a feature—**External Entities**—that was designed for flexibility but is often enabled by default in insecure configurations.
