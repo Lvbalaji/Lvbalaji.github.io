@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Access Control Vulnerabilities: The Theory & Mechanics (Part 1)"
 date: 2025-12-08
 categories: [Web Security, Theory, Access Control]
