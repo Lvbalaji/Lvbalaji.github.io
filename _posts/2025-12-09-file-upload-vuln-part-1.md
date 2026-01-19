@@ -5,7 +5,7 @@ date: 2025-12-09
 categories: [Web Security, Theory, File Upload]
 toc: true
 ---
-
+ 
 # File Upload Vulnerabilities: Understanding the Mechanics
 
 File upload functionality is ubiquitous in modern web applications—from changing a profile picture to uploading a CV or importing a CSV file. However, if not secured correctly, this simple feature can become a gateway for the most critical attack in web security: **Remote Code Execution (RCE)**.
