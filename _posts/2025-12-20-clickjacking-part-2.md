@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Clickjacking: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-20
 categories: [Web Security, Clickjacking]
