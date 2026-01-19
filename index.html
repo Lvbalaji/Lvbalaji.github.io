@@ -6,7 +6,7 @@ layout: null
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loganatha Vishnu Balaji | Elite Offensive Security</title>
+    <title>Loganatha Vishnu Balaji | Junior Offensive Security Engineer </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
@@ -205,7 +205,7 @@ layout: null
     <div class="cursor-dot" id="cursor-dot"></div>
 
     <nav>
-        <div class="brand">&lt;LVB /&gt;</div>
+        <div class="brand">&lt;LVB&gt;</div>
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#writeups">Writeups</a>
@@ -217,16 +217,16 @@ layout: null
         <div class="hero-text">
             <div class="status-badge">
                 <i class="fas fa-circle" style="font-size: 8px; vertical-align: middle; margin-right: 5px;"></i> 
-                AVAILABLE FOR RED TEAMING
+                AVAILABLE 
             </div>
-            <h1>Loganatha <br> <span class="highlight">Vishnu Balaji</span></h1>
+            <h1>Loganatha <br> <span class="highlight">Vishnubalaji</span></h1>
             
             <div class="typewriter">
                 <span id="type-text"></span><span class="cursor-blink">&nbsp;</span>
             </div>
             
             <p>
-                Specializing in Active Directory Exploitation and Advanced Red Teaming Operations.
+                Specializing in Network Pentesting, Active Directory Pentesting, Web App Pentesting.
             </p>
             
             <div class="cert-grid">
@@ -261,21 +261,47 @@ layout: null
                     <tr>
                         <th>DATE</th>
                         <th>TARGET / TOPIC</th>
-                        <th>THREAT LEVEL</th>
+                        <th>DIFFICULTY</th>
                         <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for post in site.posts limit:5 %}
                     <tr>
-                        <td style="font-family: 'JetBrains Mono'; color: #888;">{{ post.date | date: "%Y-%m-%d" }}</td>
-                        <td style="font-weight: bold; color: #fff;">{{ post.title }}</td>
-                        <td><span style="color:var(--neon-green)">DETECTED</span></td>
-                        <td><a href="{{ post.url }}" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">Jan 05, 2026</td>
+                        <td style="font-weight: bold; color: #fff;">GraphQL (Part 1)</td>
+                        <td>🟠 Medium</td>
+                        <td><a href="/2026/01/05/graphql-part-1.html" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
                     </tr>
-                    {% endfor %}
+                    <tr>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">Dec 17, 2025</td>
+                        <td style="font-weight: bold; color: #fff;">CSRF Vulnerabilities (Part 1)</td>
+                        <td>🟠 Medium</td>
+                        <td><a href="/2025/12/17/csrf-part-1.html" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">Dec 13, 2025</td>
+                        <td style="font-weight: bold; color: #fff;">HTTP Request Smuggling (Part 1)</td>
+                        <td>🔴 Hard</td>
+                        <td><a href="/2025/12/13/http-req-smuggling-vuln-part-1.html" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">Dec 02, 2025</td>
+                        <td style="font-weight: bold; color: #fff;">JWT Vulnerabilities (Part 1)</td>
+                        <td>🟠 Medium</td>
+                        <td><a href="/2025/12/02/jwt-vuln-part-1.html" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: 'JetBrains Mono'; color: #888;">Dec 01, 2025</td>
+                        <td style="font-weight: bold; color: #fff;">Host Header Injection (Part 1)</td>
+                        <td>🟠 Medium</td>
+                        <td><a href="/2025/12/01/host-header-injection-part-1.html" style="color: var(--neon-green); text-decoration: none;">Decrypt <i class="fas fa-arrow-right"></i></a></td>
+                    </tr>
                 </tbody>
             </table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="all-writeups.html" class="btn-outline">View Mission Archive <i class="fas fa-database"></i></a>
         </div>
     </section>
 
@@ -289,7 +315,7 @@ layout: null
 
     <script>
         // 1. Typing Effect
-        const text = "Elite Penetration Tester & Security Researcher.";
+        const text = "Junior Penetration Tester & Security Researcher.";
         const typeElement = document.getElementById('type-text');
         let index = 0;
         function typeWriter() {
