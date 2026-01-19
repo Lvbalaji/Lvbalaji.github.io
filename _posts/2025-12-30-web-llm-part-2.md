@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Web LLM Attacks: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-30
 categories: [Web Security, AI Security, LLM]
