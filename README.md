@@ -67,6 +67,12 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Jan 01, 2026 | **NOSQL Injection  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/01/onsqli-part-2.htmll) |
 | Jan 03, 2026 | **API Testing (Part 1)** | 🟠 Medium| [Read Article](/2026/01/03/api-testing-part-1.html) |
 | Jan 03, 2026 | **API Testing  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/03/api-testing-part-2.htmll) 
+| Jan 05, 2026 | **GraphQL (Part 1)** | 🟠 Medium| [Read Article](/2026/01/05/graphql-part-1.html) |
+| Jan 05, 2026 | **GraphQL  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/05/graphql-part-2.htmll) |
+| Jan 07, 2026 | **Web Socket Vulnerabilities (Part 1)** | 🟠 Medium| [Read Article](/2026/01/07/websockets-part-1.html) |
+| Jan 07, 2026 | **Web Socket Vulnerabilities  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/07/websockets-part-2.htmll) |
+| Jan 10, 2026 | **Race Condition (Part 1)** | 🟠 Medium| [Read Article](/2026/01/10/racecondition-part-1.html) |
+| Jan 10, 2026 | **Race Condition (Part 2)** | 🟠 Medium | [Read Article](/2026/01/10/racecondition-part-2.htmll) |
 
 ---
 
