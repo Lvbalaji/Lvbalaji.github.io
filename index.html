@@ -184,11 +184,25 @@ layout: null
 
         .cert-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
         .cert-badge {
-            border: 1px solid #333; padding: 10px 20px; border-radius: 8px;
-            background: rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px;
-            font-family: 'JetBrains Mono'; font-size: 0.9rem; transition: 0.3s;
+            border: 1px solid #333; 
+            padding: 10px 20px; 
+            border-radius: 8px;
+            background: rgba(0,0,0,0.5); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            font-family: 'JetBrains Mono'; 
+            font-size: 0.9rem; 
+            transition: 0.3s;
+            text-decoration: none; /* Removes underline */
+            color: #fff; /* Ensures text stays white */
         }
-        .cert-badge:hover { border-color: var(--neon-green); transform: translateY(-3px); }
+        .cert-badge:hover { 
+            border-color: var(--neon-green); 
+            transform: translateY(-3px); 
+            color: #fff; /* Keeps text white on hover */
+            background: rgba(0, 255, 65, 0.05);
+        }
         .cert-badge i { color: var(--neon-green); }
 
         @media (max-width: 900px) {
@@ -230,9 +244,25 @@ layout: null
             </p>
             
             <div class="cert-grid">
-                <div class="cert-badge"><i class="fas fa-shield-alt"></i> OSCP+</div>
-                <div class="cert-badge"><i class="fas fa-box-open"></i> CPTS</div>
-                <div class="cert-badge"><i class="fas fa-user-secret"></i> CRTP</div>
+                <a href="https://credentials.offsec.com/30cefabb-11a7-4e00-a3fe-facefeed068e#acc.aTs4HnNj" target="_blank" class="cert-badge">
+                    <i class="fas fa-shield-alt"></i> OSCP+
+                </a>
+                
+                <a href="https://credentials.offsec.com/f488be39-9aa8-43ab-91ab-b88c5009a062#acc.Y1w7oJlK" target="_blank" class="cert-badge">
+                    <i class="fas fa-wifi"></i> OSWP
+                </a>
+                
+                <a href="https://www.credly.com/badges/d533e091-b009-4d26-9331-d89fccb03de9/public_url" target="_blank" class="cert-badge">
+                    <i class="fas fa-box-open"></i> CPTS
+                </a>
+
+                <a href="https://www.credential.net/4ee84005-c0d6-495d-9d12-742c88632e6d#acc.6Wtv1jFd" target="_blank" class="cert-badge">
+                    <i class="fas fa-user-secret"></i> CRTP
+                </a>
+
+                <a href="https://tryhackme.com/certification/certificate/6b1eb214-1ff5-425d-84e4-2ed8b3770535" target="_blank" class="cert-badge">
+                    <i class="fas fa-network-wired"></i> PT1
+                </a>
             </div>
 
             <br><br>
