@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Web Cache Poisoning: The Theory & Mechanics (Part 1)"
 date: 2025-12-06
 categories: [Web Security, Theory, Caching]
