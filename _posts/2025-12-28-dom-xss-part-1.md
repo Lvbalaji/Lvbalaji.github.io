@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "DOM-Based Vulnerabilities: The Theory & Mechanics (Part 1)"
 date: 2026-01-28
 categories: [Web Security, Theory, Client-Side]
