@@ -5,7 +5,7 @@ date: 2025-12-02
 categories: [Web Security, Walkthroughs]
 toc: true
 ---
-
+ 
 # 🧠 Exploiting JWT Vulnerabilities
 
 In Part 1, we explored the theory behind JSON Web Token (JWT) attacks—how blind trust in header parameters and weak verification logic can lead to total system compromise.
