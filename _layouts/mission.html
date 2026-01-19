@@ -90,7 +90,25 @@
             padding: 2px 10px; border-bottom-right-radius: 5px; font-family: 'JetBrains Mono';
         }
         .content code { font-family: 'JetBrains Mono', monospace; color: var(--neon-green); font-size: 0.9rem; }
-        
+
+        /* --- Image Styling Fix --- */
+        .content img {
+            max-width: 100%;       /* Forces image to fit inside the container */
+            height: auto;          /* Maintains aspect ratio (prevents stretching) */
+            display: block;        /* Allows centering */
+            margin: 30px auto;     /* Centers image with space above/below */
+            border-radius: 10px;   /* Smooth corners */
+            border: 1px solid rgba(0, 255, 65, 0.2); /* Subtle neon border */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Deep shadow for depth */
+            transition: transform 0.3s ease; /* smooth hover effect */
+        }
+
+        /* Optional: Slight zoom on hover for a "scan" effect */
+        .content img:hover {
+            transform: scale(1.02);
+            border-color: var(--neon-green);
+        }
+
         /* Tables */
         .content table { 
             width: 100%; border-collapse: collapse; margin: 30px 0; 
