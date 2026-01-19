@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Race Condition Attacks: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2026-01-10
 categories: [Web Security, Exploitation, Race Conditions]
