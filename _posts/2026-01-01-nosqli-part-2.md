@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering NoSQL Injection: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2026-01-01
 categories: [Web Security, NoSQL]
