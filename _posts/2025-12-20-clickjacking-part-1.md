@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Clickjacking (UI Redressing): The Theory & Mechanics (Part 1)"
 date: 2025-12-20
 categories: [Web Security, Theory, Clickjacking]
