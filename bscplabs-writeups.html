@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Archive | LVB</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        /* reusing your existing styles for consistency */
+        :root { --bg-dark: #050505; --neon-green: #00ff41; --neon-purple: #bd00ff; --text-main: #e0e0e0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif;
+            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
+        .brand { font-family: 'JetBrains Mono', monospace; color: var(--neon-green); font-weight: bold; font-size: 1.2rem; text-decoration: none; }
+        .nav-links a { color: #fff; text-decoration: none; margin-left: 30px; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--neon-green); }
+
+        /* Table Styles */
+        .container { padding: 50px 10%; max-width: 1400px; margin: 0 auto; }
+        h1 { margin-bottom: 30px; font-size: 2.5rem; background: linear-gradient(to right, #fff, #a5a5a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; color: #ccc; min-width: 600px; }
+        th { text-align: left; padding: 15px; color: var(--neon-green); font-family: 'JetBrains Mono'; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover td { background: rgba(255,255,255,0.05); color: #fff; }
+        
+        .btn-back { display: inline-block; margin-bottom: 20px; color: var(--neon-purple); text-decoration: none; font-family: 'JetBrains Mono'; }
+        .btn-back:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="brand">&lt;LVB /&gt;</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Return to Base</a>
+        <h1>Full Mission Archive</h1>
+
+        <div class="glass-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>TARGET / TOPIC</th>
+                        <th>DIFFICULTY</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Jan 10, 2026</td><td><b>Race Condition (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2026/01/10/racecondition-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 10, 2026</td><td><b>Race Condition (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2026/01/10/racecondition-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 07, 2026</td><td><b>Web Socket Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2026/01/07/websockets-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 07, 2026</td><td><b>Web Socket Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2026/01/07/websockets-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 05, 2026</td><td><b>GraphQL (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2026/01/05/graphql-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 05, 2026</td><td><b>GraphQL (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2026/01/05/graphql-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 03, 2026</td><td><b>API Testing (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2026/01/03/api-testing-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 03, 2026</td><td><b>API Testing (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2026/01/03/api-testing-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 01, 2026</td><td><b>NOSQL Injection (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2026/01/01/onsqli-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Jan 01, 2026</td><td><b>NOSQL Injection (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2026/01/01/onsqli-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    
+                    <tr><td>Dec 30, 2025</td><td><b>Web LLM (Part 2)</b></td><td>🟢 Easy</td><td><a href="/2025/12/30/web-llm-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 30, 2025</td><td><b>Web LLM (Part 1)</b></td><td>🟢 Easy</td><td><a href="/2025/12/30/web-llm-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 29, 2025</td><td><b>Business Logic Vulnerability (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/29/business-logic-vulnerabilities-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 29, 2025</td><td><b>Business Logic Vulnerability (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/29/business-logic-vulnerabilities-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 28, 2025</td><td><b>DOM XSS (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/28/dom-xss-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 28, 2025</td><td><b>DOM XSS (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/28/dom-xss-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 26, 2025</td><td><b>ProtoType Pollution (Part 2)</b></td><td>🔴 Hard</td><td><a href="/2025/12/26/prototype-pollution-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 26, 2025</td><td><b>ProtoType Pollution (Part 1)</b></td><td>🔴 Hard</td><td><a href="/2025/12/26/prototype-pollution-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 24, 2025</td><td><b>Insecure Deserialization (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/24/insecure-deserialization-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 24, 2025</td><td><b>Insecure Deserialization (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/24/insecure-deserialization-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 22, 2025</td><td><b>CORS Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/22/cors-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 22, 2025</td><td><b>CORS Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/22/cors-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 20, 2025</td><td><b>Clickjacking Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/20/clickjacking-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 20, 2025</td><td><b>Clickjacking Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/20/clickjacking-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 19, 2025</td><td><b>Directory Traversal (Part 2)</b></td><td>🟢 Easy</td><td><a href="/2025/12/19/directory-traversal-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 19, 2025</td><td><b>Directory Traversal (Part 1)</b></td><td>🟢 Easy</td><td><a href="/2025/12/19/directory-traversal-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 18, 2025</td><td><b>OS Command Injection (Part 2)</b></td><td>🟢 Easy</td><td><a href="/2025/12/18/os-cmd-injection-part-2.htmll" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 18, 2025</td><td><b>OS Command Injection (Part 1)</b></td><td>🟢 Easy</td><td><a href="/2025/12/18/os-cmd-injection-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 17, 2025</td><td><b>CSRF Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/17/csrf-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 17, 2025</td><td><b>CSRF Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/17/csrf-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 13, 2025</td><td><b>HTTP Request Smuggling (Part 2)</b></td><td>🔴 Hard</td><td><a href="/2025/12/13/http-req-smuggling-vuln-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 13, 2025</td><td><b>HTTP Request Smuggling (Part 1)</b></td><td>🔴 Hard</td><td><a href="/2025/12/13/http-req-smuggling-vuln-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 10, 2025</td><td><b>OAuth Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/10/oauth-vulnerabilites-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 10, 2025</td><td><b>OAuth Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/10/oauth-vulnerabilites-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 09, 2025</td><td><b>File Upload Vulnerabilities (Part 2)</b></td><td>🟢 Easy</td><td><a href="/2025/12/09/file-upload-vuln-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 09, 2025</td><td><b>File Upload Vulnerabilities (Part 1)</b></td><td>🟢 Easy</td><td><a href="/2025/12/09/file-upload-vuln-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 08, 2025</td><td><b>Access Control (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/08/access-control-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 08, 2025</td><td><b>Access Control (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/08/access-control-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 07, 2025</td><td><b>SSRF Vulnerabilities (Part 2)</b></td><td>🟢 Easy</td><td><a href="/2025/12/07/ssrf-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 07, 2025</td><td><b>SSRF Vulnerabilities (Part 1)</b></td><td>🟢 Easy</td><td><a href="/2025/12/07/ssrf-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 06, 2025</td><td><b>Web Cache Poisoning (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/06/web-cache-poisoning-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 06, 2025</td><td><b>Web Cache Poisoning (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/06/web-cache-poisoning-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 03, 2025</td><td><b>XXE Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/03/xxe-vuln-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 03, 2025</td><td><b>XXE Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/03/xxe-vuln-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 02, 2025</td><td><b>JWT Vulnerabilities (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/02/jwt-vuln-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 02, 2025</td><td><b>JWT Vulnerabilities (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/02/jwt-vuln-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 01, 2025</td><td><b>Host Header Injection (Part 2)</b></td><td>🟠 Medium</td><td><a href="/2025/12/01/host-header-injection-part-2.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Dec 01, 2025</td><td><b>Host Header Injection (Part 1)</b></td><td>🟠 Medium</td><td><a href="/2025/12/01/host-header-injection-part-1.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
