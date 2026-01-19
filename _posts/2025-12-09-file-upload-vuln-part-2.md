@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering File Upload Attacks: A Deep Dive into PortSwigger Labs"
 date: 2025-12-09
 categories: [Web Security, File Upload]
