@@ -5,7 +5,7 @@ date: 2025-12-02
 categories: [Web Security, Theory, Authentication]
 toc: true
 ---
-
+ 
 # JWT Attacks: Understanding the Mechanics
 
 Before we dive into cracking secrets and injecting headers, we must understand the fundamental architecture of Token-Based Authentication. The vulnerability here isn't just about weak passwords; it is about **trusting the wrapper**. It is about the disconnect between *reading* a token and *verifying* its integrity.
