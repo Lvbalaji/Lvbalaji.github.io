@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering DOM-Based Vulnerabilities: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-28
 categories: [Web Security, DOM]
