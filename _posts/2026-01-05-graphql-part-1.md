@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "GraphQL Injection: The Theory & Mechanics (Part 1)"
 date: 2026-01-05
 categories: [Web Security, Theory, API]
