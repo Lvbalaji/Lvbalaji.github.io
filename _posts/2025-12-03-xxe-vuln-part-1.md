@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "XML External Entity (XXE): The Theory & Mechanics (Part 1)"
 date: 2025-12-03
 categories: [Web Security, Theory, XML]
