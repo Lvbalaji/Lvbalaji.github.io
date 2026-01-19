@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering JWT Attacks: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2025-12-02
 categories: [Web Security, Walkthroughs]
