@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Host Header Attacks: A Deep Dive into PortSwigger Labs"
 date: 2025-12-01
 categories: [Web Security]
