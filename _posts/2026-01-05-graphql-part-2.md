@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering GraphQL Attacks: A Deep Dive into PortSwigger Labs (Part 2)"
 date: 2026-01-05
 categories: [Web Security, Exploitation, GraphQL]
