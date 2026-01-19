@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering Access Control Attacks: A Deep Dive into PortSwigger Labs"
 date: 2025-12-08
 categories: [Web Security, Access Control]
