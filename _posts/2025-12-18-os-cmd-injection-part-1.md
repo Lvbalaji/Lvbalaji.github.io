@@ -46,17 +46,18 @@ To exploit this, you must understand how command shells (like `bash` on Linux or
 ### The Injection Operators
 
 
-| **Injection Operator** | **Injection Character** | **URL-Encoded Character** | **Executed Command**                       |
-| ---------------------- | ----------------------- | ------------------------- | ------------------------------------------ |
-| Semicolon              | `;`                     | `%3b`                     | Both                                       |
-| New Line               | `\n`                    | `%0a`                     | Both                                       |
-| Background             | `&`                     | `%26`                     | Both (second output generally shown first) |
-| Pipe                   | `\|`                    | `%7c`                     | Both (only second output is shown)         |
-| AND                    | `&&`                    | `%26%26`                  | Both (only if first succeeds)              |
-| OR                     | `\|\|`                  | `%7c%7c`                  | Second (only if first fails)               |
-| Sub-Shell              | ` `` `                  | `%60%60`                  | Both (Linux-only) and MacOS                |
-| Sub-Shell              | `$()`                   | `%24%28%29`               | Both (Linux-only) and MacOS                |
-semi-colon `;`, which will not work if the command was being executed with `Windows Command Line (CMD)` but still executed with `Windows PowerShell`.
+| Injection Operator | Injection Character | URL-Encoded Character | Executed Command |
+| :--- | :--- | :--- | :--- |
+| Semicolon | `;` | `%3b` | Both |
+| New Line | `\n` | `%0a` | Both |
+| Background | `&` | `%26` | Both (second output generally shown first) |
+| Pipe | `&#124;` | `%7c` | Both (only second output is shown) |
+| AND | `&&` | `%26%26` | Both (only if first succeeds) |
+| OR | `&#124;&#124;` | `%7c%7c` | Second (only if first fails) |
+| Sub-Shell | `` ` `` | `%60%60` | Both (Linux-only) and MacOS |
+| Sub-Shell | `$()` | `%24%28%29` | Both (Linux-only) and MacOS |
+
+semi-colon `;`, which will not work if the command was being executed with `Windows Command Line (CMD)` but still executed with `Windows PowerShell`.
 
 
 ---
