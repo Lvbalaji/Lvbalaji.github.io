@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "WebSocket Attacks: The Theory & Mechanics (Part 1)"
 date: 2026-01-07
 categories: [Web Security, Theory, Protocols]
