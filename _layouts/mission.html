@@ -16,7 +16,8 @@
             --grid-color: rgba(0, 255, 65, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* 1. GLOBAL CURSOR RESET: Hides default mouse */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
             background-color: var(--bg-dark);
@@ -27,6 +28,19 @@
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 40px 40px;
+        }
+
+        /* 2. CUSTOM CURSOR STYLES */
+        .cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s;
+        }
+        .cursor-dot {
+            width: 6px; height: 6px; background: var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
         }
 
         /* --- Navbar --- */
@@ -138,6 +152,9 @@
 </head>
 <body>
 
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
     <nav>
         <a href="{{ site.baseurl }}/" class="brand">&lt;LVB /&gt;</a>
         <div class="nav-links">
@@ -174,5 +191,15 @@
         SYSTEM STATUS: ONLINE // COPYRIGHT 2026 LVB
     </div>
 
+    <script>
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+    </script>
 </body>
 </html>
