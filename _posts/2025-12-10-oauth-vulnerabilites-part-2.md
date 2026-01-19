@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Mastering OAuth Attacks: A Deep Dive into PortSwigger Labs"
 date: 2025-12-10
 categories: [Web Security, OAuth]
