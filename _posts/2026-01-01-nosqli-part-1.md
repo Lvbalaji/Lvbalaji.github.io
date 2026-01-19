@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "NoSQL Injection: The Theory & Mechanics (Part 1)"
 date: 2026-01-01
 categories: [Web Security, Theory, NoSQL]
