@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Advanced Web Cache Poisoning: A Deep Dive into PortSwigger Labs"
 date: 2025-12-06
 categories: [Web Security]
