@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "JWT Attacks: The Theory & Mechanics (Part 1)"
 date: 2025-12-02
 categories: [Web Security, Theory, Authentication]
