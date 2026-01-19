@@ -9,7 +9,21 @@
     <style>
         /* reusing your existing styles for consistency */
         :root { --bg-dark: #050505; --neon-green: #00ff41; --neon-purple: #bd00ff; --text-main: #e0e0e0; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* 1. HIDE DEFAULT CURSOR */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        /* 2. ADD CURSOR STYLES */
+        .cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s;
+        }
+        .cursor-dot {
+            width: 6px; height: 6px; background: var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+        }
         body {
             background-color: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif;
             background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
@@ -38,7 +52,8 @@
     </style>
 </head>
 <body>
-
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
     <nav>
         <a href="index.html" class="brand">&lt;LVB /&gt;</a>
         <div class="nav-links">
@@ -114,5 +129,15 @@
             </table>
         </div>
     </div>
+<script>
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+</script>
 </body>
 </html>
