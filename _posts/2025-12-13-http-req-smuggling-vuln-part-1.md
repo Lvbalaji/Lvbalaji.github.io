@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "HTTP Request Smuggling: The Theory & Mechanics (Part 1)"
 date: 2025-12-13
 categories: [Web Security, Theory, HTTP]
