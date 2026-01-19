@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "OS Command Injection: The Theory & Mechanics (Part 1)"
 date: 2025-12-18
 categories: [Web Security, Theory, OS Command Injection]
