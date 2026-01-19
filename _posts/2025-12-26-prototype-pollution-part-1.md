@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Prototype Pollution: The Theory & Mechanics (Part 1)"
 date: 2025-12-26
 categories: [Web Security, Theory, Prototype Pollution]
