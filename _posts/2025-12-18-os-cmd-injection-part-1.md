@@ -5,7 +5,7 @@ date: 2025-12-18
 categories: [Web Security, Theory, OS Command Injection]
 toc: true
 ---
-
+ 
 # OS Command Injection: Understanding the Mechanics
 
 OS Command Injection (also known as Shell Injection) is a critical vulnerability that allows an attacker to execute arbitrary operating system (OS) commands on the server that is running an application.
