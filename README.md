@@ -60,19 +60,19 @@ This is my personal documentation of advanced penetration testing techniques, ce
 | Dec 28, 2025 | **DOM XSS (Part 1)** | 🟠 Medium| [Read Article](/2025/12/28/dom-xss-part-1.html) |
 | Dec 28, 2025 | **DOM XSS (Part 2)** | 🟠 Medium | [Read Article](/2025/12/28/dom-xss-part-2.html) |
 | Dec 29, 2025 | **Business Logic Vulnerability (Part 1)** | 🟠 Medium| [Read Article](/2025/12/29/business-logic-vulnerabilities-part-1.html) |
-| Dec 29, 2025 | **Business Logic Vulnerability (Part 2)** | 🟠 Medium | [Read Article](/2025/12/29/business-logic-vulnerabilities-part-2.htmll) |
+| Dec 29, 2025 | **Business Logic Vulnerability (Part 2)** | 🟠 Medium | [Read Article](/2025/12/29/business-logic-vulnerabilities-part-2.html) |
 | Dec 30, 2025 | **Web LLM (Part 1)** | 🟢 Easy| [Read Article](/2025/12/30/web-llm-part-1.html) |
-| Dec 30, 2025 | **Web LLM (Part 2)** | 🟢 Easy | [Read Article](/2025/12/30/web-llm-part-2.htmll) |
+| Dec 30, 2025 | **Web LLM (Part 2)** | 🟢 Easy | [Read Article](/2025/12/30/web-llm-part-2.html) |
 | Jan 01, 2026 | **NOSQL Injection (Part 1)** | 🟠 Medium| [Read Article](/2026/01/01/onsqli-part-1.html) |
-| Jan 01, 2026 | **NOSQL Injection  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/01/onsqli-part-2.htmll) |
+| Jan 01, 2026 | **NOSQL Injection  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/01/onsqli-part-2.html) |
 | Jan 03, 2026 | **API Testing (Part 1)** | 🟠 Medium| [Read Article](/2026/01/03/api-testing-part-1.html) |
-| Jan 03, 2026 | **API Testing  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/03/api-testing-part-2.htmll) 
+| Jan 03, 2026 | **API Testing  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/03/api-testing-part-2.html) 
 | Jan 05, 2026 | **GraphQL (Part 1)** | 🟠 Medium| [Read Article](/2026/01/05/graphql-part-1.html) |
-| Jan 05, 2026 | **GraphQL  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/05/graphql-part-2.htmll) |
+| Jan 05, 2026 | **GraphQL  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/05/graphql-part-2.html) |
 | Jan 07, 2026 | **Web Socket Vulnerabilities (Part 1)** | 🟠 Medium| [Read Article](/2026/01/07/websockets-part-1.html) |
-| Jan 07, 2026 | **Web Socket Vulnerabilities  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/07/websockets-part-2.htmll) |
+| Jan 07, 2026 | **Web Socket Vulnerabilities  (Part 2)** | 🟠 Medium | [Read Article](/2026/01/07/websockets-part-2.html) |
 | Jan 10, 2026 | **Race Condition (Part 1)** | 🟠 Medium| [Read Article](/2026/01/10/racecondition-part-1.html) |
-| Jan 10, 2026 | **Race Condition (Part 2)** | 🟠 Medium | [Read Article](/2026/01/10/racecondition-part-2.htmll) |
+| Jan 10, 2026 | **Race Condition (Part 2)** | 🟠 Medium | [Read Article](/2026/01/10/racecondition-part-2.html) |
 
 ---
 
