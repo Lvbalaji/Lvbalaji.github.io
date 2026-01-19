@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "File Upload Vulnerabilities: The Theory & Mechanics (Part 1)"
 date: 2025-12-09
 categories: [Web Security, Theory, File Upload]
