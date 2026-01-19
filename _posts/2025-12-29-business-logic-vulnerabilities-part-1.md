@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: mission
 title: "Business Logic Vulnerabilities: The Theory & Mechanics (Part 1)"
 date: 2025-12-29
 categories: [Web Security, Theory, Business Logic]
