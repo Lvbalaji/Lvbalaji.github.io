@@ -234,7 +234,7 @@ Yes, by closing the quote first.
 
 1. **Input:** `test"; whoami; echo "`
     
-2.Result: echo "test"; whoami; echo ""
+2. **Result:** `echo "test"; whoami; echo ""`
     
     The server executes the echo, then executes whoami.
 
@@ -252,7 +252,8 @@ Yes, by closing the quote first.
 
 Answer:
 
-When using subprocess.run or Popen in Python, setting shell=True invokes the system shell (/bin/sh) to execute the command string. This subjects the input to shell expansion and interpretation of characters like ; or |, making injection possible. shell=False passes arguments directly to the OS kernel, preventing injection.
+When using `subprocess.run` or `Popen` in Python, setting `shell=True` invokes the system shell (`/bin/sh`) to execute the command string. This subjects the input to shell expansion and interpretation of characters like `;` or `|`, making injection possible. `shell=False` passes arguments directly to the OS kernel, preventing injection.
+
 
 ### Q10: How do you escalate privileges after gaining a shell via Command Injection?
 
@@ -277,9 +278,9 @@ The Question: How do you proceed?
 
 The "Hired" Answer:
 
-"The application likely has a blacklist filter. I would fuzz for other separators like |, &, or %0a (newline).
+"The application likely has a blacklist filter. I would fuzz for other separators like `|`, `&`, or `%0a` (newline).
 
-If those are blocked, I would try shell expansions like $(sleep 5) inside the input, as some mail programs might evaluate subshells. I would also try encoding characters (URL/Hex) if the WAF is decoding them before the backend script runs."
+If those are blocked, I would try shell expansions like `$(sleep 5)` inside the input, as some mail programs might evaluate subshells. I would also try encoding characters (URL/Hex) if the WAF is decoding them before the backend script runs."
 
 ### 🎭 Scenario 2: Windows Server RCE
 
