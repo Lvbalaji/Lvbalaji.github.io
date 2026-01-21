@@ -19,9 +19,13 @@ This guide explores the mechanics of **Remote Execution**, **Credential Theft**,
 PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older tools like `psexec` (which drop a noisy binary on the disk), WinRM uses an existing system service, making it much stealthier.
 
 ### **The Mechanics: How it Works**
+
 **Protocol:** It runs over HTTP (5985) or HTTPS (5986), making it firewall-friendly.
+
 **The Process:** When you connect, the target machine spawns a child process called `wsmprovhost.exe`. This is the process that actually executes your commands.
+
 **Permissions:** You must generally be a **Local Administrator** on the target to use WinRM.
+
 **Integrity:** The session runs as "High Integrity," meaning bypasses like UAC are usually not needed once connected.
 
 ### **Technique A: One-to-One (PSSession)**
@@ -96,10 +100,13 @@ Once you land on a box, you need to "live off the land" or bring tools to steal 
 4.  **AES Keys:** Can be used for Overpass-the-Hash.
 
 ### **Tool Hierarchy (From Noisy to Stealthy)**
+
 1.  **Mimikatz:** The gold standard, but highly flagged by AV/EDR.
     `sekurlsa::logonpasswords` (Dumps everything).
     `sekurlsa::ekeys` (Dumps AES/DES keys for tickets).
+
 2.  **SafetyKatz:** Dumps LSASS memory to a temp file, then runs Mimikatz on the file. This prevents Mimikatz from interacting directly with the live LSASS process (which crashes less often).
+
 3.  **Dumpert / Comsvcs.dll:** "Living off the Land". Uses built-in Windows DLLs to create a dump file.
 
     **Mechanism:** `comsvcs.dll` has a function `MiniDump` intended for debugging. Attackers abuse it.
