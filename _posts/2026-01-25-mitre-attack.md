@@ -1,7 +1,7 @@
 ---
 layout: mission
 title: "Mastering the Adversary: The Ultimate Guide to the MITRE ATT&CK Framework"
-date: 2026-01-20
+date: 2026-01-25
 categories: [Frameworks]
 toc: true
 ---
