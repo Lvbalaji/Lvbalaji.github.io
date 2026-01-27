@@ -162,11 +162,10 @@ If you are preparing for a cybersecurity interview, expect questions on MITRE AT
 
 **Question:** A developer accidentally pushes a hardcoded AWS S3 API key to a public GitHub repository. An hour later, thousands of files are downloaded from a private bucket. Map this to the matrix.
 
-**Answer:** * **Initial Access:** Unsecured Credentials (T1552).
-    
-    **Collection:** Data from Information Repositories (T1213).
-        
-    **Exfiltration:** Exfiltration to Cloud Storage (T1567).
+**Answer:**  
+1. **Initial Access:** Unsecured Credentials (T1552).
+2. **Collection:** Data from Information Repositories (T1213).
+3. **Exfiltration:** Exfiltration to Cloud Storage (T1567).
         
 
 **Scenario 6: The "Golden Ticket"**
@@ -300,3 +299,8 @@ If you are preparing for a cybersecurity interview, expect questions on MITRE AT
 The MITRE ATT&CK framework has become the industry standard for describing cyber threats. It shifts the focus from static indicators to dynamic behaviors, allowing defenders to be proactive rather than reactive.
 
 By understanding the 14 tactics and learning how to operationalize the data using the Navigator, you gain a tremendous advantage in understanding, detecting, and emulating adversaries. Start exploring the matrix today, and look beyond the "what" to understand the "how" and "why" of cyberattacks.
+
+
+### Reference
+
+[Checkout This Playlist!! This helped me a lot](https://www.youtube.com/playlist?list=PLBf0hzazHTGMjSlPmJ73Cydh9vCqxukCu)
