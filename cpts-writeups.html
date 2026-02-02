@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Archive | LVB</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        /* reusing your existing styles for consistency */
+        :root { --bg-dark: #050505; --neon-green: #00ff41; --neon-purple: #bd00ff; --text-main: #e0e0e0; }
+        /* 1. HIDE DEFAULT CURSOR */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        /* 2. ADD CURSOR STYLES */
+        .cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s;
+        }
+        .cursor-dot {
+            width: 6px; height: 6px; background: var(--neon-green);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+        }
+        body {
+            background-color: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif;
+            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
+        .brand { font-family: 'JetBrains Mono', monospace; color: var(--neon-green); font-weight: bold; font-size: 1.2rem; text-decoration: none; }
+        .nav-links a { color: #fff; text-decoration: none; margin-left: 30px; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--neon-green); }
+
+        /* Table Styles */
+        .container { padding: 50px 10%; max-width: 1400px; margin: 0 auto; }
+        h1 { margin-bottom: 30px; font-size: 2.5rem; background: linear-gradient(to right, #fff, #a5a5a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; color: #ccc; min-width: 600px; }
+        th { text-align: left; padding: 15px; color: var(--neon-green); font-family: 'JetBrains Mono'; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover td { background: rgba(255,255,255,0.05); color: #fff; }
+        
+        .btn-back { display: inline-block; margin-bottom: 20px; color: var(--neon-purple); text-decoration: none; font-family: 'JetBrains Mono'; }
+        .btn-back:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+    <nav>
+        <a href="index.html" class="brand">&lt;LVB /&gt;</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Return to Base</a>
+        <h1>Full Mission Archive</h1>
+
+        <div class="glass-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>TARGET / TOPIC</th>
+                        <th>DIFFICULTY</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>July 05, 2024</td><td><b>Penetration Testing Process</b></td><td>🟠 Medium</td><td><a href="/2024/07/05/penetration-testing-process.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 05, 2024</td><td><b>Network Enumeration with Nmap</b></td><td>🟠 Medium</td><td><a href="/2024/07/05/nmap.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 06, 2024</td><td><b>Footprinting</b></td><td>🟠 Medium</td><td><a href="/2024/07/06/footprinting.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 08, 2024</td><td><b>Information Gathering - Web Edition</b></td><td>🟢 Easy</td><td><a href="/2024/07/08/web.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 11, 2024</td><td><b>Vulnerability Assessment</b></td><td>🟢 Easy</td><td><a href="/2024/07/11/va.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 12, 2024</td><td><b>File Transfers</b></td><td>🟠 Medium</td><td><a href="/2024/07/12/filetransfer.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 14, 2024</td><td><b>Shells & Payloads</b></td><td>🟠 Medium</td><td><a href="/2024/07/14/shellandpayload.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 15, 2024</td><td><b>Using the Metasploit Framework</b></td><td>🟢 Easy</td><td><a href="/2024/07/15/metasploit.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 15, 2024</td><td><b>Password Attacks</b></td><td>🟠 Medium</td><td><a href="/2024/07/15/passwordattacks.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 18, 2024</td><td><b>Attacking Common Services</b></td><td>🟠 Medium</td><td><a href="/2024/07/16/commonservices.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 20, 2024</td><td><b>Pivoting, Tunneling, and Port Forwarding</b></td><td>🟠 Medium</td><td><a href="/2024/07/20/pivot.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 28, 2024</td><td><b>Active Directory Enumeration & Attacks</b></td><td>🔴 Hard</td><td><a href="/2024/07/28/ad.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 29, 2024</td><td><b>Using Web Proxies</b></td><td>🟢 Easy</td><td><a href="/2024/07/29/proxies.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 30, 2024</td><td><b>Attacking Web Applications with Ffuf</b></td><td>🟢 Easy</td><td><a href="/2024/07/30/webapp.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>July 31, 2024</td><td><b>Login Brute Forcing</b></td><td>🟠 Medium</td><td><a href="/2024/07/31/login.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 01, 2024</td><td><b>SQL Injection Fundamentals</b></td><td>🟢 Easy</td><td><a href="/2024/08/01/sqli.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 03, 2024</td><td><b>SQLMap Essentials</b></td><td>🟢 Easy</td><td><a href="/2024/08/03/sqlmap.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 04, 2024</td><td><b>Cross-Site Scripting (XSS)</b></td><td>🟠 Medium</td><td><a href="/2024/08/04/xss.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 06, 2024</td><td><b>File Inclusion</b></td><td>🟠 Medium</td><td><a href="/2024/08/06/fileinclusion.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 07, 2024</td><td><b>File Upload Attacks</b></td><td>🟠 Medium</td><td><a href="/2024/08/07/fileupload.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 08, 2024</td><td><b>Command Injections</b></td><td>🟠 Medium</td><td><a href="/2024/08/08/ci.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 09, 2024</td><td><b>Web Attacks</b></td><td>🟠 Medium</td><td><a href="/2024/08/09/webattack.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 11, 2024</td><td><b>Attacking Common Applications</b></td><td>🔴 Hard</td><td><a href="/2024/08/11/commonapp.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 14, 2024</td><td><b>Linux Privilege Escalation</b></td><td>🟠 Medium</td><td><a href="/2024/08/14/linux.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 16, 2024</td><td><b>Windows Privilege Escalation</b></td><td>🟠 Medium</td><td><a href="/2024/08/16/windows.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 17, 2024</td><td><b>Documentation & Reporting</b></td><td>🟠 Medium</td><td><a href="/2024/08/17/document.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                    <tr><td>Aug 25, 2024</td><td><b>Attacking Enterprise Networks</b></td><td>🔴 Hard</td><td><a href="/2024/08/25/enterprise.html" style="color: var(--neon-green)">Completed &rarr;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script>
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+</script>
+</body>
+</html>
