@@ -120,7 +120,7 @@ grep -oP '\d+/tcp\s+open' ports.txt | awk -F'/' '{ printf "%s,", $1 }' | sed 's/
     
     - The server opens a port and waits for the client to connect to it, which helps avoid firewall issues on the client side.
     - **Advantage**: Since the client initiates the connection for both control and data channels, it bypasses firewall restrictions
-![[Pasted image 20240721113255.png]]
+![image](/images/Pasted image 20240721113255.png)
 ##### Anonymous Login
 ```
 21/tcp open ftp vsftpd 3.0.3 
@@ -138,6 +138,7 @@ Name (10.129.14.136:cry0l1t3): anonymous
 | Settings                | Description                                                                      |
 | ----------------------- | -------------------------------------------------------------------------------- |
 | `hide_ids=YES`          | All user and group information in directory listings will be displayed as "ftp". |
+
 ```shell-session
 drwxrwxr-x    2 ftp     ftp         4096 Sep 14 17:03 Clients
 drwxrwxr-x    2 ftp     ftp         4096 Sep 14 16:50 Documents
@@ -145,30 +146,41 @@ drwxrwxr-x    2 ftp     ftp         4096 Sep 14 16:50 Documents
 
 | `ls_recurse_enable=YES` | Allows the use of recurse listings. |
 | ----------------------- | ----------------------------------- |
+
 ##### Recursive Listing
+
 ```shell-session
 ftp> ls -R  
 ```
+
 ##### Download a File
+
 ```shell-session
 ftp> get  Notes.txt
 ```
+
 ##### Download All Available Files
+
 ```shell-session
 $ wget -m --no-passive ftp://anonymous:anonymous@10.129.14.136
 ```
+
 This may cause trigger because no one in company wants to download all files
+
 ##### Upload a File
+
 ```shell-session
 ftp> put testupload.txt 
 ```
 
 ##### Foot Printing the Service
+
 ```shell-session
 $ sudo nmap -sV -p21 -sC -A 10.129.14.136
 ```
 
 ##### Service Interaction -- Establishes a raw TCP connection to the FTP server for manual interaction.
+
 ```shell-session
 $ nc -nv 10.129.14.136 21
 ```
@@ -179,9 +191,11 @@ $ telnet 10.129.14.136 21
 
 
 if the FTP server runs with TLS/SSL encryption. Because then we need a client that can handle TLS/SSL. Use the client `openssl` and communicate with the FTP server.
+
 ```shell-session
 $ openssl s_client -connect 10.129.14.136:21 -starttls ftp
 ```
+
 #### TFTP(69)
 
 - `Trivial File Transfer Protocol` (`TFTP`) is simpler than FTP and performs file transfers between client and server processes.
@@ -205,26 +219,32 @@ https://medium.com/@aashutos.katare/silent-servers-the-art-of-tftp-enumeration-2
 ##### SMBclient - Connecting to the Share
 
 Listing shares
+
 ```shell-session
 $ smbclient -N -L //10.129.14.128
 ```
 
 Use specific share
+
 ```shell-session
 $ smbclient //10.129.14.128/notes
 ```
 ##### Download Files from SMB
+
 ```shell-session
 $ smb: \> get prep-prod.txt 
 ```
 
 From the administrative point of view, we can check these connections using `smbstatus`. not need for exam.
+
 ##### Samba Status
+
 ```shell-session
 $ root@samba:~# smbstatus
 ```
 
 ##### Footprinting the Service
+
 ```shell-session
 $ sudo nmap 10.129.14.128 -sV -sC -p139,445
 ```
@@ -245,6 +265,7 @@ No password.
 | `netsharegetinfo <share>` | Provides information about a specific share.                       |
 | `enumdomusers`            | Enumerates all domain users.                                       |
 | `queryuser <RID>`         | Provides information about a specific user.                        |
+
 same thing can be done by different tools.  helpful for the enumeration of SMB services. We can't connect only enumeration.
 
 1. samrdump.py
@@ -253,24 +274,29 @@ same thing can be done by different tools.  helpful for the enumeration of SMB s
 4. Enum4Linux-ng
 
 ##### Impacket - Samrdump.py
+
 ```shell-session
 $ samrdump.py 10.129.14.128
 ```
 ##### SMBmap
+
 ```shell-session
 $ smbmap -H 10.129.14.128
 ```
 ##### CrackMapExec
+
 ```shell-session
 $ crackmapexec smb 10.129.14.128 --shares -u '' -p ''
 ```
 ##### Enum4Linux-ng - Enumeration
+
 ```shell-session
 $ ./enum4linux-ng.py 10.129.14.128 -A
 ```
 Can do entire enumeration.
 
 Enumeration in windows 
+
 ```
 net view \\dc01 /all
 ```
@@ -278,6 +304,7 @@ net view \\dc01 /all
 **NetBIOS**
 
 this to query the NetBIOS name service for valid NetBIOS names, specifying the originating UDP port as 137 with the -r option.
+
 ```
 sudo nbtscan -r 192.168.50.0/24
 ```
@@ -291,6 +318,7 @@ sudo nbtscan -r 192.168.50.0/24
 - **Incompatibility**: NFS clients cannot directly communicate with SMB servers due to the differences in protocols.
 
 ##### Foot Printing the Service
+
 ```shell-session
 $ sudo nmap 10.129.14.128 -p111,2049 -sV -sC
 
@@ -299,18 +327,24 @@ PORT     STATE SERVICE VERSION
 | nfs-ls: Volume /mnt/nfs
 
 ```
+
 we have discovered such an NFS service, we can mount it on our local machine.
+
 ##### Show Available NFS Shares
+
 ```shell-session
 $ showmount -e 10.129.14.128
 ```
+
 ##### Mounting NFS Share
+
 ```shell-session
 $ mkdir target-NFS
 $ sudo mount -t nfs 10.129.14.128:/ ./target-NFS/ -o nolock
 ```
 
 ##### List Contents with Usernames & Group Names
+
 ```shell-session
 $ ls -l mnt/nfs/
 
@@ -321,7 +355,9 @@ $ ls -l mnt/nfs/
 - It is important to note that if the `root_squash` option is set, we cannot edit the `backup.sh` file even as `root`.
 
 - We can also use NFS for further escalation -- by uploading a shell in nfs and run it via ssh connection
+
 ##### Unmounting
+
 ```shell-session
 $ cd ..
 $ sudo umount ./target-NFS
@@ -332,45 +368,57 @@ $ sudo umount ./target-NFS
 - DNS is a system for resolving computer names into IP addresses, and it does not have a central database. DNS is mainly unencrypted. 
 
 - By default, IT security professionals apply `DNS over TLS` (`DoT`) or `DNS over HTTPS` (`DoH`) here. In addition, the network protocol `DNSCrypt` also encrypts the traffic between the computer and the name serve
-![[Pasted image 20240901163754.png]]
-![[Pasted image 20240901163805.png]]
+
+![image](/images/Pasted%20image%2020240901163754.png)
+
+![image](/images/Pasted%20image%2020240901163805.png)
 
 
 **What is CNAME?**
 - **Alias for Multiple Domains:** If you want multiple domains to point to the same IP address without manually managing multiple A records, you can create one A record and then use CNAME records for the other domains.
 - **Subdomain Redirection:** CNAME records are often used to direct traffic from subdomains (like `www`, `mail`, etc.) to the main domain or another domain.
 
-![[Pasted image 20240901111418.png]]
+![image](/images/Pasted image 20240901111418.png)
 
 **DNS Configuration Files**
+
 1. local DNS configuration files -- `named.conf.local` and `named.conf.options`.
 2. zone files   -- important
 3. reverse name resolution files
 
 Zone files
+
 A zone file describes a zone completely. There must be precisely one `SOA` record and at least one `NS` record. The SOA resource record is usually located at the beginning of a zone file. The main goal of these global rules is to improve the readability of zone files
 
 ##### Foot Printing the Service
+
 ```shell-session
 dig ns inlanefreight.htb @10.129.14.128
 
 dig <OPTION> DOMAIN NAME @DNS SERVER
  ```
+
 ##### DIG - Version Query
+
 ```shell-session
  dig CH TXT version.bind 10.129.120.85
 ```
+
 ##### DIG - ANY Query
+
 ```shell-session
  dig any inlanefreight.htb @10.129.14.128
 ```
 
+
 ##### Zone transfer
+
 A zone transfer is a process where a copy of the DNS records (the zone file) for a domain is transferred from one DNS server to another. It is primarily used to keep multiple DNS servers in sync with each other.
 
 There are two types of zone transfers:
 - **Full Zone Transfer (AXFR)**: Transfers the entire zone file.
 - **Incremental Zone Transfer (IXFR)**: Transfers only the changes made since the last update.
+
 ```shell-session
 dig axfr inlanefreight.htb @10.129.14.128
 ```
@@ -378,12 +426,15 @@ dig axfr inlanefreight.htb @10.129.14.128
 If the administrator used a subnet for the `allow-transfer` option for testing purposes or as a workaround solution or set it to `any`, everyone would query the entire zone file at the DNS server.
 
 ##### Subdomain Brute Forcing
+
 1. 
+
 ```shell-session
 [!bash!]$ for sub in $(cat /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-110000.txt);do dig $sub.inlanefreight.htb @10.129.14.128 | grep -v ';\|SOA' | sed -r '/^\s*$/d' | grep $sub | tee -a subdomains.txt;done
 ```
 
 2.   DNSENUM(Preferred way)
+
 ```shell-session
 [!bash!]$ dnsenum --dnsserver 10.129.14.128 --enum -p 0 -s 0 -o subdomains.txt -f /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-110000.txt inlanefreight.htb
 ```
@@ -407,13 +458,16 @@ This port is used to receive mail from authenticated users/servers, usually usin
 | `NOOP`       | The client requests a response from the server to prevent disconnection due to time-out.         |
 | `QUIT`       | The client terminates the session.                                                               |
 
+
 To interact with the SMTP server, we can use the `telnet` tool to initialize a TCP connection with the SMTP server.
+
 ```shell-session
 telnet 10.129.14.128 25
 ```
 Initialization of the session is done with the command -- `HELO`
 
 Here with the help of VRFY command we check whether user root,cry0l1t3 are present. if code 252 then it is confirmed.
+
 ```shell-session
 VRFY root
 252 2.0.0 root
@@ -424,6 +478,7 @@ VRFY cry0l1t3
 ```
 
 ##### Send an Email
+
 ```shell-session
 MAIL FROM: <cry0l1t3@inlanefreight.htb>
 250 2.1.0 Ok
@@ -436,18 +491,24 @@ DATA
 ```
 
 After initialize a tcp connection with server we can send mail to specific accounts.
+
 ##### Open Relay Configuration
+
 An **open relay** is an SMTP server that is configured to allow anyone on the internet to send emails through it. This configuration can be exploited by attackers to send large volumes of spam, phishing emails, or to perform other malicious activities, all while hiding the true origin of the emails.
 
 **Misconfiguration Risks**
+
 In many cases, administrators may not fully understand the range of IP addresses that should be allowed to use their SMTP server. To avoid potential disruptions in email traffic, they might misconfigure the SMTP server by allowing all IP addresses (`0.0.0.0/0`) to send emails through it.
 `mynetworks = 0.0.0.0/0`
 
 ##### Foot Printing the Service
+
 ```shell-session
 $ sudo nmap 10.129.14.128 -sC -sV -p25
 ```
+
 ##### Nmap - Open Relay
+
 ```shell-session
 $ sudo nmap 10.129.14.128 -p25 --script smtp-open-relay -v
 ```
@@ -493,6 +554,7 @@ POP3 --  it only provides listing, retrieving, and deleting emails as functions
 ```shell-session
 $ sudo nmap 10.129.14.128 -sV -p110,143,993,995 -sC
 ```
+
 ```shell-session
 995/tcp open  ssl/pop3 Dovecot pop3d
 |_pop3-capabilities: AUTH-RESP-CODE USER SASL(PLAIN) TOP UIDL RESP-CODES CAPA PIPELINING
@@ -502,6 +564,7 @@ $ sudo nmap 10.129.14.128 -sV -p110,143,993,995 -sC
 ##### cURL
 
 To connect to imaps with username and password
+
 ```shell-session
 $ curl -k 'imaps://10.129.14.128' --user user:p4ssw0rd
 ```
@@ -520,20 +583,27 @@ $ openssl s_client -connect 10.129.14.128:imaps
 #### MYSQL(3306)
 
 ##### Footprinting the Service
+
 ```
 sudo nmap 10.129.14.128 -sV -sC -p3306 --script mysql*
 ```
+
 ##### Interact with mysql
+
 ```
 mysql -u root -pP4SSw0rd -h 10.129.14.128
 ```
+
 Tip: There shouldn't be any spaces between '-p' and the password.
+
 ##### In Windows
+
 ```cmd-session
 C:\htb> mysql.exe -u username -pPassword123 -h 10.129.20.13
 ```
 
 IMPORTANT TABLE -> Information schema, System schema
+
 ```
 IMPORTANT command:
 
@@ -554,6 +624,7 @@ select * from <table> where <column> = "<string>";
 - Using Active Directory can be ideal for auditing activity and controlling access in a Windows environment, but if an account is compromised, it could lead to privilege escalation and lateral movement across a Windows domain environment.
 
 ##### Dangerous Settings
+
 - MSSQL clients not using encryption to connect to the MSSQL server
 - The use of self-signed certificates when encryption is being used. It is possible to spoof self-signed certificates
 - The use of [named pipes](https://docs.microsoft.com/en-us/sql/tools/configuration-manager/named-pipes-properties?view=sql-server-ver15)
@@ -564,6 +635,7 @@ select * from <table> where <column> = "<string>";
 ```shell-session
 $ sudo nmap --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV -p 1433 10.129.201.248
 ```
+
 can see the `hostname`, `database instance name`, `software version of MSSQL` and `named pipes are enabled`.
 
 ##### MSSQL Ping in Metasploit
@@ -572,7 +644,6 @@ Like nmap, We can also use metasploit
 ```shell-session
 msf6 auxiliary(scanner/mssql/mssql_ping)
 ```
-
 
 If we can guess or gain access to credentials, this allows us to remotely connect to the MSSQL server and start interacting with databases using T-SQL (`Transact-SQL`).
 ```shell-session
@@ -629,7 +700,9 @@ $ sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-
 
 
 **using this account to log in as the System Database Admin (`sysdba`), giving us higher privileges. This is possible when the user `scott` has the appropriate privileges typically granted by the database administrator**
+
 ##### Oracle RDBMS - Database Enumeration
+
 ```shell-session
 $ sqlplus scott/tiger@10.129.204.235/XE as sysdba
 ```
@@ -644,9 +717,11 @@ SQL> select name, password from sys.user$;
 |---|---|
 |Linux|`/var/www/html`|
 |Windows|`C:\inetpub\wwwroot`|
+
 Web server Running Path in different OS
 
 ##### Oracle RDBMS - File Upload
+
 ```shell-session
 $ echo "Oracle File Upload Test" > testing.txt
 
@@ -655,6 +730,7 @@ $ ./odat.py utlfile -s 10.129.204.235 -d XE -U scott -P tiger --sysdba --putFile
 ```
 
 To verify
+
 ```shell-session
 $ curl -X GET http://10.129.204.235/testing.txt
 ```
@@ -705,6 +781,7 @@ Metasploit scanner module -- (auxiliary/scanner/ipmi/ipmi_version)
 | Dell iDRAC      | root          | calvin                                                                    |
 | HP iLO          | Administrator | randomized 8-character string consisting of numbers and uppercase letters |
 | Supermicro IPMI | ADMIN         | ADMIN                                                                     |
+
 Default credentials of BMC's
 
 
@@ -712,7 +789,9 @@ If above passwords do not work. then use a [flaw](http://fish2.com/ipmi/remote-
 
 `Hashcat` mode `7300`
 
+
 To retrieve hashes 
+
 ```shell-session
 auxiliary(scanner/ipmi/ipmi_dumphashes)
 ```
@@ -726,7 +805,7 @@ snmp enabled HW -- routers, switches, servers, IoT devices
 
 A MIB is a text file in which all queryable SNMP objects of a device are listed in a standardized tree hierarchy. It contains at least one `Object Identifier` (`OID`).
 
-![[Pasted image 20241108053528.png]]
+![image](/images/Pasted%20image%2020241108053528.png)
  
  Footprinting the Service
 
@@ -748,6 +827,7 @@ Scanning 254 hosts, 3 communities
 ```
 
 `Snmpwalk` is used to query the OIDs with their information. 
+
 ```
 snmpwalk -c public -v1 192.168.50.151 1.3.6.1.4.1.77.1.2.25
 ```
@@ -758,7 +838,9 @@ last digits are explained in pic.
 ---
 
 Once we know a community string, we can use it with [braa](https://github.com/mteg/braa) to brute-force the individual OIDs and enumerate the information behind them.
+
 ##### Braa
+
 ```shell-session
 $ braa <community string>@<IP>:.1.3.6.*   # Syntax
 
@@ -776,10 +858,13 @@ snmpwalk -v2c -c public 192.168.50.151 NET-SNMP-EXTEND-MIB::nsExtendObjects
 #### RDP(3389)
 
 RDP works at the application layer in the TCP/IP
+
 ```shell-session
 $ nmap -sV -sC 10.129.201.248 -p3389 --script rdp*
 ```
+
 ##### RDP Security Check
+
 ```shell-session
 $ ./rdp-sec-check.pl 10.129.201.248
 ```
@@ -787,6 +872,7 @@ $ ./rdp-sec-check.pl 10.129.201.248
 we can connect to RDP servers on Linux using `xfreerdp`, `rdesktop`, or `Remmina` and interact with the GUI of the server accordingly.
 
 enable RDP 
+
 ```
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 ```
@@ -795,11 +881,13 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v
 
 
 1. use ssh audit
+
 ```shell-session
 ./ssh-audit.py 10.129.14.132
 ```
 
 To change Auth method
+
 ```shell-session
 ssh -v cry0l1t3@10.129.14.132 -o PreferredAuthentications=password
 ```
@@ -807,6 +895,7 @@ ssh -v cry0l1t3@10.129.14.132 -o PreferredAuthentications=password
 `SSH-1.99-OpenSSH_3.9p1` - can use both protocol versions SSH-1 and SSH-2, and we are dealing with OpenSSH server version 3.9p1.
 
 `SSH-2.0-OpenSSH_8.2p1` - we are dealing with an OpenSSH version 8.2p1 which only accepts the SSH-2 protocol version.
+
 
 ---
 
@@ -845,6 +934,7 @@ Key Features
 #### Windows Remote Management Protocols
 
 1. RDP
+
 ```
 hydra -l george -P /usr/share/wordlists/rockyou.txt -s 2222 rdp://192.168.50.201
 ```
@@ -874,6 +964,7 @@ hydra -l george -P /usr/share/wordlists/rockyou.txt -s 2222 rdp://192.168.50.201
 
 - **Interface:** Built on the Common Information Model (CIM) and Web-Based Enterprise Management (WBEM) standards.
 - **Usage:** Administers and manages various system settings, services, and applications via command-line or scripting tools like PowerShell.
+
 ```shell-session
 $ wmiexec.py Cry0l1t3:"P455w0rD!"@10.129.201.248 "hostname"
 ```
