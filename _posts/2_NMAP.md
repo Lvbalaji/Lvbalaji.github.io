@@ -1,0 +1,379 @@
+
+#### Host Discovery
+
+ Key Nmap Host Discovery Commands and Techniques
+
+| **Nmap Option**      | **Description**                                                        |
+| -------------------- | ---------------------------------------------------------------------- |
+| `10.10.10.0/24`      | Target network range.                                                  |
+| `-sn`                | Disables port scanning.                                                |
+| `-Pn`                | Disables ICMP Echo Requests                                            |
+| `-n`                 | Disables DNS Resolution.                                               |
+| `-PE`                | Performs the ping scan by using ICMP Echo Requests against the target. |
+| `--packet-trace`     | Shows all packets sent and received.                                   |
+| `--reason`           | Displays the reason for a specific result.                             |
+| `--disable-arp-ping` | Disables ARP Ping Requests.                                            |
+| `--top-ports=<num>`  | Scans the specified top ports that have been defined as most frequent. |
+| `-p-`                | Scan all ports.                                                        |
+| `-p22-110`           | Scan all ports between 22 and 110.                                     |
+| `-p22,25`            | Scans only the specified ports 22 and 25.                              |
+| `-F`                 | Scans top 100 ports.                                                   |
+| `-sS`                | Performs an TCP SYN-Scan.                                              |
+| `-sA`                | Performs an TCP ACK-Scan.                                              |
+| `-sU`                | Performs an UDP Scan.                                                  |
+| `-sV`                | Scans the discovered services for their versions.                      |
+| `-sC`                | Perform a Script Scan with scripts that are categorized as "default".  |
+| `--script <script>`  | Performs a Script Scan by using the specified scripts.                 |
+| `-O`                 | Performs an OS Detection Scan to determine the OS of the target.       |
+| `-A`                 | Performs OS Detection, Service Detection, and traceroute scans.        |
+| `-D RND:5`           | Sets the number of random Decoys that will be used to scan the target. |
+| `-e`                 | Specifies the network interface that is used for the scan.             |
+| `-S 10.10.10.200`    | Specifies the source IP address for the scan.                          |
+| `-g`                 | Specifies the source port for the scan.                                |
+| `--dns-server <ns>`  | DNS resolution is performed by using a specified name server.          |
+| `--stats-every=5s`   | Define a specific time interval to receive progress updates.           |
+
+
+ 1. **Scan a Network Range**
+
+The simplest way to perform host discovery is to scan an entire network range. This method identifies live hosts within the range.
+
+```
+sudo nmap 10.129.2.0/24 -sn -oA tnet | grep for | cut -d" " -f5
+```
+
+- `10.129.2.0/24`: The network range being scanned.
+- `-sn`: Disables port scanning and limits Nmap to host discovery only.
+- `-oA tnet`: Saves results in all three formats (XML, Nmap, and Grepable), with the base filename `tnet`.
+- `grep` and `cut` are used to filter and display the list of discovered IPs.
+
+This technique works if the hosts’ firewalls allow ICMP requests. If not, other methods are needed (discussed later).
+
+---
+
+ 2. **Scan IPs from a List**
+
+If you are provided with a specific list of IPs, you can scan these using a list file.
+
+```
+sudo nmap -sn -oA tnet -iL hosts.lst | grep for | cut -d" " -f5
+```
+
+- `-iL hosts.lst`: Specifies an input file (`hosts.lst`) containing the list of IP addresses to scan.
+- Only the active hosts from the list are displayed.
+
+This example shows that out of 7 hosts, only 3 responded to the scan, possibly because of firewall settings that block ICMP.
+
+---
+
+3. **Scan Multiple Specific IPs**
+
+Instead of scanning an entire network, you can scan specific IPs either individually or in ranges.
+
+**Example 1: Scan Multiple IPs**
+
+```
+sudo nmap -sn -oA tnet 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5
+```
+**Example 2: Scan an IP Range**
+
+```
+sudo nmap -sn -oA tnet 10.129.2.18-20 | grep for | cut -d" " -f5
+```
+
+---
+
+ 4. **Scan a Single IP**
+
+To scan a specific host, you can use the following command to check if it is up.
+
+```
+sudo nmap 10.129.2.18 -sn -oA host
+```
+
+The output will show the host’s status, latency, and MAC address. Nmap automatically sends **ARP** pings before ICMP, unless disabled (discussed below).
+
+---
+
+#### Advanced Host Discovery Options
+
+1. **ICMP Echo Requests (`-PE`)**
+
+To ensure that **ICMP Echo Requests** (ping requests) are sent explicitly, use the `-PE` option.
+
+```
+sudo nmap 10.129.2.18 -sn -oA host -PE --packet-trace
+```
+
+- `-PE`: Ensures that ICMP Echo Requests are sent.
+- `--packet-trace`: Displays detailed packet-level information (helpful for troubleshooting and understanding scan behavior).
+
+**Output Explanation:**
+
+- Nmap sends an ARP request before the ICMP request. In this case, the ARP reply was enough to confirm the host was alive.
+
+---
+
+2. **Displaying the Reason for Host Status (`--reason`)**
+
+Nmap allows you to see why it considers a host as "alive" using the `--reason` option.
+
+```
+sudo nmap 10.129.2.18 -sn -oA host -PE --reason
+```
+
+In this example, Nmap detects the host as alive because it received an ARP response.
+
+---
+
+3. **Disabling ARP Ping**
+
+By default, Nmap sends **ARP** requests when scanning local networks. To force Nmap to skip ARP pings and only use ICMP echo requests, use the `--disable-arp-ping` option.
+
+```
+sudo nmap 10.129.2.18 -sn -oA host -PE --packet-trace --disable-arp-ping
+```
+
+In this case, only ICMP Echo Requests are sent, and the response confirms the host is alive.
+
+---
+
+#### Storing Scan Results
+
+It is important to store every scan’s output for comparison, documentation, and reporting purposes. The `-oA` option stores the scan results in multiple formats (Nmap, XML, and Grepable).
+
+Example:
+```
+sudo nmap 10.129.2.0/24 -sn -oA tnet
+```
+
+- The results are stored as `tnet.nmap`, `tnet.xml`, and `tnet.gnmap` for later analysis.
+
+
+ Output Options
+
+| **Nmap Option** | **Description**                                                                   |
+| --------------- | --------------------------------------------------------------------------------- |
+| `-oA filename`  | Stores the results in all available formats starting with the name of "filename". |
+| `-oN filename`  | Stores the results in normal format with the name "filename".                     |
+| `-oG filename`  | Stores the results in "grepable" format with the name of "filename".              |
+| `-oX filename`  | Stores the results in XML format with the name of "filename".                     |
+
+---
+
+#### Common Nmap Scan Techniques:
+
+ 1. **SYN Scan** (-sS):
+
+- **Usage**: Default scan for root users.
+- **Mechanism**: Sends a SYN packet to the target port and waits for a response.
+    - SYN-ACK response indicates the port is **open**.
+    - RST response indicates the port is **closed**.
+- **Advantage**:
+    - Fast and stealthy, as it doesn’t complete the TCP handshake.
+- **Disadvantage**:
+    - May not work if firewalls or IDS/IPS block SYN packets.
+
+---
+
+ 2. **TCP Connect Scan** (-sT):
+
+- **Usage**: Default scan for non-root users or in environments where raw packets are not allowed.
+- **Mechanism**: Completes the full TCP three-way handshake.
+    - SYN-ACK response indicates the port is **open**.
+    - RST response indicates the port is **closed**.
+- **Advantage**:
+    - The most reliable and accurate scan method, as it establishes full connections.
+- **Disadvantage**:
+    - Slower and less stealthy than a SYN scan. Leaves a complete connection, which is more easily detected by firewalls or IDS.
+
+---
+ 
+ 3. **Filtered Port Scanning**:
+
+- **Mechanism**: When a firewall or packet filter prevents Nmap from determining whether a port is open or closed.
+    - If packets are dropped, the port is shown as **filtered** (no response).
+    - If rejected with an ICMP unreachable message, the port may also be **filtered**.
+
+---
+
+ 4. **UDP Scan** (-sU):
+
+- **Usage**: Scans UDP ports, which don't require a connection like TCP.
+- **Mechanism**: Sends UDP packets and waits for responses or errors.
+    - Open ports respond based on the service (e.g., DNS replies).
+    - If no response, the port is labeled **open|filtered**.
+    - ICMP Port Unreachable responses indicate the port is **closed**.
+- **Advantage**:
+    - Can find services running over UDP, which can be overlooked.
+- **Disadvantage**:
+    - Slow due to lack of acknowledgments in UDP and longer timeouts.
+```
+sudo nmap -sU --top-ports 50 -T4 -Pn --max-retries 2 --host-timeout 30s <target>
+```
+
+```
+nmap -Pn -sU -sV -T3 --top-ports 25 -oN udp-nmap-scan.txt <target>
+```
+---
+
+Capture packets between your machine and the target using `tcpdump`
+
+```
+sudo tcpdump -i eth0 host 10.10.14.2 and 10.129.2.28
+
+sudo tcpdum -n -w file.pcap
+```
+The output may show the sequence of packets involved in the connection, including the **SYN**, **SYN-ACK**, **ACK**, and **PSH-ACK** flags, indicating a completed TCP handshake and banner transfer.
+
+**Example Packet Flow**:
+
+1. **SYN** packet sent from the client:
+    `18:28:07.128564 IP 10.10.14.2.59618 > 10.129.2.28.smtp: Flags [S], seq 1798872233, ...`
+    
+2. **SYN-ACK** packet received from the target:
+    `18:28:07.255151 IP 10.129.2.28.smtp > 10.10.14.2.59618: Flags [S.], ...`
+    
+3. **ACK** packet sent by the client:
+    `18:28:07.255281 IP 10.10.14.2.59618 > 10.129.2.28.smtp: Flags [.], ...`
+    
+4. **PSH-ACK** (banner transfer) from the server:
+    `18:28:07.319306 IP 10.129.2.28.smtp > 10.10.14.2.59618: Flags [P.], ...`
+    
+5. **Final ACK** from the client:
+    `18:28:07.319426 IP 10.10.14.2.59618 > 10.129.2.28.smtp: Flags [.], ...`
+
+---
+#### Using NSE Scripts in Nmap
+
+Nmap provides flexibility in choosing which scripts to run during a scan. There are three main ways to specify scripts:
+
+1. **Default Scripts**:
+    - Run using the `-sC` option.
+    - Example:
+```
+sudo nmap <target> -sC
+```
+
+2. **Specific Script Categories**:
+    
+    - You can specify an entire category of scripts.
+    - Example:
+```
+sudo nmap <target> --script <category>
+
+sudo nmap 10.129.2.28 -p 80 -sV --script vuln
+```
+
+3. **Defined Scripts**:
+    
+    - Choose individual scripts for more targeted scans.
+    - Example:
+```
+sudo nmap <target> --script <script-name>,<script-name>,...
+
+sudo nmap 10.129.2.28 -p 25 --script banner,smtp-commands
+```
+
+
+---
+
+ Key NSE Scripts and Their Usage
+
+1. **Banner Grabbing**:
+    - Script: `banner`
+    - Example: Identifies the system's service version by capturing service banners.
+2. **SMTP Commands**:
+    - Script: `smtp-commands`
+    - Example: Lists supported SMTP commands, useful for potential exploitation or service identification.
+3. **HTTP Enum**:
+    - Script: `http-enum`
+    - Example: Enumerates known paths in a web application (e.g., `/wp-login.php` for WordPress).
+4. **Vulnerabilities**:
+    - Script: `vuln`
+    - Example: Checks for known vulnerabilities based on service versions, such as **CVE listings** for Apache or WordPress.
+
+---
+
+#### Performance Options
+
+| **Nmap Option**              | **Description**                                              |
+| ---------------------------- | ------------------------------------------------------------ |
+| `--max-retries <num>`        | Sets the number of retries for scans of specific ports.      |
+| `--stats-every=5s`           | Displays scan's status every 5 seconds.                      |
+| `-v/-vv`                     | Displays verbose output during the scan.                     |
+| `--initial-rtt-timeout 50ms` | Sets the specified time value as initial RTT timeout.        |
+| `--max-rtt-timeout 100ms`    | Sets the specified time value as maximum RTT timeout.        |
+| `--min-rate 300`             | Sets the number of packets that will be sent simultaneously. |
+| `-T <0-5>`                   | Specifies the specific timing template.                      |
+
+Use ACK flag to send req. firewall don't block this. bcoz firewall doesn't know whether connection was made before. if we receive RST flag then port is open
+
+```shell-session
+sudo nmap 10.129.2.28 -p 21,22,25 -sA -Pn -n
+```
+
+#### Decoys
+Decoy scanning method (`-D`) is the right choice. With this method, Nmap generates various random IP addresses inserted into the IP header to disguise the origin of the packet sent. With this method, we can generate random (`RND`) a specific number (for example: `5`) of IP addresses separated by a colon (`:`). Our IP placed any where in this 5.
+```shell-session
+sudo nmap 10.129.2.28 -p 80 -sS -Pn -n  -D RND:5
+```
+
+ Individual subnets would not have access to the server's specific services. So we can also manually specify the source IP address (`-S`) to test
+```shell-session
+sudo nmap 10.129.2.28 -n -Pn -p 445 -O -S 10.129.2.200 -e tun0
+```
+
+many DNS requests to be made via TCP port 53. Bcoz expansion of to IPv6 and DNSSEC.
+```shell-session
+sudo nmap 10.129.2.28 -p50000 -sS -Pn -n --source-port 53
+```
+
+#### Connect To The Filtered Port
+
+```shell-session
+ncat -nv --source-port 53 10.129.2.28 50000
+```
+
+The `Connect` scan is useful because it is the most accurate way to determine the state of a port, and it is also the most stealthy. [TCP Connect Scan](https://nmap.org/book/scan-methods-connect-scan.html) (`-sT`) 
+
+it less likely to be detected by intrusion detection systems (IDS) or intrusion prevention systems (IPS). It is useful when we want to map the network and don't want to disturb the services running behind it,  can bypass the firewall and accurately determine the state of the target ports.
+
+#### Netcat port scan
+
+ TCP Netcat port scan. 
+ **-w** option to specify the connection timeout in seconds
+ **-z** to specify zero-I/O mode, which is used for scanning and sends no data.
+```
+kali@kali:~$ nc -nvv -w 1 -z 192.168.50.152 3388-3390
+(UNKNOWN) [192.168.50.152] 3390 (?) : Connection refused
+(UNKNOWN) [192.168.50.152] 3389 (ms-wbt-server) open
+```
+it uses three-way handshake method to discover ports are open ot close.
+
+---
+
+
+UDP Netcat port scan. We'll use the only **nc** option we have not covered yet, **-u**, which indicates a UDP scan.
+
+```
+kali@kali:~$ nc -nv -u -z -w 1 192.168.50.149 120-123
+(UNKNOWN) [192.168.50.149] 123 (ntp) open
+```
+An empty UDP packet is sent to a specific port. The response received will depend on how the application is programmed to respond to empty packets.
+
+ If the destination UDP port is closed, the target should respond with an ICMP port unreachable
+ 
+---
+
+#### With Windows Hosts
+
+If we are conducting initial network enumeration from a Windows laptop with no internet access, we are prevented from installing any extra tools that might help us, like the Windows Nmap version. In such a limited scenario, we are forced to pursue the ‘living off the land’ strategy. Luckily, there are a few helpful built-in PowerShell functions we can use.
+```
+Test-NetConnection -Port 445 192.168.50.151
+```
+
+Powershell one-linear for port range
+```
+1..1024 | % {echo ((New-Object Net.Sockets.TcpClient).Connect("192.168.50.151", $_)) "TCP port $_ is open"} 2>$null
+```
