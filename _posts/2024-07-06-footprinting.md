@@ -49,6 +49,7 @@ curl -s https://crt.sh/\?q\=inlanefreight.com\&output\=json | jq . | grep name |
 - Focus on IP addresses owned by the company to avoid targeting third-party services.
 
  In subdomain.txt, finding Ip address of each subdomain
+
 ```shell-session
 for i in $(cat subdomainlist);do host $i | grep "has address" | grep inlanefreight.com | cut -d" " -f1,4;done
 
@@ -64,10 +65,13 @@ s3-website-us-west-2.amazonaws.com 10.129.95.250
 - As a result, we can find devices and systems, such as `surveillance cameras`, `servers`, `smart home systems`, `industrial controllers`, `traffic lights` and `traffic controllers`, and various network components.
 
 We split only ip from previous result.
+
 ```shell-session
 for i in $(cat subdomainlist);do host $i | grep "has address" | grep inlanefreight.com | cut -d" " -f4 >> ip-addresses.txt;done
 ```
+
 Shodan search
+
 ```
 for i in $(cat ip-addresses.txt);do shodan host $i;done
 ```
@@ -75,7 +79,9 @@ for i in $(cat ip-addresses.txt);do shodan host $i;done
 4. **DNS Record Analysis**
 
 - Perform a DNS query (e.g., `dig any`) to retrieve DNS records such as A, MX, NS, and TXT records.
+
 ###### DNS Records
+
 ```shell-session
 dig any inlanefreight.com
 ```
@@ -87,6 +93,7 @@ dig any inlanefreight.com
 -  [GrayHatWarfare](https://buckets.grayhatwarfare.com/) allows for searching and filtering cloud storage by file format, aiding in the passive discovery of stored files.
 
 #### Top 10 Ports
+
 ```shell-session
 21/tcp   open     ftp
 22/tcp   open     ssh
@@ -103,11 +110,12 @@ dig any inlanefreight.com
 ```shell
 grep -oP '\d+/tcp\s+open' ports.txt | awk -F'/' '{ printf "%s,", $1 }' | sed 's/,$//'
 ```
+
 ### Services
 
 #### FTP(21)
 
- - In an FTP connection, two channels are opened. First, the client and server establish a control channel through `TCP port 21`. The client sends commands to the server, and the server returns status codes. Then both communication participants can establish the data channel via `TCP port 20`.
+- In an FTP connection, two channels are opened. First, the client and server establish a control channel through `TCP port 21`. The client sends commands to the server, and the server returns status codes. Then both communication participants can establish the data channel via `TCP port 20`.
  
 - FTP servers on Linux-based distributions is [vsFTPd](https://security.appspot.com/vsftpd.html).
 
@@ -116,12 +124,16 @@ grep -oP '\d+/tcp\s+open' ports.txt | awk -F'/' '{ printf "%s,", $1 }' | sed 's/
     - The client opens a connection on **port 21**.
     - The server then connects back to the client using a dynamically assigned port for the data channel.
     - **Problem**: If the client is behind a firewall, the server’s attempt to establish a data connection may be blocked.
+
 2. **Passive FTP**:
     
     - The server opens a port and waits for the client to connect to it, which helps avoid firewall issues on the client side.
     - **Advantage**: Since the client initiates the connection for both control and data channels, it bypasses firewall restrictions
-![image](/images/Pasted image 20240721113255.png)
+
+![image](/images/Pasted%20image%2020240721113255.png)
+
 ##### Anonymous Login
+
 ```
 21/tcp open ftp vsftpd 3.0.3 
  ftp-anon: Anonymous FTP login allowed (FTP code 230)
@@ -145,7 +157,7 @@ drwxrwxr-x    2 ftp     ftp         4096 Sep 14 16:50 Documents
 ```
 
 | `ls_recurse_enable=YES` | Allows the use of recurse listings. |
-| ----------------------- | ----------------------------------- |
+
 
 ##### Recursive Listing
 
@@ -190,7 +202,7 @@ $ telnet 10.129.14.136 21
 ```
 
 
-if the FTP server runs with TLS/SSL encryption. Because then we need a client that can handle TLS/SSL. Use the client `openssl` and communicate with the FTP server.
+If the FTP server runs with TLS/SSL encryption. Because then we need a client that can handle TLS/SSL. Use the client `openssl` and communicate with the FTP server.
 
 ```shell-session
 $ openssl s_client -connect 10.129.14.136:21 -starttls ftp
@@ -229,6 +241,7 @@ Use specific share
 ```shell-session
 $ smbclient //10.129.14.128/notes
 ```
+
 ##### Download Files from SMB
 
 ```shell-session
@@ -254,6 +267,7 @@ if nmap doesn't provide much info we can use smbclient or rpcclient
 ```shell-session
 $ rpcclient -U "" 10.129.14.128
 ```
+
 No password.
 
 | Command of RPCClient      | Description                                                        |
@@ -266,7 +280,7 @@ No password.
 | `enumdomusers`            | Enumerates all domain users.                                       |
 | `queryuser <RID>`         | Provides information about a specific user.                        |
 
-same thing can be done by different tools.  helpful for the enumeration of SMB services. We can't connect only enumeration.
+Same thing can be done by different tools.  helpful for the enumeration of SMB services. We can't connect only enumeration.
 
 1. samrdump.py
 2. [SMBMap](https://github.com/ShawnDEvans/smbmap) 
@@ -278,21 +292,25 @@ same thing can be done by different tools.  helpful for the enumeration of SMB s
 ```shell-session
 $ samrdump.py 10.129.14.128
 ```
+
 ##### SMBmap
 
 ```shell-session
 $ smbmap -H 10.129.14.128
 ```
+
 ##### CrackMapExec
 
 ```shell-session
 $ crackmapexec smb 10.129.14.128 --shares -u '' -p ''
 ```
+
 ##### Enum4Linux-ng - Enumeration
 
 ```shell-session
 $ ./enum4linux-ng.py 10.129.14.128 -A
 ```
+
 Can do entire enumeration.
 
 Enumeration in windows 
@@ -378,7 +396,7 @@ $ sudo umount ./target-NFS
 - **Alias for Multiple Domains:** If you want multiple domains to point to the same IP address without manually managing multiple A records, you can create one A record and then use CNAME records for the other domains.
 - **Subdomain Redirection:** CNAME records are often used to direct traffic from subdomains (like `www`, `mail`, etc.) to the main domain or another domain.
 
-![image](/images/Pasted image 20240901111418.png)
+![image](/images/Pasted%20image%2020240901111418.png)
 
 **DNS Configuration Files**
 
@@ -396,7 +414,7 @@ A zone file describes a zone completely. There must be precisely one `SOA` rec
 dig ns inlanefreight.htb @10.129.14.128
 
 dig <OPTION> DOMAIN NAME @DNS SERVER
- ```
+```
 
 ##### DIG - Version Query
 
@@ -427,7 +445,7 @@ If the administrator used a subnet for the `allow-transfer` option for testing
 
 ##### Subdomain Brute Forcing
 
-1. 
+1. SecList
 
 ```shell-session
 [!bash!]$ for sub in $(cat /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-110000.txt);do dig $sub.inlanefreight.htb @10.129.14.128 | grep -v ';\|SOA' | sed -r '/^\s*$/d' | grep $sub | tee -a subdomains.txt;done
@@ -464,6 +482,7 @@ To interact with the SMTP server, we can use the `telnet` tool to initialize a
 ```shell-session
 telnet 10.129.14.128 25
 ```
+
 Initialization of the session is done with the command -- `HELO`
 
 Here with the help of VRFY command we check whether user root,cry0l1t3 are present. if code 252 then it is confirmed.
@@ -549,6 +568,7 @@ POP3 --  it only provides listing, retrieving, and deleting emails as functions
 | `CAPA`          | Requests the server to display the server capabilities.     |
 | `RSET`          | Requests the server to reset the transmitted information.   |
 | `QUIT`          | Closes the connection with the POP3 server.                 |
+
 ##### Footprinting the Service
 
 ```shell-session
@@ -641,11 +661,13 @@ can see the `hostname`, `database instance name`, `software version of MSSQL`
 ##### MSSQL Ping in Metasploit
 
 Like nmap, We can also use metasploit
+
 ```shell-session
 msf6 auxiliary(scanner/mssql/mssql_ping)
 ```
 
 If we can guess or gain access to credentials, this allows us to remotely connect to the MSSQL server and start interacting with databases using T-SQL (`Transact-SQL`).
+
 ```shell-session
 $ python3 mssqlclient.py Administrator@10.129.201.248 -windows-auth
 ```
@@ -674,18 +696,22 @@ $ sudo nmap -p1521 -sV 10.129.204.235 --open
 System Identifier (`SID`) is a unique name that identifies a particular database instance. When a client connects to an Oracle database, it specifies the database's `SID` along with its connection string.
 
 ##### Nmap - SID Bruteforcing
+
 ```shell-session
 $ sudo nmap -p1521 -sV 10.129.204.235 --open --script oracle-sid-brute
 ```
 
 `odat.py` tool to perform a variety of scans to enumerate
+
 ```shell-session
 $ ./odat.py all -s 10.129.204.235
 ```
 An retrieve database names, versions, running processes, user accounts, vulnerabilities, misconfigurations. We can even get credential of users
 
 user/pass
+
 ##### SQLplus - Log In
+
 ```shell-session
 $ sqlplus user/pass@10.129.204.235/XE
 ```
@@ -706,9 +732,11 @@ $ sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-
 ```shell-session
 $ sqlplus scott/tiger@10.129.204.235/XE as sysdba
 ```
+
 ##### Oracle RDBMS - Extract Password Hashes
 
 After getting admin privileges we can dump hashes 
+
 ```shell-session
 SQL> select name, password from sys.user$;
 ```
@@ -751,21 +779,26 @@ $ curl -X GET http://10.129.204.235/testing.txt
     - **Remote Upgrades**: Perform upgrades without physical access.
     - **Alerting**: Uses SNMP for alerts.
 
- Components of IPMI
+
+Components of IPMI
 
 1. **Baseboard Management Controller (BMC)**:
     
     - **Role**: Central micro-controller managing IPMI functions.
     - **Implementation**: Typically embedded in motherboards or added as a PCI card.
+      
 2. **Intelligent Chassis Management Bus (ICMB)**:
     
     - **Role**: Allows communication between chassis.
+      
 3. **Intelligent Platform Management Bus (IPMB)**:
     
     - **Role**: Extends the BMC functionality.
+      
 4. **IPMI Memory**:
     
     - **Role**: Stores system event logs, repository data, etc.
+      
 5. **Communications Interfaces**:
     
     - **Types**: Local system interfaces, serial, LAN, ICMB, PCI Management Bus.
@@ -781,6 +814,7 @@ Metasploit scanner module -- (auxiliary/scanner/ipmi/ipmi_version)
 | Dell iDRAC      | root          | calvin                                                                    |
 | HP iLO          | Administrator | randomized 8-character string consisting of numbers and uppercase letters |
 | Supermicro IPMI | ADMIN         | ADMIN                                                                     |
+
 
 Default credentials of BMC's
 
@@ -806,14 +840,16 @@ snmp enabled HW -- routers, switches, servers, IoT devices
 A MIB is a text file in which all queryable SNMP objects of a device are listed in a standardized tree hierarchy. It contains at least one `Object Identifier` (`OID`).
 
 ![image](/images/Pasted%20image%2020241108053528.png)
- 
- Footprinting the Service
+
+
+Footprinting the Service
 
 ```
 sudo nmap -sU --open -p 161 192.168.50.1-254 -oG open-snmp.txt
 ```
 
 Hosts listening snmp. Alternative for nmap. `Onesixtyone` can be used to brute-force the names of the community strings
+
 ```
 kali@kali:~$ echo public > community
 kali@kali:~$ echo private >> community
@@ -831,8 +867,10 @@ Scanning 254 hosts, 3 communities
 ```
 snmpwalk -c public -v1 192.168.50.151 1.3.6.1.4.1.77.1.2.25
 ```
+
 -v for version (1,2,2c)
 -c for community (public, private)
+
 last digits are explained in pic.
 
 ---
@@ -880,7 +918,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v
 #### Linux Remote Management Protocols
 
 
-1. use ssh audit
+##### 1. use ssh audit
 
 ```shell-session
 ./ssh-audit.py 10.129.14.132
@@ -899,17 +937,18 @@ ssh -v cry0l1t3@10.129.14.132 -o PreferredAuthentications=password
 
 ---
 
-Attacking SSH
+
+##### Attacking SSH
+
 ```
 hydra -l george -P /usr/share/wordlists/rockyou.txt -s 2222 ssh://192.168.50.201
 ```
 
 ---
 
-
 Rsync - to copy files. 
 
-2. **Rsync**
+##### 2. **Rsync**
 
  Overview
 - **Purpose**: Efficient file transfer tool that uses a delta-transfer algorithm to minimize data transfer by sending only differences between files.
@@ -931,15 +970,20 @@ Key Features
     - **Command**: `rsync -av --list-only rsync://<target_ip>/<share_name>`
 
 
+---
+
+
 #### Windows Remote Management Protocols
 
-1. RDP
+##### 1. RDP
 
 ```
 hydra -l george -P /usr/share/wordlists/rockyou.txt -s 2222 rdp://192.168.50.201
 ```
 
-2. WinRM
+---
+
+##### 2. WinRM
 
 **Purpose:** Facilitates remote management of Windows systems via command-line interfaces.
 
@@ -958,7 +1002,9 @@ hydra -l george -P /usr/share/wordlists/rockyou.txt -s 2222 rdp://192.168.50.201
     - **Using Evil-WinRM:**
         `evil-winrm -i 10.129.201.248 -u Cry0l1t3 -p P455w0rD!`
 
-3. WMI
+---
+
+##### 3. WMI
 
 **Purpose:** Provides comprehensive access to management data and configuration settings across Windows systems. **WMI** offers extensive management capabilities and is integral for Windows system administration.
 
