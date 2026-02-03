@@ -1,7 +1,7 @@
 ---
 layout: mission
 title: "Mastering Footprinting & Infrastructure Enumeration: A Comprehensive Guide"
-date: 2024-07-05
+date: 2024-07-06
 categories: [CPTS, Reconnaissance]
 toc: true
 ---
