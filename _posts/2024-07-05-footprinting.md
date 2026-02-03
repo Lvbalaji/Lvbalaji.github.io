@@ -1,8 +1,18 @@
+---
+layout: mission
+title: "Mastering Footprinting & Infrastructure Enumeration: A Comprehensive Guide"
+date: 2024-07-05
+categories: [CPTS, Reconnaissance]
+toc: true
+---
+
+
 > [!NOTE]
 > 🧠 In Real Attacks:
 > 
 > - **Footprinting** helps attackers **know who to target**.
 > - **Fingerprinting** helps them **know how to attack**.
+
 
 #### Infrastructure Based Enumeration
 
@@ -23,11 +33,12 @@
 - https://crt.sh/ -- to identify domain details
  
 Output will be in JSON query
-```shell-session
+```
 curl -s https://crt.sh/\?q\=inlanefreight.com\&output\=json | jq .
 ```
 
 Making List of subdomain
+
 ```shell-session
 curl -s https://crt.sh/\?q\=inlanefreight.com\&output\=json | jq . | grep name | cut -d":" -f2 | grep -v "CN=" | cut -d'"' -f2 | awk '{gsub(/\\n/,"\n");}1;' | sort -u
 ```
