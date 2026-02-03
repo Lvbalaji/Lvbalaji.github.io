@@ -113,6 +113,7 @@ grep -oP '\d+/tcp\s+open' ports.txt | awk -F'/' '{ printf "%s,", $1 }' | sed 's/
 
 ### Services
 
+
 #### FTP(21)
 
 - In an FTP connection, two channels are opened. First, the client and server establish a control channel through `TCP port 21`. The client sends commands to the server, and the server returns status codes. Then both communication participants can establish the data channel via `TCP port 20`.
@@ -208,6 +209,10 @@ If the FTP server runs with TLS/SSL encryption. Because then we need a client th
 $ openssl s_client -connect 10.129.14.136:21 -starttls ftp
 ```
 
+
+---
+
+
 #### TFTP(69)
 
 - `Trivial File Transfer Protocol` (`TFTP`) is simpler than FTP and performs file transfers between client and server processes.
@@ -218,6 +223,10 @@ $ openssl s_client -connect 10.129.14.136:21 -starttls ftp
 Commands: GET, PUT, CONNECT, QUIT, STATUS
 
 https://medium.com/@aashutos.katare/silent-servers-the-art-of-tftp-enumeration-265c3785a6b4
+
+
+---
+
 
 #### SMB(139,445)
 
@@ -319,6 +328,8 @@ Enumeration in windows
 net view \\dc01 /all
 ```
 
+---
+
 **NetBIOS**
 
 this to query the NetBIOS name service for valid NetBIOS names, specifying the originating UDP port as 137 with the -r option.
@@ -327,6 +338,7 @@ this to query the NetBIOS name service for valid NetBIOS names, specifying the o
 sudo nbtscan -r 192.168.50.0/24
 ```
 
+---
 
 #### NFS(111,2049)
 
@@ -380,6 +392,9 @@ $ ls -l mnt/nfs/
 $ cd ..
 $ sudo umount ./target-NFS
 ```
+
+---
+
 
 #### DNS(53)
 
@@ -457,6 +472,9 @@ If the administrator used a subnet for the `allow-transfer` option for testing
 [!bash!]$ dnsenum --dnsserver 10.129.14.128 --enum -p 0 -s 0 -o subdomains.txt -f /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-110000.txt inlanefreight.htb
 ```
 
+---
+
+
 #### SMTP(25)
 
 By default, SMTP servers accept connection requests on port `25`. However, newer SMTP servers also use other ports such as TCP port `587`. 
@@ -511,6 +529,7 @@ DATA
 
 After initialize a tcp connection with server we can send mail to specific accounts.
 
+
 ##### Open Relay Configuration
 
 An **open relay** is an SMTP server that is configured to allow anyone on the internet to send emails through it. This configuration can be exploited by attackers to send large volumes of spam, phishing emails, or to perform other malicious activities, all while hiding the true origin of the emails.
@@ -532,6 +551,7 @@ $ sudo nmap 10.129.14.128 -sC -sV -p25
 $ sudo nmap 10.129.14.128 -p25 --script smtp-open-relay -v
 ```
 
+---
 
 #### IMAP/POP3(110, 143, 993, 995)
 
@@ -569,6 +589,7 @@ POP3 --  it only provides listing, retrieving, and deleting emails as functions
 | `RSET`          | Requests the server to reset the transmitted information.   |
 | `QUIT`          | Closes the connection with the POP3 server.                 |
 
+
 ##### Footprinting the Service
 
 ```shell-session
@@ -599,6 +620,7 @@ $ openssl s_client -connect 10.129.14.128:pop3s
 $ openssl s_client -connect 10.129.14.128:imaps
 ```
 
+---
 
 #### MYSQL(3306)
 
@@ -636,6 +658,8 @@ select * from <table>;
 select * from <table> where <column> = "<string>"; 
 
 ```
+
+---
 
 #### MSSQL(1433)
 
@@ -677,6 +701,8 @@ OR
 ```
 $ impacket-mssqlclient Administrator:Lab123@192.168.50.18 -windows-auth
 ```
+
+---
 
 
 #### Oracle TNS(1521)
@@ -748,6 +774,9 @@ SQL> select name, password from sys.user$;
 
 Web server Running Path in different OS
 
+---
+
+
 ##### Oracle RDBMS - File Upload
 
 ```shell-session
@@ -762,6 +791,8 @@ To verify
 ```shell-session
 $ curl -X GET http://10.129.204.235/testing.txt
 ```
+
+---
 
 #### IPMI(623 - UDP)
 
@@ -830,6 +861,7 @@ To retrieve hashes
 auxiliary(scanner/ipmi/ipmi_dumphashes)
 ```
 
+---
 
 #### SNMP(161)
 
@@ -877,6 +909,7 @@ last digits are explained in pic.
 
 Once we know a community string, we can use it with [braa](https://github.com/mteg/braa) to brute-force the individual OIDs and enumerate the information behind them.
 
+
 ##### Braa
 
 ```shell-session
@@ -892,6 +925,9 @@ To get the extended objects the following command can be used:
 ```bash
 snmpwalk -v2c -c public 192.168.50.151 NET-SNMP-EXTEND-MIB::nsExtendObjects
 ```
+
+---
+
 
 #### RDP(3389)
 
@@ -914,6 +950,9 @@ enable RDP
 ```
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 ```
+
+---
+
 
 #### Linux Remote Management Protocols
 
